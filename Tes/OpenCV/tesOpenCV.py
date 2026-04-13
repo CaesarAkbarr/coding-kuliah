@@ -14,9 +14,11 @@ while cap.isOpened():
 
     # Menampilkan hasil tangkapan kamera ke jendela
     cv2.imshow('Hand Scanner Test', image)
+    print("Kamera terbuka")
 
     # Berhenti jika menekan tombol 'q'
     if cv2.waitKey(5) & 0xFF == ord('q'):
+        print("Kamera ditutup")
         break
 
 cap.release()
