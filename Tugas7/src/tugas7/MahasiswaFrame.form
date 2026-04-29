@@ -46,14 +46,14 @@
                       <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="txtalamat" alignment="0" pref="186" max="32767" attributes="0"/>
-                          <Component id="txtnama" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtnim" alignment="0" max="32767" attributes="0"/>
                           <Component id="txthp" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtkota" alignment="0" max="32767" attributes="0"/>
+                          <Component id="Nimcmb" alignment="0" max="32767" attributes="0"/>
+                          <Component id="Namacmb" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="379" max="32767" attributes="0"/>
           </Group>
           <Component id="jScrollPane1" alignment="0" pref="752" max="32767" attributes="0"/>
       </Group>
@@ -64,12 +64,12 @@
               <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="Nimlbl" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtnim" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="Nimcmb" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="Namalbl" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtnama" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="Namacmb" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -124,19 +124,6 @@
     <Component class="javax.swing.JLabel" name="Kotalbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="KOTA"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtnim">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="txtnim"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtnimActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtnama">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="txtnama"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtalamat">
@@ -213,5 +200,38 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JComboBox" name="Nimcmb">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NimcmbActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="Namacmb">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
   </SubComponents>
 </Form>

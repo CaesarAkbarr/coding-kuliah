@@ -4,6 +4,8 @@
  */
 package tugas7;
 
+import java.sql.ResultSet;
+
 /**
  *
  * @author ROG G513RM
@@ -17,6 +19,26 @@ public class MahasiswaFrame extends javax.swing.JFrame {
      */
     public MahasiswaFrame() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        addNama();
+    }
+
+    private void addNama(){
+        ResultSet res;
+        Namacmb.removeAllItems();
+        Nimcmb.removeAllItems();
+        try {
+            Koneksi.getKoneksi();
+            String query = "SELECT nim, nama FROM mhs ORDER BY nama";
+            res = Koneksi.stmt.executeQuery(query);
+
+            while (res.next()) {
+                Namacmb.addItem(res.getString("Nama"));
+                Nimcmb.addItem(res.getString("Nim"));
+            }
+        } catch (Exception e){
+            System.err.println("Koneksi Gagal " + e.getMessage());
+        }
     }
 
     /**
@@ -33,8 +55,6 @@ public class MahasiswaFrame extends javax.swing.JFrame {
         Alamatlbl = new javax.swing.JLabel();
         Nohplbl = new javax.swing.JLabel();
         Kotalbl = new javax.swing.JLabel();
-        txtnim = new javax.swing.JTextField();
-        txtnama = new javax.swing.JTextField();
         txtalamat = new javax.swing.JTextField();
         txthp = new javax.swing.JTextField();
         txtkota = new javax.swing.JTextField();
@@ -44,6 +64,8 @@ public class MahasiswaFrame extends javax.swing.JFrame {
         Batalbtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        Nimcmb = new javax.swing.JComboBox<>();
+        Namacmb = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,15 +78,6 @@ public class MahasiswaFrame extends javax.swing.JFrame {
         Nohplbl.setText("NO_HP");
 
         Kotalbl.setText("KOTA");
-
-        txtnim.setText("txtnim");
-        txtnim.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtnimActionPerformed(evt);
-            }
-        });
-
-        txtnama.setText("txtnama");
 
         txtalamat.setText("txtalamat");
         txtalamat.addActionListener(new java.awt.event.ActionListener() {
@@ -123,6 +136,15 @@ public class MahasiswaFrame extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        Nimcmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Nimcmb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NimcmbActionPerformed(evt);
+            }
+        });
+
+        Namacmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -148,11 +170,11 @@ public class MahasiswaFrame extends javax.swing.JFrame {
                         .addGap(45, 45, 45)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtalamat, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                            .addComponent(txtnama)
-                            .addComponent(txtnim)
                             .addComponent(txthp)
-                            .addComponent(txtkota))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtkota)
+                            .addComponent(Nimcmb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Namacmb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(379, Short.MAX_VALUE))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 752, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -161,11 +183,11 @@ public class MahasiswaFrame extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Nimlbl)
-                    .addComponent(txtnim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Nimcmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Namalbl)
-                    .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Namacmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Alamatlbl)
@@ -192,10 +214,6 @@ public class MahasiswaFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtnimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnimActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtnimActionPerformed
-
     private void txtalamatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtalamatActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtalamatActionPerformed
@@ -219,6 +237,10 @@ public class MahasiswaFrame extends javax.swing.JFrame {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void NimcmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NimcmbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NimcmbActionPerformed
 
     /**
      * @param args the command line arguments
@@ -250,7 +272,9 @@ public class MahasiswaFrame extends javax.swing.JFrame {
     private javax.swing.JButton Batalbtn;
     private javax.swing.JButton Hapusbtn;
     private javax.swing.JLabel Kotalbl;
+    private javax.swing.JComboBox<String> Namacmb;
     private javax.swing.JLabel Namalbl;
+    private javax.swing.JComboBox<String> Nimcmb;
     private javax.swing.JLabel Nimlbl;
     private javax.swing.JLabel Nohplbl;
     private javax.swing.JButton Simpanbtn;
@@ -260,7 +284,5 @@ public class MahasiswaFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txtalamat;
     private javax.swing.JTextField txthp;
     private javax.swing.JTextField txtkota;
-    private javax.swing.JTextField txtnama;
-    private javax.swing.JTextField txtnim;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,8 @@
  */
 package tugas7;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author ROG G513RM
@@ -17,6 +19,7 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -29,10 +32,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        MenuUtama = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        Mastermenu = new javax.swing.JMenu();
+        Mahasiswa = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
@@ -40,7 +43,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jMenu1.setLabel("Menu Utama");
+        MenuUtama.setLabel("Menu Utama");
 
         jMenuItem3.setText("Exit");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -48,24 +51,24 @@ public class MainFrame extends javax.swing.JFrame {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        MenuUtama.add(jMenuItem3);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(MenuUtama);
 
-        jMenu2.setText("Master");
+        Mastermenu.setText("Master");
 
-        jMenuItem1.setLabel("Mahasiswa");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        Mahasiswa.setLabel("Mahasiswa");
+        Mahasiswa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                MahasiswaActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        Mastermenu.add(Mahasiswa);
 
         jMenuItem2.setText("Penduduk");
-        jMenu2.add(jMenuItem2);
+        Mastermenu.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(Mastermenu);
 
         jMenu3.setText("Transaksi");
         jMenuBar1.add(jMenu3);
@@ -96,9 +99,11 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void MahasiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MahasiswaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+        MahasiswaFrame mahasiswa = new MahasiswaFrame();
+        mahasiswa.setVisible(true);
+    }//GEN-LAST:event_MahasiswaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,13 +131,13 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuItem Mahasiswa;
+    private javax.swing.JMenu Mastermenu;
+    private javax.swing.JMenu MenuUtama;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     // End of variables declaration//GEN-END:variables
