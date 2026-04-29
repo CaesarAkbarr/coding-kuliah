@@ -20,7 +20,17 @@ public class MahasiswaFrame extends javax.swing.JFrame {
     public MahasiswaFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addNama();
+        bersih();
+    }
+
+    private void bersih() {
+        Nimcmb.setSelectedIndex(0);
+        Namacmb.setSelectedIndex(0);
+        txtalamat.setText("");
+        txthp.setText("");
+        txtkota.setText("");
     }
 
     private void addNama(){
@@ -35,6 +45,23 @@ public class MahasiswaFrame extends javax.swing.JFrame {
             while (res.next()) {
                 Namacmb.addItem(res.getString("Nama"));
                 Nimcmb.addItem(res.getString("Nim"));
+            }
+        } catch (Exception e){
+            System.err.println("Koneksi Gagal " + e.getMessage());
+        }
+    }
+
+    private void cariNama(){
+        ResultSet res;
+        try {
+            Koneksi.getKoneksi();
+            String query = "SELECT * FROM mhs WHERE nim = '" + Nimcmb.getSelectedItem() + "'";
+            res = Koneksi.stmt.executeQuery(query);
+
+            if (res.next()) {
+                txtalamat.setText(res.getString("alamat"));
+                txthp.setText(res.getString("no_hp"));
+                txtkota.setText(res.getString("kota"));
             }
         } catch (Exception e){
             System.err.println("Koneksi Gagal " + e.getMessage());
