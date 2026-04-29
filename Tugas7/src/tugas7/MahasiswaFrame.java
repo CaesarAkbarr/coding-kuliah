@@ -23,6 +23,7 @@ public class MahasiswaFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addNama();
         bersih();
+        cariNama();
     }
 
     private void bersih() {
@@ -52,16 +53,15 @@ public class MahasiswaFrame extends javax.swing.JFrame {
     }
 
     private void cariNama(){
+        String nm = txtalamat.getText();
         ResultSet res;
         try {
             Koneksi.getKoneksi();
-            String query = "SELECT * FROM mhs WHERE nim = '" + Nimcmb.getSelectedItem() + "'";
+            String query = "SELECT nim, nama FROM mhs WHERE nama = '" + nm + "'";
             res = Koneksi.stmt.executeQuery(query);
 
-            if (res.next()) {
-                txtalamat.setText(res.getString("alamat"));
-                txthp.setText(res.getString("no_hp"));
-                txtkota.setText(res.getString("kota"));
+            while (res.next()) {
+                txtkota.setText(res.getString("nim"));
             }
         } catch (Exception e){
             System.err.println("Koneksi Gagal " + e.getMessage());
@@ -164,6 +164,11 @@ public class MahasiswaFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         Nimcmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Nimcmb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                NimcmbFocusLost(evt);
+            }
+        });
         Nimcmb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NimcmbActionPerformed(evt);
@@ -268,6 +273,26 @@ public class MahasiswaFrame extends javax.swing.JFrame {
     private void NimcmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NimcmbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NimcmbActionPerformed
+
+    private void NimcmbFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NimcmbFocusLost
+        // TODO add your handling code here:
+        int Nomor = Nimcmb.getSelectedIndex();
+        if (Nomor == 0) {
+            txtalamat.setText("");
+            txthp.setText("");
+            txtkota.setText("");
+        } else {
+            String nim = Nimcmb.getSelectedItem().toString();
+            ResultSet res;
+            try {
+                Koneksi.getKoneksi();
+                String query = "SELECT nim, nama FROM mhs WHERE nim = '" + nim + "'";
+                res = Koneksi.stmt.executeQuery(query);
+            } catch (Exception ex) {
+                logger.log(java.util.logging.Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_NimcmbFocusLost
 
     /**
      * @param args the command line arguments

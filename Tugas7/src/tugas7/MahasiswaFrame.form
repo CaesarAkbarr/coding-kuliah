@@ -212,6 +212,7 @@
         </Property>
       </Properties>
       <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="NimcmbFocusLost"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NimcmbActionPerformed"/>
       </Events>
       <AuxValues>
