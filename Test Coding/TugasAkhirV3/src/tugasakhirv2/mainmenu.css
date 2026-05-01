@@ -1,0 +1,29 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+
+.root {
+    -fx-background-color: #1e1e1e; /* Abu-abu sangat gelap */
+}
+
+.label {
+    -fx-text-fill: #e0e0e0; /* Putih keabu-abuan */
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-background-color: #3700b3;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.button:hover {
+    -fx-background-color: #bb86fc;
+    -fx-text-fill: #121212;
+}
