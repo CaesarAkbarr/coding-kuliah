@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root id="AnchorPane" prefHeight="1000.0" prefWidth="1000.0" stylesheets="@MahasiswaStyle.css" type="AnchorPane" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tugasakhirv2.MahasiswaController">
+<AnchorPane id="AnchorPane" prefHeight="1000.0" prefWidth="1000.0" stylesheets="@MahasiswaStyle.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tugasakhirv2.MahasiswaController">
     <children>
       <VBox alignment="CENTER" layoutX="-1.0" layoutY="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -80,4 +80,4 @@
          </children>
       </VBox>
     </children>
-</fx:root>
+</AnchorPane>

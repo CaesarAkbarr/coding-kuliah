@@ -20,10 +20,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  *
@@ -101,7 +106,7 @@ public class MahasiswaController implements Initializable {
     alert.setHeaderText(null);
     alert.setContentText(content);
     alert.showAndWait();
-}
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -205,7 +210,17 @@ public class MahasiswaController implements Initializable {
 
     @FXML
     private void handleBatal(ActionEvent event) {
-    clearFields();
-    tableData.getSelectionModel().clearSelection(); // Lepas seleksi di tabel
+        clearFields();
+        tableData.getSelectionModel().clearSelection(); // Lepas seleksi di tabel
+    }
+
+    @FXML
+    private void handleMenuMahasiswa(ActionEvent event) throws IOException {
+        Parent mainMenu = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
+        Scene mainScene = new Scene(mainMenu);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(mainScene);
+        stage.setMaximized(true);
+        stage.show();
     }
 }

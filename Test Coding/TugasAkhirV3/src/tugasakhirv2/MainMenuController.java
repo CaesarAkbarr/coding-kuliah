@@ -26,7 +26,7 @@ public class MainMenuController implements Initializable {
     @FXML
     private void handleMenuMahasiswa(ActionEvent event) throws IOException {
         // 1. Load file halaman mahasiswa
-        Parent mhsPage = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        Parent mhsPage = FXMLLoader.load(getClass().getResource("Mahasiswa.fxml"));
         Scene mhsScene = new Scene(mhsPage);
         
         // 2. Ambil Stage (Jendela) yang lagi aktif
