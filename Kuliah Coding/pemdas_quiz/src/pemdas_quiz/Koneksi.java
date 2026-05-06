@@ -22,7 +22,7 @@ public class Koneksi {
     // Mendapatkan koneksi ke database
     public static Connection getKoneksi() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(URL, USER, PASS);
             stmt = con.createStatement();
             System.out.println("Koneksi berhasil.");
