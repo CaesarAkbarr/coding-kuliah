@@ -6,8 +6,10 @@ package pemdas_quiz_final;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.awt.Frame;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -38,10 +40,16 @@ public class FramePembelianDetail extends javax.swing.JFrame {
      */
     public FramePembelianDetail() {
         initComponents();
-        setLocationRelativeTo(null);
         tambahKomponenTambahan();
+        aturKolomTabel();
         muatDataBarang();
         daftarkanListener();
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+        setVisible(true);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
+        setTitle("Form Detail Pembelian");
     }
 
     /**
@@ -53,13 +61,15 @@ public class FramePembelianDetail extends javax.swing.JFrame {
         this.kdSupplier = kdSupplier;
 
         initComponents();
-        setLocationRelativeTo(null);
 
-        // Tambahkan label info dan tombol simpan
+        // Tambahkan label info dan tombol simpan secara programatik
         tambahKomponenTambahan();
 
         // Tampilkan informasi transaksi di label header
         lblInfoTransaksi.setText("No: " + noPesanan + "  |  Tgl: " + tanggal + "  |  Supplier: " + kdSupplier);
+
+        // Ubah kolom tabel sesuai kebutuhan transaksi (Kode, Nama, Harga, Jumlah, Subtotal)
+        aturKolomTabel();
 
         // Muat data barang ke ComboBox
         muatDataBarang();
@@ -67,32 +77,43 @@ public class FramePembelianDetail extends javax.swing.JFrame {
         // Daftarkan semua event listener
         daftarkanListener();
 
-        // Ubah kolom tabel sesuai kebutuhan transaksi
-        aturKolomTabel();
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
+        setTitle("Form Detail Pembelian");
     }
 
-    // Menambahkan label info transaksi, grand total, dan tombol Simpan secara programatik
+    /**
+     * Menambahkan panel info transaksi (NORTH), panel grand total + tombol simpan (SOUTH).
+     * Konten utama dari initComponents (GroupLayout) tetap di CENTER via BorderLayout wrapper.
+     */
     private void tambahKomponenTambahan() {
-        // Panel atas: informasi transaksi
+        // Label informasi transaksi di bagian atas
         lblInfoTransaksi = new JLabel("-- Informasi Transaksi --");
-        lblInfoTransaksi.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
+        lblInfoTransaksi.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 13));
 
-        javax.swing.JPanel panelAtas = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        javax.swing.JPanel panelAtas = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 8));
         panelAtas.add(lblInfoTransaksi);
 
-        // Panel bawah: grand total dan tombol simpan
+        // Label grand total dan tombol simpan di bagian bawah
         lblGrandTotal = new JLabel("Grand Total: Rp 0");
         lblGrandTotal.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
-        btnSimpan = new JButton("Simpan Transaksi");
+        btnSimpan = new JButton("💾 Simpan Transaksi");
 
-        javax.swing.JPanel panelBawah = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        javax.swing.JPanel panelBawah = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 8));
         panelBawah.add(lblGrandTotal);
         panelBawah.add(btnSimpan);
 
-        // Atur layout frame menjadi BorderLayout dan pasang panel
-        getContentPane().setLayout(new java.awt.BorderLayout());
-        getContentPane().add(panelAtas,  java.awt.BorderLayout.NORTH);
-        getContentPane().add(panelBawah, java.awt.BorderLayout.SOUTH);
+        // Simpan konten lama (GroupLayout) lalu bungkus dengan BorderLayout wrapper
+        java.awt.Container kontenLama = getContentPane();
+
+        javax.swing.JPanel wrapper = new javax.swing.JPanel(new java.awt.BorderLayout());
+        setContentPane(wrapper);
+
+        wrapper.add(panelAtas,   java.awt.BorderLayout.NORTH);
+        wrapper.add(kontenLama,  java.awt.BorderLayout.CENTER);
+        wrapper.add(panelBawah,  java.awt.BorderLayout.SOUTH);
 
         pack();
     }
@@ -100,8 +121,12 @@ public class FramePembelianDetail extends javax.swing.JFrame {
     // Mengatur kolom JTable untuk menampilkan item transaksi pembelian
     private void aturKolomTabel() {
         DefaultTableModel model = new DefaultTableModel(
-            new String[]{"Kode Barang", "Nama Barang", "Harga Beli", "Jumlah", "Subtotal"}, 0
-        );
+            new String[]{"Kode Barang", "Nama Barang", "Harga Beli (Rp)", "Jumlah", "Subtotal (Rp)"}, 0
+        ) {
+            // Buat semua sel tidak bisa diedit langsung dari tabel
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
         jTable1.setModel(model);
     }
 
@@ -112,7 +137,7 @@ public class FramePembelianDetail extends javax.swing.JFrame {
 
         try {
             Connection c = Koneksi.getKoneksi();
-            String sql   = "SELECT kd_barang, nama_barang FROM tb_barang ORDER BY kd_barang";
+            String sql = "SELECT kd_barang, nama_barang FROM tb_barang ORDER BY kd_barang";
             ResultSet rs = c.createStatement().executeQuery(sql);
 
             while (rs.next()) {
@@ -128,18 +153,22 @@ public class FramePembelianDetail extends javax.swing.JFrame {
         cmbBarang.setModel(model);
     }
 
-    // Mendaftarkan semua event listener
+    // Mendaftarkan semua event listener pada komponen
     private void daftarkanListener() {
-        // Saat barang dipilih di ComboBox, otomatis isi harga beli
+        // Kosongkan field harga saat placeholder dipilih
+        txtBarang.setText("");
+        txtJumlah.setText("");
+
+        // Saat barang dipilih di ComboBox, otomatis isi harga beli dari database
         cmbBarang.addActionListener(e -> isiHargaOtomatis());
 
-        // Tombol Tambah: tambahkan item ke JTable
+        // Tombol Tambah dari GUI Builder: tambahkan item ke JTable
         btnTambah.addActionListener(e -> tambahItemKeTable());
 
-        // Tombol Hapus: hapus baris yang dipilih dari JTable
+        // Tombol Hapus dari GUI Builder: hapus baris yang dipilih dari JTable
         btnHapus.addActionListener(e -> hapusItemDariTable());
 
-        // Tombol Simpan: simpan transaksi ke database dengan transaction
+        // Tombol Simpan dari panel programatik: simpan transaksi ke database
         btnSimpan.addActionListener(e -> simpanTransaksi());
     }
 
@@ -147,6 +176,7 @@ public class FramePembelianDetail extends javax.swing.JFrame {
     private void isiHargaOtomatis() {
         if (cmbBarang.getSelectedIndex() == 0) {
             txtBarang.setText("");
+            txtBarang.setEditable(true);
             return;
         }
 
@@ -155,7 +185,7 @@ public class FramePembelianDetail extends javax.swing.JFrame {
 
         try {
             Connection c = Koneksi.getKoneksi();
-            String sql   = "SELECT harga_beli_stok FROM tb_barang WHERE kd_barang = '" + kdBarang + "'";
+            String sql = "SELECT harga_beli_stok FROM tb_barang WHERE kd_barang = '" + kdBarang + "'";
             ResultSet rs = c.createStatement().executeQuery(sql);
 
             if (rs.next()) {
@@ -178,6 +208,11 @@ public class FramePembelianDetail extends javax.swing.JFrame {
                     "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (txtBarang.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Harga barang belum terbaca dari database!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (txtJumlah.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Masukkan jumlah barang!",
                     "Peringatan", JOptionPane.WARNING_MESSAGE);
@@ -190,28 +225,37 @@ public class FramePembelianDetail extends javax.swing.JFrame {
             String nmBarang = pilihan.split(" - ")[1];
             double harga    = Double.parseDouble(txtBarang.getText().trim());
             int    jumlah   = Integer.parseInt(txtJumlah.getText().trim());
+
+            // Validasi jumlah harus positif
+            if (jumlah <= 0) {
+                JOptionPane.showMessageDialog(this, "Jumlah harus lebih dari 0!",
+                        "Peringatan", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             double subtotal = harga * jumlah;
 
             // Tambahkan baris ke tabel transaksi
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.addRow(new Object[]{kdBarang, nmBarang, harga, jumlah, subtotal});
 
-            // Update grand total
+            // Update grand total secara real-time
             grandTotal += subtotal;
             lblGrandTotal.setText("Grand Total: Rp " + String.format("%,.2f", grandTotal));
 
             // Reset field pilihan setelah ditambahkan
             cmbBarang.setSelectedIndex(0);
             txtBarang.setText("");
+            txtBarang.setEditable(true);
             txtJumlah.setText("");
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Jumlah harus berupa angka!",
+            JOptionPane.showMessageDialog(this, "Jumlah harus berupa angka bulat!",
                     "Format Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // Menghapus baris yang dipilih dari JTable dan kurangi grand total
+    // Menghapus baris yang dipilih dari JTable dan kurangi grand total secara real-time
     private void hapusItemDariTable() {
         int baris = jTable1.getSelectedRow();
         if (baris < 0) {
@@ -220,7 +264,7 @@ public class FramePembelianDetail extends javax.swing.JFrame {
             return;
         }
 
-        // Kurangi grand total sebelum dihapus
+        // Kurangi grand total sebelum baris dihapus
         double subtotal = Double.parseDouble(jTable1.getValueAt(baris, 4).toString());
         grandTotal -= subtotal;
         lblGrandTotal.setText("Grand Total: Rp " + String.format("%,.2f", grandTotal));
@@ -248,32 +292,34 @@ public class FramePembelianDetail extends javax.swing.JFrame {
 
             // ——— INSERT ke tb_pembelian (header transaksi) ———
             String sqlHeader = "INSERT INTO tb_pembelian (kd_pembelian, tgl_pembelian, kd_supplier, total_bayar) "
-                             + "VALUES ('" + noPesanan + "', '" + tanggal + "', '" + kdSupplier + "', " + grandTotal + ")";
+                    + "VALUES ('" + noPesanan + "', '" + tanggal + "', '" + kdSupplier + "', " + grandTotal + ")";
             conn.createStatement().executeUpdate(sqlHeader);
 
-            // ——— INSERT ke tb_pembelian_detail (detail per item) ———
+            // ——— INSERT ke tb_pembelian_detail (detail per item) + UPDATE stok ———
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             for (int i = 0; i < model.getRowCount(); i++) {
-                String kdBarang  = model.getValueAt(i, 0).toString();
-                double harga     = Double.parseDouble(model.getValueAt(i, 2).toString());
-                int    jumlah    = Integer.parseInt(model.getValueAt(i, 3).toString());
-                double subtotal  = Double.parseDouble(model.getValueAt(i, 4).toString());
+                String kdBarang = model.getValueAt(i, 0).toString();
+                double harga    = Double.parseDouble(model.getValueAt(i, 2).toString());
+                int    jumlah   = Integer.parseInt(model.getValueAt(i, 3).toString());
+                double subtotal = Double.parseDouble(model.getValueAt(i, 4).toString());
 
+                // INSERT baris detail pembelian
                 String sqlDetail = "INSERT INTO tb_pembelian_detail (kd_pembelian, kd_barang, jumlah, subtotal) "
-                                 + "VALUES ('" + noPesanan + "', '" + kdBarang + "', " + jumlah + ", " + subtotal + ")";
+                        + "VALUES ('" + noPesanan + "', '" + kdBarang + "', " + jumlah + ", " + subtotal + ")";
                 conn.createStatement().executeUpdate(sqlDetail);
 
-                // Update stok barang setelah pembelian
+                // UPDATE stok barang: tambah stok sesuai jumlah yang dibeli
                 String sqlUpdateStok = "UPDATE tb_barang SET stok_barang = stok_barang + " + jumlah
-                                     + " WHERE kd_barang = '" + kdBarang + "'";
+                        + " WHERE kd_barang = '" + kdBarang + "'";
                 conn.createStatement().executeUpdate(sqlUpdateStok);
             }
 
-            // Commit: semua query berhasil, simpan permanen
+            // Commit: semua query berhasil, simpan permanen ke database
             conn.commit();
 
             JOptionPane.showMessageDialog(this,
-                    "Transaksi pembelian " + noPesanan + " berhasil disimpan!\nTotal: Rp " + String.format("%,.2f", grandTotal),
+                    "Transaksi pembelian " + noPesanan + " berhasil disimpan!\n"
+                    + "Total: Rp " + String.format("%,.2f", grandTotal),
                     "Sukses", JOptionPane.INFORMATION_MESSAGE);
 
             this.dispose(); // Tutup frame setelah sukses
@@ -407,8 +453,6 @@ public class FramePembelianDetail extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //GEN-BEGIN:variables
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
@@ -422,7 +466,6 @@ public class FramePembelianDetail extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FramePembelianDetail().setVisible(true));

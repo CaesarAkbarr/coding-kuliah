@@ -7,8 +7,10 @@ package pemdas_quiz_final;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.awt.Frame;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,34 +19,26 @@ import javax.swing.JOptionPane;
  */
 public class FramePembelian extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FramePembelian.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger
+            .getLogger(FramePembelian.class.getName());
 
-    // Tombol Next ditambahkan programatik karena tidak ada di GUI Builder
-    private JButton btnNext;
+    // btnNext adalah alias programatik untuk btnLanjut yang sudah ada di GUI Builder
+    // Kita tidak perlu deklarasi terpisah; cukup gunakan btnLanjut langsung.
 
     /**
      * Creates new form FramePembelian
      */
     public FramePembelian() {
         initComponents();
+        // setExtendedState(Frame.MAXIMIZED_BOTH);
+        setVisible(true);
         setLocationRelativeTo(null);
-
-        // Tambahkan tombol Next secara programatik
-        tambahTombolNext();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
+        setTitle("Form Pembelian");
 
         // Inisialisasi data saat frame dibuka
         inisialisasiFrame();
-    }
-
-    // Menambahkan tombol Next/Lanjut ke panel bawah
-    private void tambahTombolNext() {
-        btnNext = new JButton("Lanjut →");
-
-        javax.swing.JPanel panelBawah = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-        panelBawah.add(btnNext);
-
-        getContentPane().add(panelBawah, java.awt.BorderLayout.SOUTH);
-        pack();
     }
 
     // Mengisi data awal: tanggal hari ini, nomor pesanan otomatis, dan data supplier
@@ -60,8 +54,8 @@ public class FramePembelian extends javax.swing.JFrame {
         // Muat data supplier ke ComboBox
         muatDataSupplier();
 
-        // Tombol Lanjut: validasi lalu buka FramePembelianDetail
-        btnNext.addActionListener(e -> lanjutKeDetail());
+        // Hubungkan btnLanjut (dari GUI Builder) dengan logika validasi
+        btnLanjut.addActionListener(e -> lanjutKeDetail());
     }
 
     // Memuat data supplier dari database ke ComboBox
@@ -71,7 +65,7 @@ public class FramePembelian extends javax.swing.JFrame {
 
         try {
             Connection c = Koneksi.getKoneksi();
-            String sql   = "SELECT kd_supplier, nama_supplier FROM tb_supplier ORDER BY kd_supplier";
+            String sql = "SELECT kd_supplier, nama_supplier FROM tb_supplier ORDER BY kd_supplier";
             ResultSet rs = c.createStatement().executeQuery(sql);
 
             while (rs.next()) {
@@ -98,9 +92,9 @@ public class FramePembelian extends javax.swing.JFrame {
 
         // Ambil kode supplier dari pilihan ComboBox (bagian sebelum " - ")
         String pilihanSupplier = cmbSupplier.getSelectedItem().toString();
-        String kdSupplier      = pilihanSupplier.split(" - ")[0];
-        String noPesanan       = txtNoPesanan.getText();
-        String tanggal         = txtTanggal.getText();
+        String kdSupplier = pilihanSupplier.split(" - ")[0];
+        String noPesanan  = txtNoPesanan.getText();
+        String tanggal    = txtTanggal.getText();
 
         // Buka frame detail dan passing parameter transaksi
         FramePembelianDetail frameDetail = new FramePembelianDetail(noPesanan, tanggal, kdSupplier);
@@ -123,6 +117,7 @@ public class FramePembelian extends javax.swing.JFrame {
         txtTanggal = new javax.swing.JTextField();
         lblSupplier = new javax.swing.JLabel();
         cmbSupplier = new javax.swing.JComboBox<>();
+        btnLanjut = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -138,24 +133,31 @@ public class FramePembelian extends javax.swing.JFrame {
 
         cmbSupplier.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        btnLanjut.setText("Lanjut");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap(132, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblNoPesanan)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(lblSupplier, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblTanggal, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtNoPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtTanggal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(cmbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(117, 117, 117))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNoPesanan)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(lblSupplier, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblTanggal, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtNoPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtTanggal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(117, 117, 117))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnLanjut)
+                        .addGap(160, 160, 160))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,7 +174,9 @@ public class FramePembelian extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSupplier)
                     .addComponent(cmbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(109, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnLanjut)
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         pack();
@@ -182,10 +186,9 @@ public class FramePembelian extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //GEN-BEGIN:variables
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel.
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -197,13 +200,13 @@ public class FramePembelian extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FramePembelian().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLanjut;
     private javax.swing.JComboBox<String> cmbSupplier;
     private javax.swing.JLabel lblNoPesanan;
     private javax.swing.JLabel lblSupplier;

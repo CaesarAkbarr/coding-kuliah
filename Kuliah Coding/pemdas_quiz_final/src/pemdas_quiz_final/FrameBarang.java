@@ -6,6 +6,8 @@ package pemdas_quiz_final;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.awt.Frame;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -15,20 +17,38 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrameBarang extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrameBarang.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger
+            .getLogger(FrameBarang.class.getName());
 
     /**
      * Creates new form FrameBarang
      */
     public FrameBarang() {
         initComponents();
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+        setVisible(true);
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
+        setTitle("Form Barang");
+
+        // Bersihkan teks placeholder "jTextField1" dari semua field
+        clearField();
 
         // Inisialisasi saat frame dibuka
         inisialisasiFrame();
     }
 
-    // Menyiapkan kode otomatis dan tabel data barang
+    // Mengosongkan semua JTextField (kecuali kode yang di-generate otomatis)
+    private void clearField() {
+        txtNamaBarang.setText("");
+        txtSatuan.setText("");
+        txtHargaJual.setText("");
+        txtHargaBeli.setText("");
+        txtStockBarang.setText("");
+    }
+
+    // Menyiapkan kode otomatis, tabel data, dan event listener
     private void inisialisasiFrame() {
         // Auto-generate kode barang dan buat field read-only
         txtKodeBarang.setText(Koneksi.generateIdMaster("tb_barang", "kd_barang", "B"));
@@ -37,14 +57,27 @@ public class FrameBarang extends javax.swing.JFrame {
         // Tampilkan data barang yang sudah ada di tabel
         muatDataBarang();
 
+        // MouseListener: klik baris tabel → isi data ke form (Data Binding)
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int baris = jTable1.getSelectedRow();
+                if (baris >= 0) {
+                    txtKodeBarang.setText(jTable1.getValueAt(baris, 0).toString());
+                    txtNamaBarang.setText(jTable1.getValueAt(baris, 1).toString());
+                    txtSatuan.setText(jTable1.getValueAt(baris, 2).toString());
+                    txtHargaJual.setText(jTable1.getValueAt(baris, 3).toString());
+                    txtHargaBeli.setText(jTable1.getValueAt(baris, 4).toString());
+                    txtStockBarang.setText(jTable1.getValueAt(baris, 5).toString());
+                }
+            }
+        });
+
         // Tombol Batal: bersihkan form dan generate kode baru
         btnBatal.addActionListener(e -> bersihkanForm());
 
-        // Tombol Tambah: bersihkan form untuk input baru
-        btnTambah.addActionListener(e -> {
-            bersihkanForm();
-            txtNamaBarang.requestFocus();
-        });
+        // Tombol Tambah: simpan data ke database, lalu bersihkan form
+        btnTambah.addActionListener(e -> simpanBarang());
 
         // Tombol Hapus: hapus baris yang dipilih dari tabel dan database
         btnHapus.addActionListener(e -> hapusBarang());
@@ -60,17 +93,17 @@ public class FrameBarang extends javax.swing.JFrame {
 
         try {
             Connection c = Koneksi.getKoneksi();
-            String sql   = "SELECT kd_barang, nama_barang, satuan, harga_jual, harga_beli_stok, stok_barang FROM tb_barang";
+            String sql = "SELECT kd_barang, nama_barang, satuan, harga_jual, harga_beli_stok, stok_barang FROM tb_barang";
             ResultSet rs = c.createStatement().executeQuery(sql);
 
             while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getString("kd_barang"),
-                    rs.getString("nama_barang"),
-                    rs.getString("satuan"),
-                    rs.getDouble("harga_jual"),
-                    rs.getDouble("harga_beli_stok"),
-                    rs.getInt("stok_barang")
+                model.addRow(new Object[] {
+                        rs.getString("kd_barang"),
+                        rs.getString("nama_barang"),
+                        rs.getString("satuan"),
+                        rs.getDouble("harga_jual"),
+                        rs.getDouble("harga_beli_stok"),
+                        rs.getInt("stok_barang")
                 });
             }
             rs.close();
@@ -95,20 +128,24 @@ public class FrameBarang extends javax.swing.JFrame {
 
         try {
             // Ambil nilai dari form
-            String  kode     = txtKodeBarang.getText().trim();
-            String  nama     = txtNamaBarang.getText().trim();
-            String  satuan   = txtSatuan.getText().trim();
-            double  hargaJual = Double.parseDouble(txtHargaJual.getText().trim());
-            double  hargaBeli = Double.parseDouble(txtHargaBeli.getText().trim());
-            int     stok     = Integer.parseInt(txtStockBarang.getText().trim());
+            String kode = txtKodeBarang.getText().trim();
+            String nama = txtNamaBarang.getText().trim();
+            String satuan = txtSatuan.getText().trim();
+            double hargaJual = Double.parseDouble(txtHargaJual.getText().trim());
+            double hargaBeli = Double.parseDouble(txtHargaBeli.getText().trim());
+            int stok = Integer.parseInt(txtStockBarang.getText().trim());
 
-            // Eksekusi query INSERT
+            // Eksekusi query UPSERT: INSERT baru atau UPDATE jika kode sudah ada
             String sql = "INSERT INTO tb_barang (kd_barang, nama_barang, satuan, harga_jual, harga_beli_stok, stok_barang) "
-                       + "VALUES ('" + kode + "', '" + nama + "', '" + satuan + "', "
-                       + hargaJual + ", " + hargaBeli + ", " + stok + ")";
+                    + "VALUES ('" + kode + "', '" + nama + "', '" + satuan + "', "
+                    + hargaJual + ", " + hargaBeli + ", " + stok + ") "
+                    + "ON DUPLICATE KEY UPDATE "
+                    + "nama_barang=VALUES(nama_barang), satuan=VALUES(satuan), "
+                    + "harga_jual=VALUES(harga_jual), harga_beli_stok=VALUES(harga_beli_stok), "
+                    + "stok_barang=VALUES(stok_barang)";
             Koneksi.ubahData(sql);
 
-            JOptionPane.showMessageDialog(this, "Data barang berhasil disimpan!",
+            JOptionPane.showMessageDialog(this, "Data barang berhasil disimpan/diperbarui!",
                     "Sukses", JOptionPane.INFORMATION_MESSAGE);
 
             // Refresh tampilan
@@ -160,7 +197,8 @@ public class FrameBarang extends javax.swing.JFrame {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblKodeBarang = new javax.swing.JLabel();
@@ -183,132 +221,88 @@ public class FrameBarang extends javax.swing.JFrame {
         btnBatal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
         lblKodeBarang.setText("Kode Barang:");
+        getContentPane().add(lblKodeBarang);
+        lblKodeBarang.setBounds(38, 61, 71, 16);
 
         txtKodeBarang.setText("jTextField1");
+        getContentPane().add(txtKodeBarang);
+        txtKodeBarang.setBounds(140, 58, 71, 22);
 
         txtNamaBarang.setText("jTextField1");
+        getContentPane().add(txtNamaBarang);
+        txtNamaBarang.setBounds(140, 98, 71, 22);
 
         lblNamaBarang.setText("Nama Barang:");
+        getContentPane().add(lblNamaBarang);
+        lblNamaBarang.setBounds(38, 101, 75, 16);
 
         lblSatuan.setText("Satuan:");
+        getContentPane().add(lblSatuan);
+        lblSatuan.setBounds(38, 141, 38, 16);
 
         txtSatuan.setText("jTextField1");
+        getContentPane().add(txtSatuan);
+        txtSatuan.setBounds(140, 138, 71, 22);
 
         lblHargaJual.setText("Harga Jual (Rp):");
+        getContentPane().add(lblHargaJual);
+        lblHargaJual.setBounds(38, 181, 84, 16);
 
         txtHargaJual.setText("jTextField1");
+        getContentPane().add(txtHargaJual);
+        txtHargaJual.setBounds(140, 178, 71, 22);
 
         txtHargaBeli.setText("jTextField1");
+        getContentPane().add(txtHargaBeli);
+        txtHargaBeli.setBounds(140, 218, 71, 22);
 
         lblHargaBeli.setText("Harga Beli (Rp):");
+        getContentPane().add(lblHargaBeli);
+        lblHargaBeli.setBounds(38, 221, 84, 16);
 
         txtStockBarang.setText("jTextField1");
+        getContentPane().add(txtStockBarang);
+        txtStockBarang.setBounds(140, 258, 71, 22);
 
         lblStockBarang.setText("Stock Barang:");
+        getContentPane().add(lblStockBarang);
+        lblStockBarang.setBounds(38, 261, 72, 16);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "Kode Barang", "Nama Barang", "Satuan", "Harga Jual", "Harga Beli", "Stock Barang"
-            }
-        ));
+                new Object[][] {
+                        { null, null, null, null, null, null },
+                        { null, null, null, null, null, null },
+                        { null, null, null, null, null, null },
+                        { null, null, null, null, null, null },
+                        { null, null, null, null, null, null },
+                        { null, null, null, null, null, null }
+                },
+                new String[] {
+                        "Kode Barang", "Nama Barang", "Satuan", "Harga Jual", "Harga Beli", "Stock Barang"
+                }));
         jScrollPane1.setViewportView(jTable1);
 
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(229, 6, 526, 382);
+
         btnTambah.setText("Tambah");
+        getContentPane().add(btnTambah);
+        btnTambah.setBounds(38, 298, 73, 23);
 
         btnHapus.setText("Hapus");
+        getContentPane().add(btnHapus);
+        btnHapus.setBounds(139, 298, 72, 23);
 
         btnSImpan.setText("Simpan");
+        getContentPane().add(btnSImpan);
+        btnSImpan.setBounds(38, 339, 72, 23);
 
         btnBatal.setText("Batal");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblKodeBarang)
-                            .addComponent(lblNamaBarang)
-                            .addComponent(lblSatuan)
-                            .addComponent(lblHargaJual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblHargaBeli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblStockBarang))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtKodeBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNamaBarang, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSatuan, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtHargaJual, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtHargaBeli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtStockBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnTambah)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnHapus))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSImpan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnBatal)))
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(151, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblKodeBarang)
-                            .addComponent(txtKodeBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblNamaBarang)
-                            .addComponent(txtNamaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblSatuan)
-                            .addComponent(txtSatuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblHargaJual)
-                            .addComponent(txtHargaJual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblHargaBeli)
-                            .addComponent(txtHargaBeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblStockBarang)
-                            .addComponent(txtStockBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnHapus)
-                            .addComponent(btnTambah))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSImpan)
-                            .addComponent(btnBatal))
-                        .addGap(0, 26, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addGap(19, 19, 19))
-        );
+        getContentPane().add(btnBatal);
+        btnBatal.setBounds(139, 339, 72, 23);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -318,9 +312,11 @@ public class FrameBarang extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //GEN-BEGIN:variables
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel.
+         * For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -332,7 +328,6 @@ public class FrameBarang extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrameBarang().setVisible(true));

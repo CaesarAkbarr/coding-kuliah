@@ -26,7 +26,7 @@ public class FrameMaster extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
-        setTitle("Data Master");
+        setTitle("Form Master");
 
         // Daftarkan action listener untuk setiap tombol navigasi
         daftarkanTombol();
@@ -58,8 +58,9 @@ public class FrameMaster extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         btnSupplier = new javax.swing.JButton();
         btnBarang = new javax.swing.JButton();
@@ -67,51 +68,47 @@ public class FrameMaster extends javax.swing.JFrame {
         btnPembelian = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         btnSupplier.setText("Supplier");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 37;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(83, 51, 0, 0);
+        getContentPane().add(btnSupplier, gridBagConstraints);
 
         btnBarang.setText("Barang");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 39;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 51, 112, 0);
+        getContentPane().add(btnBarang, gridBagConstraints);
 
         btnPelanggan.setText("Pelanggan");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 25;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(83, 18, 0, 109);
+        getContentPane().add(btnPelanggan, gridBagConstraints);
 
         btnPembelian.setText("Pembelian");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(51, 51, 51)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btnSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 111,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(btnPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, 111,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btnBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 111,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(btnPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 111,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(109, Short.MAX_VALUE)));
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(83, 83, 83)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(btnSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 72,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, 72,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(btnPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 72,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 72,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(112, Short.MAX_VALUE)));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 25;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 18, 112, 109);
+        getContentPane().add(btnPembelian, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
