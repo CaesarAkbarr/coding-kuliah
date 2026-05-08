@@ -4,19 +4,298 @@
  */
 package pemdas_quiz_final;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ROG G513RM
  */
 public class FramePembelianDetail extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FramePembelianDetail.class.getName());
 
+    // Parameter transaksi yang diterima dari FramePembelian
+    private String noPesanan;
+    private String tanggal;
+    private String kdSupplier;
+
+    // Komponen tambahan yang tidak ada di GUI Builder
+    private JLabel  lblInfoTransaksi;
+    private JLabel  lblGrandTotal;
+    private JButton btnSimpan;
+
+    // Menyimpan total grand total dari semua item yang ditambahkan
+    private double grandTotal = 0;
+
     /**
-     * Creates new form FramePembelianDetail
+     * Constructor default (tanpa parameter) — diperlukan oleh NetBeans
      */
     public FramePembelianDetail() {
         initComponents();
+        setLocationRelativeTo(null);
+        tambahKomponenTambahan();
+        muatDataBarang();
+        daftarkanListener();
+    }
+
+    /**
+     * Constructor dengan parameter transaksi yang di-passing dari FramePembelian
+     */
+    public FramePembelianDetail(String noPesanan, String tanggal, String kdSupplier) {
+        this.noPesanan  = noPesanan;
+        this.tanggal    = tanggal;
+        this.kdSupplier = kdSupplier;
+
+        initComponents();
+        setLocationRelativeTo(null);
+
+        // Tambahkan label info dan tombol simpan
+        tambahKomponenTambahan();
+
+        // Tampilkan informasi transaksi di label header
+        lblInfoTransaksi.setText("No: " + noPesanan + "  |  Tgl: " + tanggal + "  |  Supplier: " + kdSupplier);
+
+        // Muat data barang ke ComboBox
+        muatDataBarang();
+
+        // Daftarkan semua event listener
+        daftarkanListener();
+
+        // Ubah kolom tabel sesuai kebutuhan transaksi
+        aturKolomTabel();
+    }
+
+    // Menambahkan label info transaksi, grand total, dan tombol Simpan secara programatik
+    private void tambahKomponenTambahan() {
+        // Panel atas: informasi transaksi
+        lblInfoTransaksi = new JLabel("-- Informasi Transaksi --");
+        lblInfoTransaksi.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
+
+        javax.swing.JPanel panelAtas = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        panelAtas.add(lblInfoTransaksi);
+
+        // Panel bawah: grand total dan tombol simpan
+        lblGrandTotal = new JLabel("Grand Total: Rp 0");
+        lblGrandTotal.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
+        btnSimpan = new JButton("Simpan Transaksi");
+
+        javax.swing.JPanel panelBawah = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        panelBawah.add(lblGrandTotal);
+        panelBawah.add(btnSimpan);
+
+        // Atur layout frame menjadi BorderLayout dan pasang panel
+        getContentPane().setLayout(new java.awt.BorderLayout());
+        getContentPane().add(panelAtas,  java.awt.BorderLayout.NORTH);
+        getContentPane().add(panelBawah, java.awt.BorderLayout.SOUTH);
+
+        pack();
+    }
+
+    // Mengatur kolom JTable untuk menampilkan item transaksi pembelian
+    private void aturKolomTabel() {
+        DefaultTableModel model = new DefaultTableModel(
+            new String[]{"Kode Barang", "Nama Barang", "Harga Beli", "Jumlah", "Subtotal"}, 0
+        );
+        jTable1.setModel(model);
+    }
+
+    // Memuat data barang dari database ke ComboBox
+    private void muatDataBarang() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        model.addElement("-- Pilih Barang --");
+
+        try {
+            Connection c = Koneksi.getKoneksi();
+            String sql   = "SELECT kd_barang, nama_barang FROM tb_barang ORDER BY kd_barang";
+            ResultSet rs = c.createStatement().executeQuery(sql);
+
+            while (rs.next()) {
+                // Format: "B00001 - Nama Barang"
+                model.addElement(rs.getString("kd_barang") + " - " + rs.getString("nama_barang"));
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal memuat data barang: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        cmbBarang.setModel(model);
+    }
+
+    // Mendaftarkan semua event listener
+    private void daftarkanListener() {
+        // Saat barang dipilih di ComboBox, otomatis isi harga beli
+        cmbBarang.addActionListener(e -> isiHargaOtomatis());
+
+        // Tombol Tambah: tambahkan item ke JTable
+        btnTambah.addActionListener(e -> tambahItemKeTable());
+
+        // Tombol Hapus: hapus baris yang dipilih dari JTable
+        btnHapus.addActionListener(e -> hapusItemDariTable());
+
+        // Tombol Simpan: simpan transaksi ke database dengan transaction
+        btnSimpan.addActionListener(e -> simpanTransaksi());
+    }
+
+    // Mengambil harga_beli_stok dari database berdasarkan barang yang dipilih
+    private void isiHargaOtomatis() {
+        if (cmbBarang.getSelectedIndex() == 0) {
+            txtBarang.setText("");
+            return;
+        }
+
+        String pilihan  = cmbBarang.getSelectedItem().toString();
+        String kdBarang = pilihan.split(" - ")[0];
+
+        try {
+            Connection c = Koneksi.getKoneksi();
+            String sql   = "SELECT harga_beli_stok FROM tb_barang WHERE kd_barang = '" + kdBarang + "'";
+            ResultSet rs = c.createStatement().executeQuery(sql);
+
+            if (rs.next()) {
+                // Tampilkan harga beli di field txtBarang dan jadikan read-only
+                txtBarang.setText(String.valueOf(rs.getDouble("harga_beli_stok")));
+                txtBarang.setEditable(false);
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal mengambil harga: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Menambahkan item yang dipilih sebagai baris baru ke JTable dan update grand total
+    private void tambahItemKeTable() {
+        // Validasi input
+        if (cmbBarang.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Pilih barang terlebih dahulu!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (txtJumlah.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Masukkan jumlah barang!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            String pilihan  = cmbBarang.getSelectedItem().toString();
+            String kdBarang = pilihan.split(" - ")[0];
+            String nmBarang = pilihan.split(" - ")[1];
+            double harga    = Double.parseDouble(txtBarang.getText().trim());
+            int    jumlah   = Integer.parseInt(txtJumlah.getText().trim());
+            double subtotal = harga * jumlah;
+
+            // Tambahkan baris ke tabel transaksi
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.addRow(new Object[]{kdBarang, nmBarang, harga, jumlah, subtotal});
+
+            // Update grand total
+            grandTotal += subtotal;
+            lblGrandTotal.setText("Grand Total: Rp " + String.format("%,.2f", grandTotal));
+
+            // Reset field pilihan setelah ditambahkan
+            cmbBarang.setSelectedIndex(0);
+            txtBarang.setText("");
+            txtJumlah.setText("");
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Jumlah harus berupa angka!",
+                    "Format Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Menghapus baris yang dipilih dari JTable dan kurangi grand total
+    private void hapusItemDariTable() {
+        int baris = jTable1.getSelectedRow();
+        if (baris < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Kurangi grand total sebelum dihapus
+        double subtotal = Double.parseDouble(jTable1.getValueAt(baris, 4).toString());
+        grandTotal -= subtotal;
+        lblGrandTotal.setText("Grand Total: Rp " + String.format("%,.2f", grandTotal));
+
+        // Hapus baris dari tabel
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.removeRow(baris);
+    }
+
+    // Menyimpan transaksi pembelian (header + detail) ke database dengan database transaction
+    private void simpanTransaksi() {
+        // Validasi: tabel tidak boleh kosong
+        if (jTable1.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Tambahkan minimal satu barang ke transaksi!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Connection conn = null;
+        try {
+            conn = Koneksi.getKoneksi();
+
+            // Mulai database transaction — nonaktifkan auto commit
+            conn.setAutoCommit(false);
+
+            // ——— INSERT ke tb_pembelian (header transaksi) ———
+            String sqlHeader = "INSERT INTO tb_pembelian (kd_pembelian, tgl_pembelian, kd_supplier, total_bayar) "
+                             + "VALUES ('" + noPesanan + "', '" + tanggal + "', '" + kdSupplier + "', " + grandTotal + ")";
+            conn.createStatement().executeUpdate(sqlHeader);
+
+            // ——— INSERT ke tb_pembelian_detail (detail per item) ———
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            for (int i = 0; i < model.getRowCount(); i++) {
+                String kdBarang  = model.getValueAt(i, 0).toString();
+                double harga     = Double.parseDouble(model.getValueAt(i, 2).toString());
+                int    jumlah    = Integer.parseInt(model.getValueAt(i, 3).toString());
+                double subtotal  = Double.parseDouble(model.getValueAt(i, 4).toString());
+
+                String sqlDetail = "INSERT INTO tb_pembelian_detail (kd_pembelian, kd_barang, jumlah, subtotal) "
+                                 + "VALUES ('" + noPesanan + "', '" + kdBarang + "', " + jumlah + ", " + subtotal + ")";
+                conn.createStatement().executeUpdate(sqlDetail);
+
+                // Update stok barang setelah pembelian
+                String sqlUpdateStok = "UPDATE tb_barang SET stok_barang = stok_barang + " + jumlah
+                                     + " WHERE kd_barang = '" + kdBarang + "'";
+                conn.createStatement().executeUpdate(sqlUpdateStok);
+            }
+
+            // Commit: semua query berhasil, simpan permanen
+            conn.commit();
+
+            JOptionPane.showMessageDialog(this,
+                    "Transaksi pembelian " + noPesanan + " berhasil disimpan!\nTotal: Rp " + String.format("%,.2f", grandTotal),
+                    "Sukses", JOptionPane.INFORMATION_MESSAGE);
+
+            this.dispose(); // Tutup frame setelah sukses
+
+        } catch (Exception e) {
+            // Rollback: batalkan semua perubahan jika terjadi error
+            try {
+                if (conn != null) conn.rollback();
+            } catch (Exception ex) {
+                System.err.println("Rollback gagal: " + ex.getMessage());
+            }
+            JOptionPane.showMessageDialog(this,
+                    "Transaksi gagal! Semua perubahan dibatalkan.\nError: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // Kembalikan auto commit ke true setelah selesai
+            try {
+                if (conn != null) conn.setAutoCommit(true);
+            } catch (Exception ex) {
+                System.err.println("Gagal reset autoCommit: " + ex.getMessage());
+            }
+        }
     }
 
     /**
@@ -129,7 +408,7 @@ public class FramePembelianDetail extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //GEN-BEGIN:variables
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */

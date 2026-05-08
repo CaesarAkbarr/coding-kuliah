@@ -4,12 +4,17 @@
  */
 package pemdas_quiz_final;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ROG G513RM
  */
 public class FrameSupplier extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrameSupplier.class.getName());
 
     /**
@@ -17,6 +22,127 @@ public class FrameSupplier extends javax.swing.JFrame {
      */
     public FrameSupplier() {
         initComponents();
+        setLocationRelativeTo(null);
+
+        // Inisialisasi saat frame dibuka
+        inisialisasiFrame();
+    }
+
+    // Menyiapkan kode otomatis dan tabel data supplier
+    private void inisialisasiFrame() {
+        // Auto-generate kode supplier dan buat field read-only
+        txtKodeSupplier.setText(Koneksi.generateIdMaster("tb_supplier", "kd_supplier", "S"));
+        txtKodeSupplier.setEditable(false);
+
+        // Tampilkan data supplier yang sudah ada di tabel
+        muatDataSupplier();
+
+        // Tombol Batal: bersihkan form
+        btnBatal.addActionListener(e -> bersihkanForm());
+
+        // Tombol Tambah: bersihkan form untuk input baru
+        btnTambah.addActionListener(e -> {
+            bersihkanForm();
+            txtNamaSupplier.requestFocus();
+        });
+
+        // Tombol Hapus: hapus data supplier yang dipilih
+        btnHapus.addActionListener(e -> hapusSupplier());
+
+        // Tombol Simpan: validasi lalu simpan ke database
+        btnSImpan.addActionListener(e -> simpanSupplier());
+    }
+
+    // Memuat semua data supplier dari database ke JTable
+    private void muatDataSupplier() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Bersihkan tabel terlebih dahulu
+
+        try {
+            Connection c = Koneksi.getKoneksi();
+            String sql   = "SELECT kd_supplier, nama_supplier, alamat, no_telp FROM tb_supplier";
+            ResultSet rs = c.createStatement().executeQuery(sql);
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("kd_supplier"),
+                    rs.getString("nama_supplier"),
+                    rs.getString("alamat"),
+                    rs.getString("no_telp")
+                });
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal memuat data supplier: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Menyimpan data supplier baru ke database
+    private void simpanSupplier() {
+        // Validasi: semua field harus terisi
+        if (txtNamaSupplier.getText().trim().isEmpty()
+                || txtNoTelp.getText().trim().isEmpty()
+                || txtAlamat.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Semua field harus diisi!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Ambil nilai dari form
+            String kode  = txtKodeSupplier.getText().trim();
+            String nama  = txtNamaSupplier.getText().trim();
+            String noTlp = txtNoTelp.getText().trim();
+            String alamat = txtAlamat.getText().trim();
+
+            // Eksekusi query INSERT
+            String sql = "INSERT INTO tb_supplier (kd_supplier, nama_supplier, alamat, no_telp) "
+                       + "VALUES ('" + kode + "', '" + nama + "', '" + alamat + "', '" + noTlp + "')";
+            Koneksi.ubahData(sql);
+
+            JOptionPane.showMessageDialog(this, "Data supplier berhasil disimpan!",
+                    "Sukses", JOptionPane.INFORMATION_MESSAGE);
+
+            // Refresh tampilan
+            muatDataSupplier();
+            bersihkanForm();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Menghapus supplier berdasarkan baris yang dipilih di tabel
+    private void hapusSupplier() {
+        int baris = jTable1.getSelectedRow();
+        if (baris < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus terlebih dahulu!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String kode = jTable1.getValueAt(baris, 0).toString();
+        int konfirmasi = JOptionPane.showConfirmDialog(this,
+                "Apakah Anda yakin ingin menghapus supplier " + kode + "?",
+                "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+            Koneksi.ubahData("DELETE FROM tb_supplier WHERE kd_supplier = '" + kode + "'");
+            JOptionPane.showMessageDialog(this, "Data supplier berhasil dihapus!",
+                    "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            muatDataSupplier();
+            bersihkanForm();
+        }
+    }
+
+    // Membersihkan semua field form dan generate kode baru
+    private void bersihkanForm() {
+        txtKodeSupplier.setText(Koneksi.generateIdMaster("tb_supplier", "kd_supplier", "S"));
+        txtNamaSupplier.setText("");
+        txtNoTelp.setText("");
+        txtAlamat.setText("");
     }
 
     /**
@@ -162,7 +288,7 @@ public class FrameSupplier extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //GEN-BEGIN:variables
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */

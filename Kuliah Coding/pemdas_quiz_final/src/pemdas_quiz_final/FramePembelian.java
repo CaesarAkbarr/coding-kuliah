@@ -4,19 +4,108 @@
  */
 package pemdas_quiz_final;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.time.LocalDate;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ROG G513RM
  */
 public class FramePembelian extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FramePembelian.class.getName());
+
+    // Tombol Next ditambahkan programatik karena tidak ada di GUI Builder
+    private JButton btnNext;
 
     /**
      * Creates new form FramePembelian
      */
     public FramePembelian() {
         initComponents();
+        setLocationRelativeTo(null);
+
+        // Tambahkan tombol Next secara programatik
+        tambahTombolNext();
+
+        // Inisialisasi data saat frame dibuka
+        inisialisasiFrame();
+    }
+
+    // Menambahkan tombol Next/Lanjut ke panel bawah
+    private void tambahTombolNext() {
+        btnNext = new JButton("Lanjut →");
+
+        javax.swing.JPanel panelBawah = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        panelBawah.add(btnNext);
+
+        getContentPane().add(panelBawah, java.awt.BorderLayout.SOUTH);
+        pack();
+    }
+
+    // Mengisi data awal: tanggal hari ini, nomor pesanan otomatis, dan data supplier
+    private void inisialisasiFrame() {
+        // Isi tanggal hari ini secara otomatis dan jadikan read-only
+        txtTanggal.setText(LocalDate.now().toString());
+        txtTanggal.setEditable(false);
+
+        // Generate nomor pesanan otomatis dan jadikan read-only
+        txtNoPesanan.setText(Koneksi.generateNoPesanan());
+        txtNoPesanan.setEditable(false);
+
+        // Muat data supplier ke ComboBox
+        muatDataSupplier();
+
+        // Tombol Lanjut: validasi lalu buka FramePembelianDetail
+        btnNext.addActionListener(e -> lanjutKeDetail());
+    }
+
+    // Memuat data supplier dari database ke ComboBox
+    private void muatDataSupplier() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        model.addElement("-- Pilih Supplier --");
+
+        try {
+            Connection c = Koneksi.getKoneksi();
+            String sql   = "SELECT kd_supplier, nama_supplier FROM tb_supplier ORDER BY kd_supplier";
+            ResultSet rs = c.createStatement().executeQuery(sql);
+
+            while (rs.next()) {
+                // Format: "S00001 - Nama Supplier"
+                model.addElement(rs.getString("kd_supplier") + " - " + rs.getString("nama_supplier"));
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal memuat data supplier: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        cmbSupplier.setModel(model);
+    }
+
+    // Validasi input lalu buka FramePembelianDetail dengan parameter yang diperlukan
+    private void lanjutKeDetail() {
+        // Validasi: supplier harus dipilih (bukan item default)
+        if (cmbSupplier.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Pilih supplier terlebih dahulu!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Ambil kode supplier dari pilihan ComboBox (bagian sebelum " - ")
+        String pilihanSupplier = cmbSupplier.getSelectedItem().toString();
+        String kdSupplier      = pilihanSupplier.split(" - ")[0];
+        String noPesanan       = txtNoPesanan.getText();
+        String tanggal         = txtTanggal.getText();
+
+        // Buka frame detail dan passing parameter transaksi
+        FramePembelianDetail frameDetail = new FramePembelianDetail(noPesanan, tanggal, kdSupplier);
+        frameDetail.setVisible(true);
+        this.dispose(); // Tutup frame ini
     }
 
     /**
@@ -94,7 +183,7 @@ public class FramePembelian extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //GEN-BEGIN:variables
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */

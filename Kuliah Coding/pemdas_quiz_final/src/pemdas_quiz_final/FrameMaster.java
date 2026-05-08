@@ -27,6 +27,28 @@ public class FrameMaster extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setTitle("Data Master");
+
+        // Daftarkan action listener untuk setiap tombol navigasi
+        daftarkanTombol();
+    }
+
+    // Menghubungkan setiap tombol ke frame tujuannya
+    private void daftarkanTombol() {
+        btnBarang.addActionListener(e -> {
+            new FrameBarang().setVisible(true);
+        });
+
+        btnSupplier.addActionListener(e -> {
+            new FrameSupplier().setVisible(true);
+        });
+
+        btnPelanggan.addActionListener(e -> {
+            new FramePelanggan().setVisible(true);
+        });
+
+        btnPembelian.addActionListener(e -> {
+            new FramePembelian().setVisible(true);
+        });
     }
 
     /**

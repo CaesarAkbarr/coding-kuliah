@@ -4,12 +4,17 @@
  */
 package pemdas_quiz_final;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ROG G513RM
  */
 public class FrameBarang extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrameBarang.class.getName());
 
     /**
@@ -18,6 +23,135 @@ public class FrameBarang extends javax.swing.JFrame {
     public FrameBarang() {
         initComponents();
         setLocationRelativeTo(null);
+
+        // Inisialisasi saat frame dibuka
+        inisialisasiFrame();
+    }
+
+    // Menyiapkan kode otomatis dan tabel data barang
+    private void inisialisasiFrame() {
+        // Auto-generate kode barang dan buat field read-only
+        txtKodeBarang.setText(Koneksi.generateIdMaster("tb_barang", "kd_barang", "B"));
+        txtKodeBarang.setEditable(false);
+
+        // Tampilkan data barang yang sudah ada di tabel
+        muatDataBarang();
+
+        // Tombol Batal: bersihkan form dan generate kode baru
+        btnBatal.addActionListener(e -> bersihkanForm());
+
+        // Tombol Tambah: bersihkan form untuk input baru
+        btnTambah.addActionListener(e -> {
+            bersihkanForm();
+            txtNamaBarang.requestFocus();
+        });
+
+        // Tombol Hapus: hapus baris yang dipilih dari tabel dan database
+        btnHapus.addActionListener(e -> hapusBarang());
+
+        // Tombol Simpan: validasi lalu simpan ke database
+        btnSImpan.addActionListener(e -> simpanBarang());
+    }
+
+    // Memuat semua data barang dari database ke JTable
+    private void muatDataBarang() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Bersihkan tabel terlebih dahulu
+
+        try {
+            Connection c = Koneksi.getKoneksi();
+            String sql   = "SELECT kd_barang, nama_barang, satuan, harga_jual, harga_beli_stok, stok_barang FROM tb_barang";
+            ResultSet rs = c.createStatement().executeQuery(sql);
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("kd_barang"),
+                    rs.getString("nama_barang"),
+                    rs.getString("satuan"),
+                    rs.getDouble("harga_jual"),
+                    rs.getDouble("harga_beli_stok"),
+                    rs.getInt("stok_barang")
+                });
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal memuat data barang: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Menyimpan data barang baru ke database
+    private void simpanBarang() {
+        // Validasi: semua field harus terisi
+        if (txtNamaBarang.getText().trim().isEmpty()
+                || txtSatuan.getText().trim().isEmpty()
+                || txtHargaJual.getText().trim().isEmpty()
+                || txtHargaBeli.getText().trim().isEmpty()
+                || txtStockBarang.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Semua field harus diisi!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Ambil nilai dari form
+            String  kode     = txtKodeBarang.getText().trim();
+            String  nama     = txtNamaBarang.getText().trim();
+            String  satuan   = txtSatuan.getText().trim();
+            double  hargaJual = Double.parseDouble(txtHargaJual.getText().trim());
+            double  hargaBeli = Double.parseDouble(txtHargaBeli.getText().trim());
+            int     stok     = Integer.parseInt(txtStockBarang.getText().trim());
+
+            // Eksekusi query INSERT
+            String sql = "INSERT INTO tb_barang (kd_barang, nama_barang, satuan, harga_jual, harga_beli_stok, stok_barang) "
+                       + "VALUES ('" + kode + "', '" + nama + "', '" + satuan + "', "
+                       + hargaJual + ", " + hargaBeli + ", " + stok + ")";
+            Koneksi.ubahData(sql);
+
+            JOptionPane.showMessageDialog(this, "Data barang berhasil disimpan!",
+                    "Sukses", JOptionPane.INFORMATION_MESSAGE);
+
+            // Refresh tampilan
+            muatDataBarang();
+            bersihkanForm();
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Harga dan stok harus berupa angka!",
+                    "Format Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Menghapus barang berdasarkan baris yang dipilih di tabel
+    private void hapusBarang() {
+        int baris = jTable1.getSelectedRow();
+        if (baris < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus terlebih dahulu!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String kode = jTable1.getValueAt(baris, 0).toString();
+        int konfirmasi = JOptionPane.showConfirmDialog(this,
+                "Apakah Anda yakin ingin menghapus barang " + kode + "?",
+                "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+            Koneksi.ubahData("DELETE FROM tb_barang WHERE kd_barang = '" + kode + "'");
+            JOptionPane.showMessageDialog(this, "Data barang berhasil dihapus!",
+                    "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            muatDataBarang();
+            bersihkanForm();
+        }
+    }
+
+    // Membersihkan semua field form dan generate kode baru
+    private void bersihkanForm() {
+        txtKodeBarang.setText(Koneksi.generateIdMaster("tb_barang", "kd_barang", "B"));
+        txtNamaBarang.setText("");
+        txtSatuan.setText("");
+        txtHargaJual.setText("");
+        txtHargaBeli.setText("");
+        txtStockBarang.setText("");
     }
 
     /**
@@ -184,7 +318,7 @@ public class FrameBarang extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //GEN-BEGIN:variables
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
