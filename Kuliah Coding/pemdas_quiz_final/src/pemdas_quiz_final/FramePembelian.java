@@ -124,16 +124,36 @@ public class FramePembelian extends javax.swing.JFrame {
         lblNoPesanan.setText("No. Pesanan:");
 
         txtNoPesanan.setText("jTextField1");
+        txtNoPesanan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNoPesananActionPerformed(evt);
+            }
+        });
 
         lblTanggal.setText("Tanggal:");
 
         txtTanggal.setText("jTextField1");
+        txtTanggal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTanggalActionPerformed(evt);
+            }
+        });
 
         lblSupplier.setText("Supplier:");
 
         cmbSupplier.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSupplierActionPerformed(evt);
+            }
+        });
 
         btnLanjut.setText("Lanjut");
+        btnLanjut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLanjutActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -181,6 +201,22 @@ public class FramePembelian extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLanjutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanjutActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLanjutActionPerformed
+
+    private void cmbSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSupplierActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbSupplierActionPerformed
+
+    private void txtNoPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPesananActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoPesananActionPerformed
+
+    private void txtTanggalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTanggalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTanggalActionPerformed
 
     /**
      * @param args the command line arguments

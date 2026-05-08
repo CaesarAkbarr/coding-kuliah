@@ -26,64 +26,25 @@ public class FrameBarang extends javax.swing.JFrame {
     public FrameBarang() {
         initComponents();
         setExtendedState(Frame.MAXIMIZED_BOTH);
-        setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
         setTitle("Form Barang");
 
-        // Bersihkan teks placeholder "jTextField1" dari semua field
+        // Bersihkan placeholder dan generate kode otomatis
         clearField();
-
-        // Inisialisasi saat frame dibuka
-        inisialisasiFrame();
+        muatDataBarang();
     }
 
-    // Mengosongkan semua JTextField (kecuali kode yang di-generate otomatis)
+    // Mengosongkan field input dan generate kode barang baru
     private void clearField() {
+        txtKodeBarang.setText(Koneksi.generateIdMaster("tb_barang", "kd_barang", "B"));
+        txtKodeBarang.setEditable(false);
         txtNamaBarang.setText("");
         txtSatuan.setText("");
         txtHargaJual.setText("");
         txtHargaBeli.setText("");
         txtStockBarang.setText("");
-    }
-
-    // Menyiapkan kode otomatis, tabel data, dan event listener
-    private void inisialisasiFrame() {
-        // Auto-generate kode barang dan buat field read-only
-        txtKodeBarang.setText(Koneksi.generateIdMaster("tb_barang", "kd_barang", "B"));
-        txtKodeBarang.setEditable(false);
-
-        // Tampilkan data barang yang sudah ada di tabel
-        muatDataBarang();
-
-        // MouseListener: klik baris tabel → isi data ke form (Data Binding)
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int baris = jTable1.getSelectedRow();
-                if (baris >= 0) {
-                    txtKodeBarang.setText(jTable1.getValueAt(baris, 0).toString());
-                    txtNamaBarang.setText(jTable1.getValueAt(baris, 1).toString());
-                    txtSatuan.setText(jTable1.getValueAt(baris, 2).toString());
-                    txtHargaJual.setText(jTable1.getValueAt(baris, 3).toString());
-                    txtHargaBeli.setText(jTable1.getValueAt(baris, 4).toString());
-                    txtStockBarang.setText(jTable1.getValueAt(baris, 5).toString());
-                }
-            }
-        });
-
-        // Tombol Batal: bersihkan form dan generate kode baru
-        btnBatal.addActionListener(e -> bersihkanForm());
-
-        // Tombol Tambah: simpan data ke database, lalu bersihkan form
-        btnTambah.addActionListener(e -> simpanBarang());
-
-        // Tombol Hapus: hapus baris yang dipilih dari tabel dan database
-        btnHapus.addActionListener(e -> hapusBarang());
-
-        // Tombol Simpan: validasi lalu simpan ke database
-        btnSImpan.addActionListener(e -> simpanBarang());
     }
 
     // Memuat semua data barang dari database ke JTable
@@ -198,7 +159,7 @@ public class FrameBarang extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblKodeBarang = new javax.swing.JLabel();
@@ -228,10 +189,20 @@ public class FrameBarang extends javax.swing.JFrame {
         lblKodeBarang.setBounds(38, 61, 71, 16);
 
         txtKodeBarang.setText("jTextField1");
+        txtKodeBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtKodeBarangActionPerformed(evt);
+            }
+        });
         getContentPane().add(txtKodeBarang);
         txtKodeBarang.setBounds(140, 58, 71, 22);
 
         txtNamaBarang.setText("jTextField1");
+        txtNamaBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNamaBarangActionPerformed(evt);
+            }
+        });
         getContentPane().add(txtNamaBarang);
         txtNamaBarang.setBounds(140, 98, 71, 22);
 
@@ -244,6 +215,11 @@ public class FrameBarang extends javax.swing.JFrame {
         lblSatuan.setBounds(38, 141, 38, 16);
 
         txtSatuan.setText("jTextField1");
+        txtSatuan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSatuanActionPerformed(evt);
+            }
+        });
         getContentPane().add(txtSatuan);
         txtSatuan.setBounds(140, 138, 71, 22);
 
@@ -252,10 +228,20 @@ public class FrameBarang extends javax.swing.JFrame {
         lblHargaJual.setBounds(38, 181, 84, 16);
 
         txtHargaJual.setText("jTextField1");
+        txtHargaJual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtHargaJualActionPerformed(evt);
+            }
+        });
         getContentPane().add(txtHargaJual);
         txtHargaJual.setBounds(140, 178, 71, 22);
 
         txtHargaBeli.setText("jTextField1");
+        txtHargaBeli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtHargaBeliActionPerformed(evt);
+            }
+        });
         getContentPane().add(txtHargaBeli);
         txtHargaBeli.setBounds(140, 218, 71, 22);
 
@@ -264,6 +250,11 @@ public class FrameBarang extends javax.swing.JFrame {
         lblHargaBeli.setBounds(38, 221, 84, 16);
 
         txtStockBarang.setText("jTextField1");
+        txtStockBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStockBarangActionPerformed(evt);
+            }
+        });
         getContentPane().add(txtStockBarang);
         txtStockBarang.setBounds(140, 258, 71, 22);
 
@@ -272,40 +263,125 @@ public class FrameBarang extends javax.swing.JFrame {
         lblStockBarang.setBounds(38, 261, 72, 16);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                        { null, null, null, null, null, null },
-                        { null, null, null, null, null, null },
-                        { null, null, null, null, null, null },
-                        { null, null, null, null, null, null },
-                        { null, null, null, null, null, null },
-                        { null, null, null, null, null, null }
-                },
-                new String[] {
-                        "Kode Barang", "Nama Barang", "Satuan", "Harga Jual", "Harga Beli", "Stock Barang"
-                }));
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Kode Barang", "Nama Barang", "Satuan", "Harga Jual", "Harga Beli", "Stock Barang"
+            }
+        ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(229, 6, 526, 382);
 
         btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnTambah);
         btnTambah.setBounds(38, 298, 73, 23);
 
         btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnHapus);
         btnHapus.setBounds(139, 298, 72, 23);
 
         btnSImpan.setText("Simpan");
+        btnSImpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSImpanActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnSImpan);
         btnSImpan.setBounds(38, 339, 72, 23);
 
         btnBatal.setText("Batal");
+        btnBatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatalActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnBatal);
         btnBatal.setBounds(139, 339, 72, 23);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // Simpan data ke database (UPSERT), lalu refresh tabel
+        simpanBarang();
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // Hapus data berdasarkan baris terpilih di tabel
+        hapusBarang();
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnSImpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSImpanActionPerformed
+        // Simpan data ke database (UPSERT), lalu refresh tabel
+        simpanBarang();
+    }//GEN-LAST:event_btnSImpanActionPerformed
+
+    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
+        // Bersihkan form dan generate kode baru
+        clearField();
+    }//GEN-LAST:event_btnBatalActionPerformed
+
+    private void txtKodeBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKodeBarangActionPerformed
+        // Tidak ada aksi khusus saat Enter di field kode
+    }//GEN-LAST:event_txtKodeBarangActionPerformed
+
+    private void txtNamaBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaBarangActionPerformed
+        // Pindah fokus ke field berikutnya saat Enter
+        txtSatuan.requestFocus();
+    }//GEN-LAST:event_txtNamaBarangActionPerformed
+
+    private void txtSatuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSatuanActionPerformed
+        txtHargaJual.requestFocus();
+    }//GEN-LAST:event_txtSatuanActionPerformed
+
+    private void txtHargaJualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHargaJualActionPerformed
+        txtHargaBeli.requestFocus();
+    }//GEN-LAST:event_txtHargaJualActionPerformed
+
+    private void txtHargaBeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHargaBeliActionPerformed
+        txtStockBarang.requestFocus();
+    }//GEN-LAST:event_txtHargaBeliActionPerformed
+
+    private void txtStockBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockBarangActionPerformed
+        // Enter di field terakhir → langsung simpan
+        simpanBarang();
+    }//GEN-LAST:event_txtStockBarangActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // Klik baris tabel → isi data ke form (Data Binding)
+        int baris = jTable1.getSelectedRow();
+        if (baris >= 0) {
+            txtKodeBarang.setText(jTable1.getValueAt(baris, 0).toString());
+            txtNamaBarang.setText(jTable1.getValueAt(baris, 1).toString());
+            txtSatuan.setText(jTable1.getValueAt(baris, 2).toString());
+            txtHargaJual.setText(jTable1.getValueAt(baris, 3).toString());
+            txtHargaBeli.setText(jTable1.getValueAt(baris, 4).toString());
+            txtStockBarang.setText(jTable1.getValueAt(baris, 5).toString());
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments

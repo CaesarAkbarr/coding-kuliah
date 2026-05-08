@@ -71,6 +71,11 @@ public class FrameMaster extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         btnSupplier.setText("Supplier");
+        btnSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSupplierActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -81,6 +86,11 @@ public class FrameMaster extends javax.swing.JFrame {
         getContentPane().add(btnSupplier, gridBagConstraints);
 
         btnBarang.setText("Barang");
+        btnBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBarangActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -91,6 +101,11 @@ public class FrameMaster extends javax.swing.JFrame {
         getContentPane().add(btnBarang, gridBagConstraints);
 
         btnPelanggan.setText("Pelanggan");
+        btnPelanggan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPelangganActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -101,6 +116,11 @@ public class FrameMaster extends javax.swing.JFrame {
         getContentPane().add(btnPelanggan, gridBagConstraints);
 
         btnPembelian.setText("Pembelian");
+        btnPembelian.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPembelianActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -112,6 +132,22 @@ public class FrameMaster extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSupplierActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSupplierActionPerformed
+
+    private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPelangganActionPerformed
+
+    private void btnBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBarangActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBarangActionPerformed
+
+    private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPembelianActionPerformed
 
     /**
      * @param args the command line arguments

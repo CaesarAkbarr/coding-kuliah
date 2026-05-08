@@ -33,101 +33,23 @@ public class FramePelanggan extends javax.swing.JFrame {
     public FramePelanggan() {
         initComponents();
         setExtendedState(Frame.MAXIMIZED_BOTH);
-        setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
         setTitle("Form Pelanggan");
 
-        // Bersihkan teks placeholder sebelum tambahTombol dipanggil
+        // Bersihkan placeholder dan generate kode otomatis
         clearField();
-
-        // tambahTombol();
-
-        // Inisialisasi data saat frame dibuka
-        inisialisasiFrame();
+        muatDataPelanggan();
     }
 
-    // Mengosongkan semua JTextField dan JTextArea (kecuali kode yang di-generate)
+    // Mengosongkan field input dan generate kode pelanggan baru
     private void clearField() {
+        txtKodePelanggan.setText(Koneksi.generateIdMaster("tb_pelanggan", "kd_pelanggan", "P"));
+        txtKodePelanggan.setEditable(false);
         txtNamaPelanggan.setText("");
         txtNoTelp.setText("");
         txtAlamat.setText("");
-    }
-
-    /**
-     * Menambahkan panel tombol di bawah content pane.
-     * KUNCI: Tidak mengubah layout content pane yang sudah dikelola GroupLayout.
-     * Kita hanya memanfaatkan window glass pane atau menambah baris baru
-     * lewat metode yang aman: membungkus konten lama + panel tombol baru
-     * dalam sebuah JPanel wrapper dengan BorderLayout.
-     */
-    private void tambahTombol() {
-        // Buat tombol-tombol aksi
-        btnSimpan = new JButton("Simpan");
-        btnBatal = new JButton("Batal");
-        btnTambah = new JButton("Tambah");
-        btnHapus = new JButton("Hapus");
-
-        // Panel tombol di bagian bawah
-        javax.swing.JPanel panelTombol = new javax.swing.JPanel(
-                new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 8));
-        panelTombol.add(btnTambah);
-        panelTombol.add(btnSimpan);
-        panelTombol.add(btnHapus);
-        panelTombol.add(btnBatal);
-
-        // Simpan panel konten lama (yang berisi semua komponen GroupLayout)
-        java.awt.Container panelKontenLama = getContentPane();
-
-        // Buat wrapper JPanel dengan BorderLayout
-        javax.swing.JPanel wrapper = new javax.swing.JPanel(new java.awt.BorderLayout());
-
-        // Pindahkan semua komponen dari content pane lama ke wrapper CENTER
-        // Cara: bungkus content pane asli dengan JPanel scroll, tapi lebih mudah:
-        // Ganti content pane dengan wrapper, lalu masukkan konten lama ke CENTER
-        // dan panel tombol ke SOUTH
-        setContentPane(wrapper);
-
-        // Tambahkan content pane lama (dengan GroupLayout) ke CENTER
-        wrapper.add(panelKontenLama, java.awt.BorderLayout.CENTER);
-
-        // Tambahkan panel tombol ke SOUTH
-        wrapper.add(panelTombol, java.awt.BorderLayout.SOUTH);
-
-        // Pack ulang agar ukuran frame menyesuaikan
-        pack();
-    }
-
-    // Menyiapkan kode otomatis, tabel data, dan event listener
-    private void inisialisasiFrame() {
-        // Auto-generate kode pelanggan dan buat field read-only
-        txtKodePelanggan.setText(Koneksi.generateIdMaster("tb_pelanggan", "kd_pelanggan", "P"));
-        txtKodePelanggan.setEditable(false);
-
-        // Tampilkan data pelanggan yang sudah ada di tabel
-        muatDataPelanggan();
-
-        // MouseListener: klik baris tabel → isi data ke form (Data Binding)
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int baris = jTable1.getSelectedRow();
-                if (baris >= 0) {
-                    txtKodePelanggan.setText(jTable1.getValueAt(baris, 0).toString());
-                    txtNamaPelanggan.setText(jTable1.getValueAt(baris, 1).toString());
-                    txtAlamat.setText(jTable1.getValueAt(baris, 2).toString());
-                    txtNoTelp.setText(jTable1.getValueAt(baris, 3).toString());
-                }
-            }
-        });
-
-        // Daftarkan action listener untuk tombol-tombol
-        btnBatal.addActionListener(e -> bersihkanForm());
-        // Tombol Tambah: simpan data ke database, lalu bersihkan form
-        btnTambah.addActionListener(e -> simpanPelanggan());
-        btnHapus.addActionListener(e -> hapusPelanggan());
-        btnSimpan.addActionListener(e -> simpanPelanggan());
     }
 
     // Memuat semua data pelanggan dari database ke JTable
@@ -232,6 +154,7 @@ public class FramePelanggan extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -256,14 +179,29 @@ public class FramePelanggan extends javax.swing.JFrame {
         lblKodePelanggan.setText("Kode Pelanggan:");
 
         txtKodePelanggan.setText("jTextField1");
+        txtKodePelanggan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtKodePelangganActionPerformed(evt);
+            }
+        });
 
         txtNamaPelanggan.setText("jTextField1");
+        txtNamaPelanggan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNamaPelangganActionPerformed(evt);
+            }
+        });
 
         lblNamaPelanggan.setText("Nama Pelanggan:");
 
         lblNoTelp.setText("No. Telp:");
 
         txtNoTelp.setText("jTextField1");
+        txtNoTelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNoTelpActionPerformed(evt);
+            }
+        });
 
         lblAlamat.setText("Alamat:");
 
@@ -279,6 +217,11 @@ public class FramePelanggan extends javax.swing.JFrame {
                 new String[] {
                         "Kode Pelanggan", "Nama Pelanggan", "Alamat", "No. Telp."
                 }));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         txtAlamat.setColumns(20);
@@ -286,12 +229,32 @@ public class FramePelanggan extends javax.swing.JFrame {
         jScrollPane2.setViewportView(txtAlamat);
 
         btnSImpan.setText("Simpan");
+        btnSImpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSImpanActionPerformed(evt);
+            }
+        });
 
         btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         btnBatal.setText("Batal");
+        btnBatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatalActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -400,6 +363,51 @@ public class FramePelanggan extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTambahActionPerformed
+        // Simpan data ke database (UPSERT), lalu refresh tabel
+        simpanPelanggan();
+    }// GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnHapusActionPerformed
+        // Hapus data berdasarkan baris terpilih di tabel
+        hapusPelanggan();
+    }// GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnSImpanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSImpanActionPerformed
+        // Simpan data ke database (UPSERT), lalu refresh tabel
+        simpanPelanggan();
+    }// GEN-LAST:event_btnSImpanActionPerformed
+
+    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnBatalActionPerformed
+        // Bersihkan form dan generate kode baru
+        clearField();
+    }// GEN-LAST:event_btnBatalActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jTable1MouseClicked
+        // Klik baris tabel → isi data ke form (Data Binding)
+        int baris = jTable1.getSelectedRow();
+        if (baris >= 0) {
+            txtKodePelanggan.setText(jTable1.getValueAt(baris, 0).toString());
+            txtNamaPelanggan.setText(jTable1.getValueAt(baris, 1).toString());
+            txtAlamat.setText(jTable1.getValueAt(baris, 2).toString());
+            txtNoTelp.setText(jTable1.getValueAt(baris, 3).toString());
+        }
+    }// GEN-LAST:event_jTable1MouseClicked
+
+    private void txtKodePelangganActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtKodePelangganActionPerformed
+        // Tidak ada aksi khusus
+    }// GEN-LAST:event_txtKodePelangganActionPerformed
+
+    private void txtNamaPelangganActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtNamaPelangganActionPerformed
+        // Pindah fokus ke No. Telp saat Enter
+        txtNoTelp.requestFocus();
+    }// GEN-LAST:event_txtNamaPelangganActionPerformed
+
+    private void txtNoTelpActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtNoTelpActionPerformed
+        // Pindah fokus ke Alamat saat Enter
+        txtAlamat.requestFocus();
+    }// GEN-LAST:event_txtNoTelpActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -426,10 +434,10 @@ public class FramePelanggan extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    // private javax.swing.JButton btnBatal;
-    // private javax.swing.JButton btnHapus;
-    // private javax.swing.JButton btnTambah;
+    private javax.swing.JButton btnBatal;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnSImpan;
+    private javax.swing.JButton btnTambah;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;

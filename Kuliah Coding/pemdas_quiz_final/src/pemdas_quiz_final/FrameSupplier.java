@@ -26,60 +26,23 @@ public class FrameSupplier extends javax.swing.JFrame {
     public FrameSupplier() {
         initComponents();
         setExtendedState(Frame.MAXIMIZED_BOTH);
-        setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
         setTitle("Form Supplier");
 
-        // Bersihkan teks placeholder "jTextField1" dari semua field
+        // Bersihkan placeholder dan generate kode otomatis
         clearField();
-
-        // Inisialisasi saat frame dibuka
-        inisialisasiFrame();
+        muatDataSupplier();
     }
 
-    // Mengosongkan semua JTextField dan JTextArea (kecuali kode yang di-generate)
+    // Mengosongkan field input dan generate kode supplier baru
     private void clearField() {
+        txtKodeSupplier.setText(Koneksi.generateIdMaster("tb_supplier", "kd_supplier", "S"));
+        txtKodeSupplier.setEditable(false);
         txtNamaSupplier.setText("");
         txtNoTelp.setText("");
         txtAlamat.setText("");
-    }
-
-    // Menyiapkan kode otomatis, tabel data, dan event listener
-    private void inisialisasiFrame() {
-        // Auto-generate kode supplier dan buat field read-only
-        txtKodeSupplier.setText(Koneksi.generateIdMaster("tb_supplier", "kd_supplier", "S"));
-        txtKodeSupplier.setEditable(false);
-
-        // Tampilkan data supplier yang sudah ada di tabel
-        muatDataSupplier();
-
-        // MouseListener: klik baris tabel → isi data ke form (Data Binding)
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int baris = jTable1.getSelectedRow();
-                if (baris >= 0) {
-                    txtKodeSupplier.setText(jTable1.getValueAt(baris, 0).toString());
-                    txtNamaSupplier.setText(jTable1.getValueAt(baris, 1).toString());
-                    txtAlamat.setText(jTable1.getValueAt(baris, 2).toString());
-                    txtNoTelp.setText(jTable1.getValueAt(baris, 3).toString());
-                }
-            }
-        });
-
-        // Tombol Batal: bersihkan form
-        btnBatal.addActionListener(e -> bersihkanForm());
-
-        // Tombol Tambah: simpan data ke database, lalu bersihkan form
-        btnTambah.addActionListener(e -> simpanSupplier());
-
-        // Tombol Hapus: hapus data supplier yang dipilih
-        btnHapus.addActionListener(e -> hapusSupplier());
-
-        // Tombol Simpan: validasi lalu simpan ke database
-        btnSImpan.addActionListener(e -> simpanSupplier());
     }
 
     // Memuat semua data supplier dari database ke JTable
@@ -183,7 +146,7 @@ public class FrameSupplier extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblKodeSupplier = new javax.swing.JLabel();
@@ -207,29 +170,50 @@ public class FrameSupplier extends javax.swing.JFrame {
         lblKodeSupplier.setText("Kode Supplier:");
 
         txtKodeSupplier.setText("jTextField1");
+        txtKodeSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtKodeSupplierActionPerformed(evt);
+            }
+        });
 
         txtNamaSupplier.setText("jTextField1");
+        txtNamaSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNamaSupplierActionPerformed(evt);
+            }
+        });
 
         lblNamaSupplier.setText("Nama Supplier:");
 
         lblNoTelp.setText("No. Telp:");
 
         txtNoTelp.setText("jTextField1");
+        txtNoTelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNoTelpActionPerformed(evt);
+            }
+        });
 
         lblAlamat.setText("Alamat:");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                        { null, null, null, null },
-                        { null, null, null, null },
-                        { null, null, null, null },
-                        { null, null, null, null },
-                        { null, null, null, null },
-                        { null, null, null, null }
-                },
-                new String[] {
-                        "Kode Supplier", "Nama Supplier", "Alamat", "No. Telp."
-                }));
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Kode Supplier", "Nama Supplier", "Alamat", "No. Telp."
+            }
+        ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         txtAlamat.setColumns(20);
@@ -237,110 +221,147 @@ public class FrameSupplier extends javax.swing.JFrame {
         jScrollPane2.setViewportView(txtAlamat);
 
         btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         btnBatal.setText("Batal");
+        btnBatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatalActionPerformed(evt);
+            }
+        });
 
         btnSImpan.setText("Simpan");
+        btnSImpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSImpanActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(lblKodeSupplier)
-                                                        .addComponent(lblNamaSupplier)
-                                                        .addComponent(lblNoTelp)
-                                                        .addComponent(lblAlamat, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(txtKodeSupplier,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 71,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(txtNamaSupplier,
-                                                                javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 71,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(txtNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0,
-                                                Short.MAX_VALUE)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btnTambah)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(btnHapus))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btnSImpan)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(btnBatal)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23,
-                                        Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(11, Short.MAX_VALUE)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblKodeSupplier)
+                            .addComponent(lblNamaSupplier)
+                            .addComponent(lblNoTelp)
+                            .addComponent(lblAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtKodeSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNamaSupplier, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnTambah)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnHapus))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnSImpan)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBatal)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(11, Short.MAX_VALUE))
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(58, 58, 58)
-                                                .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(lblKodeSupplier)
-                                                        .addComponent(txtKodeSupplier,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(lblNamaSupplier)
-                                                        .addComponent(txtNamaSupplier,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(lblNoTelp)
-                                                        .addComponent(txtNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(18, 18, 18)
-                                                .addComponent(lblAlamat)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(btnHapus)
-                                                        .addComponent(btnTambah))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(btnSImpan)
-                                                        .addComponent(btnBatal))
-                                                .addGap(0, 0, Short.MAX_VALUE))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401,
-                                                        Short.MAX_VALUE)))
-                                .addGap(19, 19, 19)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblKodeSupplier)
+                            .addComponent(txtKodeSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblNamaSupplier)
+                            .addComponent(txtNamaSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblNoTelp)
+                            .addComponent(txtNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblAlamat)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnHapus)
+                            .addComponent(btnTambah))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSImpan)
+                            .addComponent(btnBatal))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)))
+                .addGap(19, 19, 19))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // Simpan data ke database (UPSERT), lalu refresh tabel
+        simpanSupplier();
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // Hapus data berdasarkan baris terpilih di tabel
+        hapusSupplier();
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnSImpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSImpanActionPerformed
+        // Simpan data ke database (UPSERT), lalu refresh tabel
+        simpanSupplier();
+    }//GEN-LAST:event_btnSImpanActionPerformed
+
+    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
+        // Bersihkan form dan generate kode baru
+        clearField();
+    }//GEN-LAST:event_btnBatalActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // Klik baris tabel → isi data ke form (Data Binding)
+        int baris = jTable1.getSelectedRow();
+        if (baris >= 0) {
+            txtKodeSupplier.setText(jTable1.getValueAt(baris, 0).toString());
+            txtNamaSupplier.setText(jTable1.getValueAt(baris, 1).toString());
+            txtAlamat.setText(jTable1.getValueAt(baris, 2).toString());
+            txtNoTelp.setText(jTable1.getValueAt(baris, 3).toString());
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void txtKodeSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKodeSupplierActionPerformed
+        // Tidak ada aksi khusus
+    }//GEN-LAST:event_txtKodeSupplierActionPerformed
+
+    private void txtNamaSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaSupplierActionPerformed
+        // Pindah fokus ke field No. Telp saat Enter
+        txtNoTelp.requestFocus();
+    }//GEN-LAST:event_txtNamaSupplierActionPerformed
+
+    private void txtNoTelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoTelpActionPerformed
+        // Pindah fokus ke Alamat saat Enter
+        txtAlamat.requestFocus();
+    }//GEN-LAST:event_txtNoTelpActionPerformed
 
     /**
      * @param args the command line arguments
