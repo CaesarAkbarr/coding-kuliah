@@ -4,19 +4,26 @@
  */
 package pemdasquizlagi;
 
+import java.awt.Frame;
+import javax.swing.JFrame;
+
 /**
  *
  * @author ROG G513RM
  */
 public class FrameMaster extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrameMaster.class.getName());
+
+    private static final java.util.logging.Logger logger =
+        java.util.logging.Logger.getLogger(FrameMaster.class.getName());
 
     /**
      * Creates new form FrameMaster
      */
     public FrameMaster() {
         initComponents();
+        setExtendedState(Frame.NORMAL);
+        setLocationRelativeTo(null);
+        setTitle("Form Master");
     }
 
     /**
@@ -27,6 +34,7 @@ public class FrameMaster extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         btnSupplier = new javax.swing.JButton();
         btnBarang = new javax.swing.JButton();
@@ -34,84 +42,106 @@ public class FrameMaster extends javax.swing.JFrame {
         btnPembelian = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         btnSupplier.setText("Supplier");
-        btnSupplier.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSupplierActionPerformed(evt);
+        btnSupplier.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnSupplierActionPerformed(evt);
+                }
             }
-        });
+        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 37;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(64, 77, 0, 0);
+        getContentPane().add(btnSupplier, gridBagConstraints);
 
         btnBarang.setText("Barang");
-        btnBarang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBarangActionPerformed(evt);
+        btnBarang.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnBarangActionPerformed(evt);
+                }
             }
-        });
+        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 39;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 77, 74, 0);
+        getContentPane().add(btnBarang, gridBagConstraints);
 
         btnPelanggan.setText("Pelanggan");
-        btnPelanggan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPelangganActionPerformed(evt);
+        btnPelanggan.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnPelangganActionPerformed(evt);
+                }
             }
-        });
+        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 25;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(64, 18, 0, 83);
+        getContentPane().add(btnPelanggan, gridBagConstraints);
 
         btnPembelian.setText("Pembelian");
-        btnPembelian.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPembelianActionPerformed(evt);
+        btnPembelian.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnPembelianActionPerformed(evt);
+                }
             }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(83, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(74, Short.MAX_VALUE))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 25;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 18, 74, 83);
+        getContentPane().add(btnPembelian, gridBagConstraints);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSupplierActionPerformed
+    private void btnSupplierActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_btnSupplierActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnSupplierActionPerformed
+        FrameSupplier frameSupplier = new FrameSupplier();
+        frameSupplier.setVisible(true);
+    } //GEN-LAST:event_btnSupplierActionPerformed
 
-    private void btnBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBarangActionPerformed
+    private void btnBarangActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_btnBarangActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnBarangActionPerformed
+        FrameBarang frameBarang = new FrameBarang();
+        frameBarang.setVisible(true);
+    } //GEN-LAST:event_btnBarangActionPerformed
 
-    private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
+    private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_btnPelangganActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnPelangganActionPerformed
+        FramePelanggan framePelanggan = new FramePelanggan();
+        framePelanggan.setVisible(true);
+    } //GEN-LAST:event_btnPelangganActionPerformed
 
-    private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
+    private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_btnPembelianActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnPembelianActionPerformed
+        FramePembelian framePembelian = new FramePembelian();
+        framePembelian.setVisible(true);
+    } //GEN-LAST:event_btnPembelianActionPerformed
 
     /**
      * @param args the command line arguments
@@ -120,7 +150,7 @@ public class FrameMaster extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -129,13 +159,18 @@ public class FrameMaster extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (
+            ReflectiveOperationException
+            | javax.swing.UnsupportedLookAndFeelException ex
+        ) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrameMaster().setVisible(true));
+        java.awt.EventQueue.invokeLater(() ->
+            new FrameMaster().setVisible(true)
+        );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

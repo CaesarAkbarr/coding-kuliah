@@ -4,19 +4,38 @@
  */
 package pemdasquizlagi;
 
+import java.awt.Frame;
+
 /**
  *
  * @author ROG G513RM
  */
 public class FramePelanggan extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FramePelanggan.class.getName());
+
+    private static final java.util.logging.Logger logger =
+        java.util.logging.Logger.getLogger(FramePelanggan.class.getName());
 
     /**
      * Creates new form FramePelanggan
      */
     public FramePelanggan() {
         initComponents();
+        setTitle("Form Pelanggan");
+
+        // Mengambil content pane yang ada, yang berisi semua komponen UI Anda
+        java.awt.Container contentPane = getContentPane();
+
+        // Membuat panel pembungkus dengan GridBagLayout.
+        // Layout ini akan menempatkan komponen di dalamnya (yaitu contentPane) ke tengah.
+        javax.swing.JPanel wrapperPanel = new javax.swing.JPanel(
+            new java.awt.GridBagLayout()
+        );
+        wrapperPanel.add(contentPane, new java.awt.GridBagConstraints());
+
+        // Mengatur panel pembungkus sebagai content pane yang baru untuk frame ini.
+        setContentPane(wrapperPanel);
+
+        setExtendedState(Frame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -27,7 +46,6 @@ public class FramePelanggan extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         lblKodePelanggan = new javax.swing.JLabel();
         txtKodePelanggan = new javax.swing.JTextField();
         txtNamaPelanggan = new javax.swing.JTextField();
@@ -44,55 +62,68 @@ public class FramePelanggan extends javax.swing.JFrame {
         btnHapus = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblKodePelanggan.setText("Kode Pelanggan:");
 
         txtKodePelanggan.setText("jTextField1");
-        txtKodePelanggan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtKodePelangganActionPerformed(evt);
+        txtKodePelanggan.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    txtKodePelangganActionPerformed(evt);
+                }
             }
-        });
+        );
 
         txtNamaPelanggan.setText("jTextField1");
-        txtNamaPelanggan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNamaPelangganActionPerformed(evt);
+        txtNamaPelanggan.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    txtNamaPelangganActionPerformed(evt);
+                }
             }
-        });
+        );
 
         lblNamaPelanggan.setText("Nama Pelanggan:");
 
         lblNoTelp.setText("No. Telp:");
 
         txtNoTelp.setText("jTextField1");
-        txtNoTelp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNoTelpActionPerformed(evt);
+        txtNoTelp.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    txtNoTelpActionPerformed(evt);
+                }
             }
-        });
+        );
 
         lblAlamat.setText("Alamat:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Kode Pelanggan", "Nama Pelanggan", "Alamat", "No. Telp."
+        jTable1.setModel(
+            new javax.swing.table.DefaultTableModel(
+                new Object[][] {
+                    { null, null, null, null },
+                    { null, null, null, null },
+                    { null, null, null, null },
+                    { null, null, null, null },
+                    { null, null, null, null },
+                    { null, null, null, null },
+                },
+                new String[] {
+                    "Kode Pelanggan",
+                    "Nama Pelanggan",
+                    "Alamat",
+                    "No. Telp.",
+                }
+            )
+        );
+        jTable1.addMouseListener(
+            new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    jTable1MouseClicked(evt);
+                }
             }
-        ));
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
-            }
-        });
+        );
         jScrollPane1.setViewportView(jTable1);
 
         txtAlamat.setColumns(20);
@@ -100,136 +131,309 @@ public class FramePelanggan extends javax.swing.JFrame {
         jScrollPane2.setViewportView(txtAlamat);
 
         btnSImpan.setText("Simpan");
-        btnSImpan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSImpanActionPerformed(evt);
+        btnSImpan.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnSImpanActionPerformed(evt);
+                }
             }
-        });
+        );
 
         btnTambah.setText("Tambah");
-        btnTambah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTambahActionPerformed(evt);
+        btnTambah.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnTambahActionPerformed(evt);
+                }
             }
-        });
+        );
 
         btnHapus.setText("Hapus");
-        btnHapus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHapusActionPerformed(evt);
+        btnHapus.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnHapusActionPerformed(evt);
+                }
             }
-        });
+        );
 
         btnBatal.setText("Batal");
-        btnBatal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBatalActionPerformed(evt);
+        btnBatal.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnBatalActionPerformed(evt);
+                }
             }
-        });
+        );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
+            getContentPane()
+        );
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblKodePelanggan)
-                                .addComponent(lblNamaPelanggan)
-                                .addComponent(lblNoTelp)
-                                .addComponent(lblAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(18, 18, 18)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtKodePelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtNamaPelanggan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(btnTambah)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnHapus))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(btnSImpan)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnBatal))))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addGroup(
+                            layout
+                                .createParallelGroup(
+                                    javax.swing.GroupLayout.Alignment.LEADING
+                                )
+                                .addGroup(
+                                    layout
+                                        .createParallelGroup(
+                                            javax.swing.GroupLayout.Alignment.LEADING,
+                                            false
+                                        )
+                                        .addGroup(
+                                            layout
+                                                .createSequentialGroup()
+                                                .addGroup(
+                                                    layout
+                                                        .createParallelGroup(
+                                                            javax.swing.GroupLayout.Alignment.LEADING
+                                                        )
+                                                        .addComponent(
+                                                            lblKodePelanggan
+                                                        )
+                                                        .addComponent(
+                                                            lblNamaPelanggan
+                                                        )
+                                                        .addComponent(lblNoTelp)
+                                                        .addComponent(
+                                                            lblAlamat,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            84,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE
+                                                        )
+                                                )
+                                                .addGap(18, 18, 18)
+                                                .addGroup(
+                                                    layout
+                                                        .createParallelGroup(
+                                                            javax.swing.GroupLayout.Alignment.LEADING
+                                                        )
+                                                        .addComponent(
+                                                            txtKodePelanggan,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            71,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE
+                                                        )
+                                                        .addComponent(
+                                                            txtNamaPelanggan,
+                                                            javax.swing.GroupLayout.Alignment.TRAILING,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            71,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE
+                                                        )
+                                                        .addComponent(
+                                                            txtNoTelp,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                            71,
+                                                            javax.swing.GroupLayout.PREFERRED_SIZE
+                                                        )
+                                                )
+                                        )
+                                        .addComponent(
+                                            jScrollPane2,
+                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                            0,
+                                            Short.MAX_VALUE
+                                        )
+                                )
+                                .addGroup(
+                                    layout
+                                        .createParallelGroup(
+                                            javax.swing.GroupLayout.Alignment.LEADING,
+                                            false
+                                        )
+                                        .addGroup(
+                                            layout
+                                                .createSequentialGroup()
+                                                .addComponent(btnTambah)
+                                                .addPreferredGap(
+                                                    javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    Short.MAX_VALUE
+                                                )
+                                                .addComponent(btnHapus)
+                                        )
+                                        .addGroup(
+                                            layout
+                                                .createSequentialGroup()
+                                                .addComponent(btnSImpan)
+                                                .addPreferredGap(
+                                                    javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    Short.MAX_VALUE
+                                                )
+                                                .addComponent(btnBatal)
+                                        )
+                                )
+                        )
+                        .addGap(18, 18, 18)
+                        .addComponent(
+                            jScrollPane1,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            526,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addContainerGap(
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            Short.MAX_VALUE
+                        )
+                )
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblKodePelanggan)
-                            .addComponent(txtKodePelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblNamaPelanggan)
-                            .addComponent(txtNamaPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblNoTelp)
-                            .addComponent(txtNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(lblAlamat)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnHapus)
-                            .addComponent(btnTambah))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSImpan)
-                            .addComponent(btnBatal))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addGap(19, 19, 19))
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addGroup(
+                            layout
+                                .createParallelGroup(
+                                    javax.swing.GroupLayout.Alignment.LEADING
+                                )
+                                .addGroup(
+                                    layout
+                                        .createSequentialGroup()
+                                        .addGap(58, 58, 58)
+                                        .addGroup(
+                                            layout
+                                                .createParallelGroup(
+                                                    javax.swing.GroupLayout.Alignment.BASELINE
+                                                )
+                                                .addComponent(lblKodePelanggan)
+                                                .addComponent(
+                                                    txtKodePelanggan,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                                )
+                                        )
+                                        .addGap(18, 18, 18)
+                                        .addGroup(
+                                            layout
+                                                .createParallelGroup(
+                                                    javax.swing.GroupLayout.Alignment.BASELINE
+                                                )
+                                                .addComponent(lblNamaPelanggan)
+                                                .addComponent(
+                                                    txtNamaPelanggan,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                                )
+                                        )
+                                        .addGap(18, 18, 18)
+                                        .addGroup(
+                                            layout
+                                                .createParallelGroup(
+                                                    javax.swing.GroupLayout.Alignment.BASELINE
+                                                )
+                                                .addComponent(lblNoTelp)
+                                                .addComponent(
+                                                    txtNoTelp,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                                )
+                                        )
+                                        .addGap(18, 18, 18)
+                                        .addComponent(lblAlamat)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(
+                                            jScrollPane2,
+                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                            javax.swing.GroupLayout.PREFERRED_SIZE
+                                        )
+                                        .addGap(18, 18, 18)
+                                        .addGroup(
+                                            layout
+                                                .createParallelGroup(
+                                                    javax.swing.GroupLayout.Alignment.BASELINE
+                                                )
+                                                .addComponent(btnHapus)
+                                                .addComponent(btnTambah)
+                                        )
+                                        .addGap(18, 18, 18)
+                                        .addGroup(
+                                            layout
+                                                .createParallelGroup(
+                                                    javax.swing.GroupLayout.Alignment.BASELINE
+                                                )
+                                                .addComponent(btnSImpan)
+                                                .addComponent(btnBatal)
+                                        )
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                )
+                                .addGroup(
+                                    layout
+                                        .createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(
+                                            jScrollPane1,
+                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                            0,
+                                            Short.MAX_VALUE
+                                        )
+                                )
+                        )
+                        .addGap(19, 19, 19)
+                )
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void txtKodePelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKodePelangganActionPerformed
+    private void txtKodePelangganActionPerformed(
+        java.awt.event.ActionEvent evt
+    ) {
+        //GEN-FIRST:event_txtKodePelangganActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtKodePelangganActionPerformed
+    } //GEN-LAST:event_txtKodePelangganActionPerformed
 
-    private void txtNamaPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaPelangganActionPerformed
+    private void txtNamaPelangganActionPerformed(
+        java.awt.event.ActionEvent evt
+    ) {
+        //GEN-FIRST:event_txtNamaPelangganActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNamaPelangganActionPerformed
+    } //GEN-LAST:event_txtNamaPelangganActionPerformed
 
-    private void txtNoTelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoTelpActionPerformed
+    private void txtNoTelpActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_txtNoTelpActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNoTelpActionPerformed
+    } //GEN-LAST:event_txtNoTelpActionPerformed
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {
+        //GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTable1MouseClicked
+    } //GEN-LAST:event_jTable1MouseClicked
 
-    private void btnSImpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSImpanActionPerformed
+    private void btnSImpanActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_btnSImpanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnSImpanActionPerformed
+    } //GEN-LAST:event_btnSImpanActionPerformed
 
-    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnTambahActionPerformed
+    } //GEN-LAST:event_btnTambahActionPerformed
 
-    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnHapusActionPerformed
+    } //GEN-LAST:event_btnHapusActionPerformed
 
-    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
+    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_btnBatalActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnBatalActionPerformed
+    } //GEN-LAST:event_btnBatalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -238,7 +442,7 @@ public class FramePelanggan extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -247,13 +451,18 @@ public class FramePelanggan extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (
+            ReflectiveOperationException
+            | javax.swing.UnsupportedLookAndFeelException ex
+        ) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FramePelanggan().setVisible(true));
+        java.awt.EventQueue.invokeLater(() ->
+            new FramePelanggan().setVisible(true)
+        );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -37,17 +37,17 @@
               </Group>
               <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btnHapus" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnBatal" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnHapus" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnBatal" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtKodeBarang" min="-2" pref="71" max="-2" attributes="0"/>
-                          <Component id="txtNamaBarang" min="-2" pref="71" max="-2" attributes="0"/>
-                          <Component id="txtSatuan" min="-2" pref="71" max="-2" attributes="0"/>
-                          <Component id="txtHargaJual" min="-2" pref="71" max="-2" attributes="0"/>
-                          <Component id="txtHargaBeli" min="-2" pref="71" max="-2" attributes="0"/>
-                          <Component id="txtStockBarang" min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="txtKodeBarang" alignment="1" min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="txtNamaBarang" alignment="1" min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="txtSatuan" alignment="1" min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="txtHargaJual" alignment="1" min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="txtHargaBeli" alignment="1" min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="txtStockBarang" alignment="1" min="-2" pref="71" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -62,41 +62,50 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="55" pref="55" max="-2" attributes="0"/>
-                      <Component id="lblKodeBarang" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
-                      <Component id="lblNamaBarang" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
-                      <Component id="lblSatuan" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
-                      <Component id="lblHargaJual" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
-                      <Component id="lblHargaBeli" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
-                      <Component id="lblStockBarang" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="21" pref="21" max="-2" attributes="0"/>
-                      <Component id="btnTambah" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblKodeBarang" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtKodeBarang" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
-                      <Component id="btnSImpan" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="52" pref="52" max="-2" attributes="0"/>
-                      <Component id="txtKodeBarang" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblNamaBarang" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtNamaBarang" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
-                      <Component id="txtNamaBarang" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblSatuan" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtSatuan" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
-                      <Component id="txtSatuan" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblHargaJual" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtHargaJual" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
-                      <Component id="txtHargaJual" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblHargaBeli" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtHargaBeli" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
-                      <Component id="txtHargaBeli" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
-                      <Component id="txtStockBarang" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
-                      <Component id="btnHapus" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
-                      <Component id="btnBatal" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblStockBarang" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtStockBarang" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="41" pref="41" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="btnSImpan" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnBatal" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                              <Component id="btnHapus" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnTambah" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
                   <Component id="jScrollPane1" min="-2" pref="382" max="-2" attributes="0"/>
               </Group>

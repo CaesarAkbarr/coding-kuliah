@@ -4,19 +4,25 @@
  */
 package pemdasquizlagi;
 
+import java.awt.Frame;
+
 /**
  *
  * @author ROG G513RM
  */
 public class FramePembelian extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FramePembelian.class.getName());
+
+    private static final java.util.logging.Logger logger =
+        java.util.logging.Logger.getLogger(FramePembelian.class.getName());
 
     /**
      * Creates new form FramePembelian
      */
     public FramePembelian() {
         initComponents();
+        setTitle("Form Pembelian");
+        setExtendedState(Frame.NORMAL);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -27,7 +33,6 @@ public class FramePembelian extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         cmbSupplier = new javax.swing.JComboBox<>();
         btnLanjut = new javax.swing.JButton();
         lblNoPesanan = new javax.swing.JLabel();
@@ -36,101 +41,211 @@ public class FramePembelian extends javax.swing.JFrame {
         txtTanggal = new javax.swing.JTextField();
         lblSupplier = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        cmbSupplier.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cmbSupplier.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbSupplierActionPerformed(evt);
+        cmbSupplier.setModel(
+            new javax.swing.DefaultComboBoxModel<>(
+                new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }
+            )
+        );
+        cmbSupplier.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    cmbSupplierActionPerformed(evt);
+                }
             }
-        });
+        );
 
         btnLanjut.setText("Lanjut");
-        btnLanjut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLanjutActionPerformed(evt);
+        btnLanjut.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnLanjutActionPerformed(evt);
+                }
             }
-        });
+        );
 
         lblNoPesanan.setText("No. Pesanan:");
 
         txtNoPesanan.setText("jTextField1");
-        txtNoPesanan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNoPesananActionPerformed(evt);
+        txtNoPesanan.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    txtNoPesananActionPerformed(evt);
+                }
             }
-        });
+        );
 
         lblTanggal.setText("Tanggal:");
 
         txtTanggal.setText("jTextField1");
-        txtTanggal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTanggalActionPerformed(evt);
+        txtTanggal.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    txtTanggalActionPerformed(evt);
+                }
             }
-        });
+        );
 
         lblSupplier.setText("Supplier:");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
+            getContentPane()
+        );
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(112, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNoPesanan)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(lblSupplier, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblTanggal, javax.swing.GroupLayout.Alignment.LEADING)))
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNoPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(102, 102, 102))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnLanjut)
-                        .addGap(161, 161, 161))))
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap(112, Short.MAX_VALUE)
+                        .addGroup(
+                            layout
+                                .createParallelGroup(
+                                    javax.swing.GroupLayout.Alignment.LEADING
+                                )
+                                .addGroup(
+                                    javax.swing.GroupLayout.Alignment.TRAILING,
+                                    layout
+                                        .createSequentialGroup()
+                                        .addGroup(
+                                            layout
+                                                .createParallelGroup(
+                                                    javax.swing.GroupLayout.Alignment.LEADING
+                                                )
+                                                .addComponent(lblNoPesanan)
+                                                .addGroup(
+                                                    layout
+                                                        .createParallelGroup(
+                                                            javax.swing.GroupLayout.Alignment.TRAILING,
+                                                            false
+                                                        )
+                                                        .addComponent(
+                                                            lblSupplier,
+                                                            javax.swing.GroupLayout.Alignment.LEADING,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                            Short.MAX_VALUE
+                                                        )
+                                                        .addComponent(
+                                                            lblTanggal,
+                                                            javax.swing.GroupLayout.Alignment.LEADING
+                                                        )
+                                                )
+                                        )
+                                        .addGap(30, 30, 30)
+                                        .addGroup(
+                                            layout
+                                                .createParallelGroup(
+                                                    javax.swing.GroupLayout.Alignment.LEADING
+                                                )
+                                                .addComponent(
+                                                    txtTanggal,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                    91,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                                )
+                                                .addComponent(
+                                                    txtNoPesanan,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                    91,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                                )
+                                                .addComponent(
+                                                    cmbSupplier,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                    92,
+                                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                                )
+                                        )
+                                        .addGap(102, 102, 102)
+                                )
+                                .addGroup(
+                                    javax.swing.GroupLayout.Alignment.TRAILING,
+                                    layout
+                                        .createSequentialGroup()
+                                        .addComponent(btnLanjut)
+                                        .addGap(161, 161, 161)
+                                )
+                        )
+                )
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(83, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNoPesanan)
-                    .addComponent(txtNoPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTanggal)
-                    .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblSupplier)
-                    .addComponent(cmbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnLanjut)
-                .addGap(74, 74, 74))
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    javax.swing.GroupLayout.Alignment.TRAILING,
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap(83, Short.MAX_VALUE)
+                        .addGroup(
+                            layout
+                                .createParallelGroup(
+                                    javax.swing.GroupLayout.Alignment.BASELINE
+                                )
+                                .addComponent(lblNoPesanan)
+                                .addComponent(
+                                    txtNoPesanan,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                )
+                        )
+                        .addGap(18, 18, 18)
+                        .addGroup(
+                            layout
+                                .createParallelGroup(
+                                    javax.swing.GroupLayout.Alignment.BASELINE
+                                )
+                                .addComponent(lblTanggal)
+                                .addComponent(
+                                    txtTanggal,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                )
+                        )
+                        .addGap(18, 18, 18)
+                        .addGroup(
+                            layout
+                                .createParallelGroup(
+                                    javax.swing.GroupLayout.Alignment.BASELINE
+                                )
+                                .addComponent(lblSupplier)
+                                .addComponent(
+                                    cmbSupplier,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                )
+                        )
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLanjut)
+                        .addGap(74, 74, 74)
+                )
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void cmbSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSupplierActionPerformed
+    private void cmbSupplierActionPerformed(java.awt.event.ActionEvent evt) {
+//GEN-FIRST:event_cmbSupplierActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbSupplierActionPerformed
 
-    private void btnLanjutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanjutActionPerformed
+    private void btnLanjutActionPerformed(java.awt.event.ActionEvent evt) {
+//GEN-FIRST:event_btnLanjutActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLanjutActionPerformed
 
-    private void txtNoPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPesananActionPerformed
+    private void txtNoPesananActionPerformed(java.awt.event.ActionEvent evt) {
+//GEN-FIRST:event_txtNoPesananActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNoPesananActionPerformed
 
-    private void txtTanggalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTanggalActionPerformed
+    private void txtTanggalActionPerformed(java.awt.event.ActionEvent evt) {
+//GEN-FIRST:event_txtTanggalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTanggalActionPerformed
 
@@ -141,7 +256,7 @@ public class FramePembelian extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -150,13 +265,18 @@ public class FramePembelian extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (
+            ReflectiveOperationException
+            | javax.swing.UnsupportedLookAndFeelException ex
+        ) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FramePembelian().setVisible(true));
+        java.awt.EventQueue.invokeLater(() ->
+            new FramePembelian().setVisible(true)
+        );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
