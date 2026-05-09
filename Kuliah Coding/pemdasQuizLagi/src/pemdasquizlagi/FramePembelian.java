@@ -5,6 +5,13 @@
 package pemdasquizlagi;
 
 import java.awt.Frame;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.time.LocalDate;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,6 +30,83 @@ public class FramePembelian extends javax.swing.JFrame {
         setTitle("Form Pembelian");
         setExtendedState(Frame.NORMAL);
         setLocationRelativeTo(null);
+
+        inisialisasiFrame();
+    }
+
+    private void inisialisasiFrame() {
+        // Isi tanggal hari ini secara otomatis dan jadikan read-only
+        txtTanggal.setText(LocalDate.now().toString());
+        txtTanggal.setEditable(false);
+
+        // Generate nomor pesanan otomatis dan jadikan read-only
+        txtNoPesanan.setText(Koneksi.generateNoPesanan());
+        txtNoPesanan.setEditable(false);
+
+        // Muat data supplier ke ComboBox
+        muatDataSupplier();
+
+        // Hubungkan btnLanjut (dari GUI Builder) dengan logika validasi
+        // btnLanjut.addActionListener(e -> lanjutKeDetail());
+    }
+
+    private void muatDataSupplier() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        model.addElement("-- Pilih Supplier --");
+
+        try {
+            Connection c = Koneksi.getKoneksi();
+            String sql =
+                "SELECT kd_supplier, nama_supplier FROM tb_supplier ORDER BY kd_supplier";
+            ResultSet rs = c.createStatement().executeQuery(sql);
+
+            while (rs.next()) {
+                // Format: "S00001 - Nama Supplier"
+                model.addElement(
+                    rs.getString("kd_supplier") +
+                        " - " +
+                        rs.getString("nama_supplier")
+                );
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Gagal memuat data supplier: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+        cmbSupplier.setModel(model);
+    }
+
+    private void lanjutKeDetail() {
+        // Validasi: supplier harus dipilih (bukan item default)
+        if (cmbSupplier.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Pilih supplier terlebih dahulu!",
+                "Peringatan",
+                JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        // Ambil kode supplier dari pilihan ComboBox (bagian sebelum " - ")
+        String pilihanSupplier = cmbSupplier.getSelectedItem().toString();
+        String kdSupplier = pilihanSupplier.split(" - ")[0];
+        String noPesanan = txtNoPesanan.getText();
+        String tanggal = txtTanggal.getText();
+
+        // Buka frame detail dan passing parameter transaksi
+        FramePembelianDetail frameDetail = new FramePembelianDetail(
+            noPesanan,
+            tanggal,
+            kdSupplier
+        );
+        frameDetail.setVisible(true);
+        this.dispose();
     }
 
     /**
@@ -230,24 +314,25 @@ public class FramePembelian extends javax.swing.JFrame {
     } // </editor-fold>//GEN-END:initComponents
 
     private void cmbSupplierActionPerformed(java.awt.event.ActionEvent evt) {
-//GEN-FIRST:event_cmbSupplierActionPerformed
+        //GEN-FIRST:event_cmbSupplierActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbSupplierActionPerformed
+    } //GEN-LAST:event_cmbSupplierActionPerformed
 
     private void btnLanjutActionPerformed(java.awt.event.ActionEvent evt) {
-//GEN-FIRST:event_btnLanjutActionPerformed
+        //GEN-FIRST:event_btnLanjutActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnLanjutActionPerformed
+        lanjutKeDetail();
+    } //GEN-LAST:event_btnLanjutActionPerformed
 
     private void txtNoPesananActionPerformed(java.awt.event.ActionEvent evt) {
-//GEN-FIRST:event_txtNoPesananActionPerformed
+        //GEN-FIRST:event_txtNoPesananActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNoPesananActionPerformed
+    } //GEN-LAST:event_txtNoPesananActionPerformed
 
     private void txtTanggalActionPerformed(java.awt.event.ActionEvent evt) {
-//GEN-FIRST:event_txtTanggalActionPerformed
+        //GEN-FIRST:event_txtTanggalActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTanggalActionPerformed
+    } //GEN-LAST:event_txtTanggalActionPerformed
 
     /**
      * @param args the command line arguments
