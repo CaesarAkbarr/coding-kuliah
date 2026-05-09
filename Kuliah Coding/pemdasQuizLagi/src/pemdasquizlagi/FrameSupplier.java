@@ -5,6 +5,11 @@
 package pemdasquizlagi;
 
 import java.awt.Frame;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -24,18 +29,162 @@ public class FrameSupplier extends javax.swing.JFrame {
 
         // Mengambil content pane yang ada, yang berisi semua komponen UI Anda
         java.awt.Container contentPane = getContentPane();
-
         // Membuat panel pembungkus dengan GridBagLayout.
         // Layout ini akan menempatkan komponen di dalamnya (yaitu contentPane) ke tengah.
         javax.swing.JPanel wrapperPanel = new javax.swing.JPanel(
             new java.awt.GridBagLayout()
         );
         wrapperPanel.add(contentPane, new java.awt.GridBagConstraints());
-
         // Mengatur panel pembungkus sebagai content pane yang baru untuk frame ini.
         setContentPane(wrapperPanel);
 
         setExtendedState(Frame.MAXIMIZED_BOTH);
+        clearField();
+        muatDataSupplier();
+    }
+
+    private void clearField() {
+        txtKodeSupplier.setText(
+            Koneksi.generateIdMaster("tb_supplier", "kd_supplier", "S")
+        );
+        txtKodeSupplier.setEditable(false);
+        txtNamaSupplier.setText("");
+        txtNoTelp.setText("");
+        txtAlamat.setText("");
+    }
+
+    private void muatDataSupplier() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Bersihkan tabel terlebih dahulu
+
+        try {
+            Connection c = Koneksi.getKoneksi();
+            String sql =
+                "SELECT kd_supplier, nama_supplier, alamat, no_telp FROM tb_supplier";
+            ResultSet rs = c.createStatement().executeQuery(sql);
+
+            while (rs.next()) {
+                model.addRow(
+                    new Object[] {
+                        rs.getString("kd_supplier"),
+                        rs.getString("nama_supplier"),
+                        rs.getString("alamat"),
+                        rs.getString("no_telp"),
+                    }
+                );
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Gagal memuat data supplier: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    private void simpanSupplier() {
+        // Validasi: semua field harus terisi
+        if (
+            txtNamaSupplier.getText().trim().isEmpty() ||
+            txtNoTelp.getText().trim().isEmpty() ||
+            txtAlamat.getText().trim().isEmpty()
+        ) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Semua field harus diisi!",
+                "Peringatan",
+                JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        try {
+            // Ambil nilai dari form
+            String kode = txtKodeSupplier.getText().trim();
+            String nama = txtNamaSupplier.getText().trim();
+            String noTlp = txtNoTelp.getText().trim();
+            String alamat = txtAlamat.getText().trim();
+
+            // Eksekusi query UPSERT: INSERT baru atau UPDATE jika kode sudah ada
+            String sql =
+                "INSERT INTO tb_supplier (kd_supplier, nama_supplier, alamat, no_telp) " +
+                "VALUES ('" +
+                kode +
+                "', '" +
+                nama +
+                "', '" +
+                alamat +
+                "', '" +
+                noTlp +
+                "') " +
+                "ON DUPLICATE KEY UPDATE " +
+                "nama_supplier=VALUES(nama_supplier), alamat=VALUES(alamat), no_telp=VALUES(no_telp)";
+            Koneksi.ubahData(sql);
+
+            JOptionPane.showMessageDialog(
+                this,
+                "Data supplier berhasil disimpan/diperbarui!",
+                "Sukses",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+
+            // Refresh tampilan
+            muatDataSupplier();
+            bersihkanForm();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Gagal menyimpan: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    private void hapusSupplier() {
+        int baris = jTable1.getSelectedRow();
+        if (baris < 0) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Pilih baris yang ingin dihapus terlebih dahulu!",
+                "Peringatan",
+                JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        String kode = jTable1.getValueAt(baris, 0).toString();
+        int konfirmasi = JOptionPane.showConfirmDialog(
+            this,
+            "Apakah Anda yakin ingin menghapus supplier " + kode + "?",
+            "Konfirmasi Hapus",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+            Koneksi.ubahData(
+                "DELETE FROM tb_supplier WHERE kd_supplier = '" + kode + "'"
+            );
+            JOptionPane.showMessageDialog(
+                this,
+                "Data supplier berhasil dihapus!",
+                "Sukses",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+            muatDataSupplier();
+            bersihkanForm();
+        }
+    }
+
+    private void bersihkanForm() {
+        txtKodeSupplier.setText(
+            Koneksi.generateIdMaster("tb_supplier", "kd_supplier", "S")
+        );
+        txtNamaSupplier.setText("");
+        txtNoTelp.setText("");
+        txtAlamat.setText("");
     }
 
     /**
@@ -388,36 +537,49 @@ public class FrameSupplier extends javax.swing.JFrame {
     ) {
         //GEN-FIRST:event_txtNamaSupplierActionPerformed
         // TODO add your handling code here:
+        txtNoTelp.requestFocus();
     } //GEN-LAST:event_txtNamaSupplierActionPerformed
 
     private void txtNoTelpActionPerformed(java.awt.event.ActionEvent evt) {
         //GEN-FIRST:event_txtNoTelpActionPerformed
         // TODO add your handling code here:
+        txtAlamat.requestFocus();
     } //GEN-LAST:event_txtNoTelpActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {
         //GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
+        int baris = jTable1.getSelectedRow();
+        if (baris >= 0) {
+            txtKodeSupplier.setText(jTable1.getValueAt(baris, 0).toString());
+            txtNamaSupplier.setText(jTable1.getValueAt(baris, 1).toString());
+            txtAlamat.setText(jTable1.getValueAt(baris, 2).toString());
+            txtNoTelp.setText(jTable1.getValueAt(baris, 3).toString());
+        }
     } //GEN-LAST:event_jTable1MouseClicked
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {
         //GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
+        simpanSupplier();
     } //GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {
         //GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
+        hapusSupplier();
     } //GEN-LAST:event_btnHapusActionPerformed
 
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {
         //GEN-FIRST:event_btnBatalActionPerformed
         // TODO add your handling code here:
+        clearField();
     } //GEN-LAST:event_btnBatalActionPerformed
 
     private void btnSImpanActionPerformed(java.awt.event.ActionEvent evt) {
         //GEN-FIRST:event_btnSImpanActionPerformed
         // TODO add your handling code here:
+        simpanSupplier();
     } //GEN-LAST:event_btnSImpanActionPerformed
 
     /**
