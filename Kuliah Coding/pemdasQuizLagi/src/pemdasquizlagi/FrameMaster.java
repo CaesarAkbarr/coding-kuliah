@@ -139,7 +139,7 @@ public class FrameMaster extends javax.swing.JFrame {
     private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {
         //GEN-FIRST:event_btnPembelianActionPerformed
         // TODO add your handling code here:
-        FramePembelian framePembelian = new FramePembelian();
+        FramePembelianPilih framePembelian = new FramePembelianPilih();
         framePembelian.setVisible(true);
     } //GEN-LAST:event_btnPembelianActionPerformed
 

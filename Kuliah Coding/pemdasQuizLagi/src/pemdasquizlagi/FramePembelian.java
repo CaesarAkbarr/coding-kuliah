@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -81,7 +79,7 @@ public class FramePembelian extends javax.swing.JFrame {
         cmbSupplier.setModel(model);
     }
 
-    private void lanjutKeDetail() {
+    private void lanjut() {
         // Validasi: supplier harus dipilih (bukan item default)
         if (cmbSupplier.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(
@@ -321,7 +319,7 @@ public class FramePembelian extends javax.swing.JFrame {
     private void btnLanjutActionPerformed(java.awt.event.ActionEvent evt) {
         //GEN-FIRST:event_btnLanjutActionPerformed
         // TODO add your handling code here:
-        lanjutKeDetail();
+        lanjut();
     } //GEN-LAST:event_btnLanjutActionPerformed
 
     private void txtNoPesananActionPerformed(java.awt.event.ActionEvent evt) {
