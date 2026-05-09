@@ -27,19 +27,15 @@ public class FramePelanggan extends javax.swing.JFrame {
     public FramePelanggan() {
         initComponents();
         setTitle("Form Pelanggan");
+        setExtendedState(Frame.MAXIMIZED_BOTH);
 
-        // Mengambil content pane yang ada, yang berisi semua komponen UI Anda
+        // Menengahkan content pane ke tengah frame dengan GridBagLayout
         java.awt.Container contentPane = getContentPane();
-        // Membuat panel pembungkus dengan GridBagLayout.
-        // Layout ini akan menempatkan komponen di dalamnya (yaitu contentPane) ke tengah.
         javax.swing.JPanel wrapperPanel = new javax.swing.JPanel(
             new java.awt.GridBagLayout()
         );
         wrapperPanel.add(contentPane, new java.awt.GridBagConstraints());
-        // Mengatur panel pembungkus sebagai content pane yang baru untuk frame ini.
         setContentPane(wrapperPanel);
-
-        setExtendedState(Frame.MAXIMIZED_BOTH);
 
         clearField();
         muatDataPelanggan();
@@ -57,7 +53,7 @@ public class FramePelanggan extends javax.swing.JFrame {
 
     private void muatDataPelanggan() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Bersihkan tabel terlebih dahulu
+        model.setRowCount(0);
 
         try {
             Connection c = Koneksi.getKoneksi();

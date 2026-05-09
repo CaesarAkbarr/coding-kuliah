@@ -23,7 +23,6 @@ public class FramePembelianPilih extends javax.swing.JFrame {
         setTitle("Form Pilih");
         setExtendedState(Frame.NORMAL);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -39,7 +38,7 @@ public class FramePembelianPilih extends javax.swing.JFrame {
         btnTambahPembelian = new javax.swing.JButton();
         btnCekPembelian = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         btnTambahPembelian.setText("Tambah");

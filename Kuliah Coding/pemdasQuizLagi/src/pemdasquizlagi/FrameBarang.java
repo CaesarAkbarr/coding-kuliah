@@ -26,27 +26,23 @@ public class FrameBarang extends javax.swing.JFrame {
     public FrameBarang() {
         initComponents();
         setTitle("Form Barang");
+        setExtendedState(Frame.MAXIMIZED_BOTH);
 
-        // Mengambil content pane yang ada, yang berisi semua komponen UI Anda
+        // Menengahkan content pane ke tengah frame dengan GridBagLayout
         java.awt.Container contentPane = getContentPane();
-        // Membuat panel pembungkus dengan GridBagLayout.
-        // Layout ini akan menempatkan komponen di dalamnya (yaitu contentPane) ke tengah.
         javax.swing.JPanel wrapperPanel = new javax.swing.JPanel(
             new java.awt.GridBagLayout()
         );
         wrapperPanel.add(contentPane, new java.awt.GridBagConstraints());
-        // Mengatur panel pembungkus sebagai content pane yang baru untuk frame ini.
         setContentPane(wrapperPanel);
 
-        setExtendedState(Frame.MAXIMIZED_BOTH);
         clearField();
         muatDataBarang();
     }
 
     private void muatDataBarang() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Bersihkan tabel terlebih dahulu
-
+        model.setRowCount(0);
         try {
             Connection c = Koneksi.getKoneksi();
             String sql =

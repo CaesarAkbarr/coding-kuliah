@@ -7,6 +7,7 @@ package pemdasquizlagi;
 import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -27,19 +28,83 @@ public class FramePembelianCek extends javax.swing.JFrame {
     public FramePembelianCek() {
         initComponents();
         setTitle("Form Edit Pembelian");
+        setExtendedState(Frame.MAXIMIZED_BOTH);
 
-        // Mengambil content pane yang ada, yang berisi semua komponen UI Anda
+        // Menengahkan content pane ke tengah frame dengan GridBagLayout
         java.awt.Container contentPane = getContentPane();
-        // Membuat panel pembungkus dengan GridBagLayout.
-        // Layout ini akan menempatkan komponen di dalamnya (yaitu contentPane) ke tengah.
         javax.swing.JPanel wrapperPanel = new javax.swing.JPanel(
             new java.awt.GridBagLayout()
         );
         wrapperPanel.add(contentPane, new java.awt.GridBagConstraints());
-        // Mengatur panel pembungkus sebagai content pane yang baru untuk frame ini.
         setContentPane(wrapperPanel);
 
-        setExtendedState(Frame.MAXIMIZED_BOTH);
+        muatDataComboBox();
+    }
+
+    private void muatDataComboBox() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        model.addElement("-- Pilih Kode Pembelian --");
+        try {
+            Connection c = Koneksi.getKoneksi();
+            String sql =
+                "SELECT kd_pembelian FROM tb_pembelian ORDER BY kd_pembelian DESC";
+            ResultSet rs = c.createStatement().executeQuery(sql);
+
+            while (rs.next()) {
+                model.addElement(rs.getString("kd_pembelian"));
+            }
+            rs.close();
+
+            cmbKodePembelian.setModel(model);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Gagal memuat data: " + e.getMessage()
+            );
+        }
+    }
+
+    private void muatDetailKeTabel(String id) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        try {
+            Connection c = Koneksi.getKoneksi();
+
+            String sql =
+                "SELECT " +
+                "p.kd_pembelian, " +
+                "s.nama_supplier, " +
+                "b.nama_barang, " +
+                "d.jumlah, " +
+                "(b.harga_beli_stok * d.jumlah) AS kalkulasi_subtotal " +
+                "FROM tb_pembelian_detail d " +
+                "JOIN tb_pembelian p ON d.kd_pembelian = p.kd_pembelian " +
+                "JOIN tb_supplier s ON p.kd_supplier = s.kd_supplier " +
+                "JOIN tb_barang b ON d.kd_barang = b.kd_barang " +
+                "WHERE d.kd_pembelian = '" +
+                id +
+                "'";
+
+            ResultSet rs = c.createStatement().executeQuery(sql);
+            while (rs.next()) {
+                model.addRow(
+                    new Object[] {
+                        rs.getString("kd_pembelian"),
+                        rs.getString("nama_supplier"),
+                        rs.getString("nama_barang"),
+                        rs.getInt("jumlah"),
+                        rs.getDouble("kalkulasi_subtotal"),
+                    }
+                );
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Data fetch error: " + e.getMessage()
+            );
+        }
     }
 
     /**
@@ -50,71 +115,142 @@ public class FramePembelianCek extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         lblTransaksi = new javax.swing.JLabel();
         cmbKodePembelian = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblTransaksi.setText("Transaksi:");
 
-        cmbKodePembelian.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cmbKodePembelian.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbKodePembelianActionPerformed(evt);
+        cmbKodePembelian.setModel(
+            new javax.swing.DefaultComboBoxModel<>(
+                new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }
+            )
+        );
+        cmbKodePembelian.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    cmbKodePembelianActionPerformed(evt);
+                }
             }
-        });
+        );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Kode Transaksi", "Nama Supplier", "Barang", "Jumlah", "Subtotal"
-            }
-        ));
+        jTable1.setModel(
+            new javax.swing.table.DefaultTableModel(
+                new Object[][] {
+                    { null, null, null, null, null },
+                    { null, null, null, null, null },
+                    { null, null, null, null, null },
+                    { null, null, null, null, null },
+                },
+                new String[] {
+                    "Kode Transaksi",
+                    "Nama Supplier",
+                    "Barang",
+                    "Jumlah",
+                    "Subtotal",
+                }
+            )
+        );
         jScrollPane1.setViewportView(jTable1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
+            getContentPane()
+        );
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblTransaksi)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cmbKodePembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(49, Short.MAX_VALUE))
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap(20, Short.MAX_VALUE)
+                        .addGroup(
+                            layout
+                                .createParallelGroup(
+                                    javax.swing.GroupLayout.Alignment.LEADING,
+                                    false
+                                )
+                                .addGroup(
+                                    layout
+                                        .createSequentialGroup()
+                                        .addComponent(lblTransaksi)
+                                        .addPreferredGap(
+                                            javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                                            Short.MAX_VALUE
+                                        )
+                                        .addComponent(
+                                            cmbKodePembelian,
+                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                            467,
+                                            javax.swing.GroupLayout.PREFERRED_SIZE
+                                        )
+                                )
+                                .addComponent(
+                                    jScrollPane1,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                    560,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                )
+                        )
+                        .addContainerGap(49, Short.MAX_VALUE)
+                )
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTransaksi)
-                    .addComponent(cmbKodePembelian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49))
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(
+                            layout
+                                .createParallelGroup(
+                                    javax.swing.GroupLayout.Alignment.BASELINE
+                                )
+                                .addComponent(lblTransaksi)
+                                .addComponent(
+                                    cmbKodePembelian,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE
+                                )
+                        )
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            Short.MAX_VALUE
+                        )
+                        .addComponent(
+                            jScrollPane1,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addGap(49, 49, 49)
+                )
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     private void cmbKodePembelianActionPerformed(
         java.awt.event.ActionEvent evt
     ) {
-//GEN-FIRST:event_cmbKodePembelianActionPerformed
+        //GEN-FIRST:event_cmbKodePembelianActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbKodePembelianActionPerformed
+        if (cmbKodePembelian.getSelectedIndex() <= 0) {
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            return;
+        }
+
+        String selectedID = cmbKodePembelian.getSelectedItem().toString();
+        muatDetailKeTabel(selectedID);
+    } //GEN-LAST:event_cmbKodePembelianActionPerformed
 
     /**
      * @param args the command line arguments

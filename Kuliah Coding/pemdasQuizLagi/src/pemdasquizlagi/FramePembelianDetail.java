@@ -48,27 +48,20 @@ public class FramePembelianDetail extends javax.swing.JFrame {
         this.kdSupplier = kdSupplier;
 
         initComponents();
-
-        txtBarang.setText("");
-        txtJumlah.setText("");
-        txtTotalHarga.setText("0");
-        txtTotalHarga.setEditable(false);
-
         setTitle("Detail Pembelian: " + noPesanan);
-        // Mengambil content pane yang ada, yang berisi semua komponen UI Anda
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+
+        // Menengahkan content pane ke tengah frame dengan GridBagLayout
         java.awt.Container contentPane = getContentPane();
-        // Membuat panel pembungkus dengan GridBagLayout.
-        // Layout ini akan menempatkan komponen di dalamnya (yaitu contentPane) ke tengah.
         javax.swing.JPanel wrapperPanel = new javax.swing.JPanel(
             new java.awt.GridBagLayout()
         );
         wrapperPanel.add(contentPane, new java.awt.GridBagConstraints());
-        // Mengatur panel pembungkus sebagai content pane yang baru untuk frame ini.
         setContentPane(wrapperPanel);
-        setExtendedState(Frame.MAXIMIZED_BOTH);
 
         muatDataBarang();
         aturKolomTabel();
+        clearField();
     }
 
     // Variabel untuk menyimpan data yang diterima dari FramePembelian
@@ -76,6 +69,13 @@ public class FramePembelianDetail extends javax.swing.JFrame {
     private String tanggal;
     private String kdSupplier;
     private double grandTotal = 0;
+
+    private void clearField() {
+        txtBarang.setText("");
+        txtJumlah.setText("");
+        txtTotalHarga.setText("0");
+        txtTotalHarga.setEditable(false);
+    }
 
     private void aturKolomTabel() {
         DefaultTableModel model = new DefaultTableModel(

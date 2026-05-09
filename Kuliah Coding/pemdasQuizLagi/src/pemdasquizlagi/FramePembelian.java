@@ -43,9 +43,6 @@ public class FramePembelian extends javax.swing.JFrame {
 
         // Muat data supplier ke ComboBox
         muatDataSupplier();
-
-        // Hubungkan btnLanjut (dari GUI Builder) dengan logika validasi
-        // btnLanjut.addActionListener(e -> lanjutKeDetail());
     }
 
     private void muatDataSupplier() {
