@@ -17,7 +17,7 @@ import static pdbaru.koneksi.stm;
  */
 public class transaksi extends javax.swing.JFrame {
     String kdbarang;
-    Integer jmlbrg;
+    Integer jmlbrg, ttls, no, ttl;
     DefaultTableModel tb= new DefaultTableModel();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(transaksi.class.getName());
 
@@ -26,13 +26,17 @@ public class transaksi extends javax.swing.JFrame {
      */
     public transaksi() {
         initComponents();
-       // addnama();
+        addnama();
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String tgl=now.format(formatter);
         autonumbertanggal(tgl);
         bersih();
         tbltrans();
+        this.setLocationRelativeTo(null);
+        ttl = 0;  // Inisialisasi awal agar tidak null
+        ttls = 0;
+        no = 0;
                 
     }
     
@@ -65,27 +69,26 @@ public class transaksi extends javax.swing.JFrame {
         }        
     }
     
-    private void carinama(String nm){
-        //String nm = txtalamat.getText();
-        ResultSet res;
-        try {
-            koneksi.getKoneksi();
-            //String query="Select * from tbbarang where nama like '%" + nm + "%' and jumlah > 0 Order By nama";
-            String query="Select * from tbbarang where nama = '" + nm + "' and jumlah > 0 Order By nama";
-            res=stm.executeQuery(query);
-            //res.last();
-            while (res.next()){
-                txthrgjual.setText(res.getString("hrgjual"));
-                txtsatuan.setText(res.getString("satuan"));
-                kdbarang=res.getString("kdbarang");
-                txtjumlah.setText(res.getString("jumlah"));
-                jmlbrg=Integer.parseInt(res.getString("jumlah"));
-            }
-        } catch (Exception e) {
-            //System.err.println("koneksi gagal"+e.getMessage());
-            JOptionPane.showMessageDialog(rootPane, "Data tidak ditemukan");
-        }        
-    }
+   private void carinama(String nm){
+    // Hapus atau jangan tulis ulang 'String nm = ' karena variabel nm sudah ada di parameter atas.
+    ResultSet res;
+    try {
+        koneksi.getKoneksi();
+        String query="Select * from tbbarang where nama = '" + nm + "' and jumlah > 0 Order By nama";
+        res=stm.executeQuery(query);
+        
+        while (res.next()){
+            txthrgjual.setText(res.getString("hrgjual"));
+            txtsatuan.setText(res.getString("satuan"));
+            kdbarang=res.getString("kdbarang");
+            
+            // Mengambil stok asli dari database dan menyimpannya ke jmlbrg
+            jmlbrg=Integer.parseInt(res.getString("jumlah"));
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(rootPane, "Data tidak ditemukan atau error database");
+    }        
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -116,8 +119,9 @@ public class transaksi extends javax.swing.JFrame {
         cmbnama = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         txtjumlah = new javax.swing.JTextField();
+        jButton6 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -154,10 +158,25 @@ public class transaksi extends javax.swing.JFrame {
         });
 
         jButton2.setText("Hapus");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Rubah");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Batal");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         tbbarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -179,9 +198,14 @@ public class transaksi extends javax.swing.JFrame {
             }
         });
         tbbarang.setName("tbbarang"); // NOI18N
+        tbbarang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbbarangMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbbarang);
 
-        jButton5.setText("Tutup");
+        jButton5.setText("Simpan");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -204,6 +228,13 @@ public class transaksi extends javax.swing.JFrame {
         jLabel7.setText("Jumlah");
 
         txtjumlah.setText("jTextField1");
+
+        jButton6.setText("Tutup");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -242,10 +273,12 @@ public class transaksi extends javax.swing.JFrame {
                                             .addComponent(cmbnim, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(cmbnama, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtjumlah, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(0, 173, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5)))
+                        .addComponent(jButton5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton6)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -290,8 +323,10 @@ public class transaksi extends javax.swing.JFrame {
                     .addComponent(jButton4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -303,13 +338,70 @@ public class transaksi extends javax.swing.JFrame {
         txtsatuan.setText("");
         txthrgjual.setText("");       
         txtjumlah.setText("0");
-        
+        kdbarang = "";
+        jmlbrg = 0;
        // autonumbertanggal(tgl);
-        
+       // ... kode bersih textfield ...
+    ttl = 0;
+    ttls = 0;       
     }
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        this.dispose();
+       if (tbbarang.getRowCount() == 0) {
+        JOptionPane.showMessageDialog(rootPane, "Tabel transaksi kosong!");
+        return;
+    }
+
+    // Ambil tanggal hari ini untuk fungsi autonumbertanggal (seperti di proyektor)
+    java.time.LocalDateTime now = java.time.LocalDateTime.now();
+    java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    String tgl = now.format(formatter);
+    
+    // Memasukkan fungsi autonumbertanggal dari proyektor
+    autonumbertanggal(tgl);
+    String jmlString = "0"; // Sesuai baris 'String jml="0"' di proyektor
+
+    try {
+        koneksi.getKoneksi();
+        
+        // 2. Simpan Header ke tbjual (Disesuaikan dengan kolom gambarmu: kdjual, tgljual, nim, total_bayar)
+        String sqlHeader = "INSERT INTO tbjual (kdjual, tgljual, nim, total_bayar) VALUES ('" 
+                           + jLabel6.getText() + "', '" + tgl + "', '" + cmbnim.getSelectedItem().toString() + "', '" + ttl + "')";
+        stm.executeUpdate(sqlHeader);
+
+        // 3. Simpan Detail ke tbdetailjual & Kurangi Stok Gudang (Looping gabungan)
+        for (int i = 0; i < tbbarang.getRowCount(); i++) {
+            String kd = tbbarang.getValueAt(i, 0).toString();
+            String nmBarang = tbbarang.getValueAt(i, 1).toString(); // Diperlukan untuk cari stok master
+            String hrg = tbbarang.getValueAt(i, 3).toString();
+            String jml = tbbarang.getValueAt(i, 4).toString();
+            String sub = tbbarang.getValueAt(i, 5).toString();
+
+            // Query Simpan Detail milikmu (Kolom: kdjual, kdbarang, harga_jual, jumlah_beli, subtotal)
+            String sqlDetail = "INSERT INTO tbdetailjual (kdjual, kdbarang, harga_jual, jumlah_beli, subtotal) VALUES ('" 
+                               + jLabel6.getText() + "', '" + kd + "', '" + hrg + "', '" + jml + "', '" + sub + "')";
+            stm.executeUpdate(sqlDetail);
+
+            // 4. LOGIKA PENGURANGAN STOK (Sesuai gambar proyektor dosenmu)
+            // Memanggil fungsi carinama bawaanmu untuk mengisi variabel global 'jmlbrg' (stok awal)
+            carinama(nmBarang);
+            
+            // Rumus hitung sisa: Stok Gudang saat ini (jmlbrg) dikurangi Jumlah yang baru dibeli (jml)
+            int sisaStok = jmlbrg - Integer.parseInt(jml);
+            
+            // Query update stok ke tabel master barang (tbbarang) sesuai proyektor
+            String sqlUpdateStok = "UPDATE tbbarang SET jumlah = '" + sisaStok + "' WHERE kdbarang = '" + kd + "'";
+            stm.executeUpdate(sqlUpdateStok);
+        }
+
+        // Akhir proses penyelesaian transaksi milikmu
+        JOptionPane.showMessageDialog(rootPane, "Data berhasil disimpan dan stok diperbarui!");
+        tb.setRowCount(0); // Kosongkan tabel di layar
+        bersih();
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(rootPane, "Error simpan: " + e.getMessage());
+    }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void cmbnamaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbnamaFocusLost
@@ -326,24 +418,133 @@ public class transaksi extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
+        addnama();
         
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String tgl = now.format(formatter);
+        autonumbertanggal(tgl);
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if(Integer.valueOf(txtjumlah.getText())>=jmlbrg) {
-            JOptionPane.showMessageDialog(rootPane, "Jumlah barang dijual melebihin stok yang ada " + jmlbrg + " " + txtsatuan.getText());
-        } else {
-            tb.addRow(new Object[]{
-                kdbarang, 
-                txtnmbarang.getText(), 
-                txtsatuan.getText(), 
-                txthrgjual.getText(), 
-                txtjumlah.getText(), 
-                Integer.parseInt(txthrgjual.getText())*Integer.parseInt(txtjumlah.getText())
-            });
+        try {
+            // Validasi input kosong
+            if(txtnmbarang.getText().trim().isEmpty() || txtjumlah.getText().equals("0")) {
+                JOptionPane.showMessageDialog(rootPane, "Nama barang atau jumlah tidak boleh kosong!");
+                return;
+            }
+            
+            int jumlahBeli = Integer.parseInt(txtjumlah.getText());
+            
+            // Cek jika stok barang di database kosong/null
+            if (jmlbrg == null) {
+                JOptionPane.showMessageDialog(rootPane, "Data stok barang belum dimuat dengan benar!");
+                return;
+            }
+
+            if(jumlahBeli > jmlbrg) { // Ubah jadi '>' agar jika beli pas sesuai stok tetap bisa
+                JOptionPane.showMessageDialog(rootPane, "Jumlah barang dijual melebihi stok yang ada (" + jmlbrg + " " + txtsatuan.getText() + ")");
+            } else {
+                tb.addRow(new Object[]{
+                    kdbarang, 
+                    txtnmbarang.getText(), 
+                    txtsatuan.getText(), 
+                    txthrgjual.getText(), 
+                    txtjumlah.getText(), 
+                    Integer.parseInt(txthrgjual.getText()) * jumlahBeli
+                });
+                bersih(); // Bersihkan field setelah berhasil tambah ke tabel
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(rootPane, "Format jumlah atau harga harus berupa angka!");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+       int baris = tbbarang.getSelectedRow();
+    if (baris == -1) {
+        JOptionPane.showMessageDialog(rootPane, "Pilih baris yang ingin diubah!");
+        return;
+    }
+
+    try {
+        int jumlahBeli = Integer.parseInt(txtjumlah.getText());
+        int hargaJual = Integer.parseInt(txthrgjual.getText());
+        
+        // Update baris yang dipilih (bukan tambah baru)
+        tb.setValueAt(kdbarang, baris, 0);
+        tb.setValueAt(txtnmbarang.getText(), baris, 1);
+        tb.setValueAt(txtsatuan.getText(), baris, 2);
+        tb.setValueAt(hargaJual, baris, 3);
+        tb.setValueAt(jumlahBeli, baris, 4);
+        tb.setValueAt(hargaJual * jumlahBeli, baris, 5);
+        
+        bersih();
+        JOptionPane.showMessageDialog(rootPane, "Data berhasil diubah!");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(rootPane, "Error: " + e.getMessage());
+    }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void tbbarangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbbarangMouseClicked
+        // TODO add your handling code here:
+        int baris = tbbarang.getSelectedRow();
+    
+    if (baris != -1) {
+        // 1. Ambil data dari baris tabel yang diklik
+        String kode      = tbbarang.getValueAt(baris, 0).toString();
+        String nama      = tbbarang.getValueAt(baris, 1).toString();
+        String satuan    = tbbarang.getValueAt(baris, 2).toString();
+        String harga     = tbbarang.getValueAt(baris, 3).toString();
+        String jumlah    = tbbarang.getValueAt(baris, 4).toString();
+        
+        
+        // 2. Tampilkan data ke form input
+        txtnmbarang.setText(nama);
+        txtsatuan.setText(satuan);
+        txthrgjual.setText(harga);
+        txtjumlah.setText(jumlah);
+        
+        // Simpan sementara ke variabel global agar bisa dipakai untuk validasi
+        kdbarang = kode;
+        
+        // 3. Hapus baris yang diklik agar data "naik" ke form
+        tb.removeRow(baris);
+        
+        // 4. Fokus ke field jumlah agar kasir bisa langsung edit
+        txtjumlah.requestFocus();
+    }
+    }//GEN-LAST:event_tbbarangMouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        int baris = tbbarang.getSelectedRow();
+    if (baris != -1) {
+        int konfirmasi = JOptionPane.showConfirmDialog(rootPane, 
+                "Apakah anda yakin ingin menghapus barang ini?", "Konfirmasi", 
+                JOptionPane.YES_NO_OPTION);
+        
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+            tb.removeRow(baris);
+            bersih(); // Bersihkan form setelah hapus
+            JOptionPane.showMessageDialog(rootPane, "Data berhasil dihapus!");
+        }
+    } else {
+        JOptionPane.showMessageDialog(rootPane, "Pilih baris di tabel yang ingin dihapus!");
+    }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:\
+       bersih();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
     
     private void autonumbertanggal(String tgl){
         ResultSet res;
@@ -400,6 +601,7 @@ public class transaksi extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

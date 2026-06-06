@@ -48,6 +48,7 @@ public class Main extends javax.swing.JFrame {
         mnPenduduk = new javax.swing.JMenuItem();
         MnMahasiswa = new javax.swing.JMenuItem();
         MTransaksi = new javax.swing.JMenu();
+        mnTransaksi = new javax.swing.JMenuItem();
         MLaporan = new javax.swing.JMenu();
         MKOnfigurasi = new javax.swing.JMenu();
 
@@ -93,6 +94,20 @@ public class Main extends javax.swing.JFrame {
         jMenuBar1.add(MMaster);
 
         MTransaksi.setText("Transaksi");
+        MTransaksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MTransaksiActionPerformed(evt);
+            }
+        });
+
+        mnTransaksi.setText("Transaksi");
+        mnTransaksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnTransaksiActionPerformed(evt);
+            }
+        });
+        MTransaksi.add(mnTransaksi);
+
         jMenuBar1.add(MTransaksi);
 
         MLaporan.setText("Laporan");
@@ -157,6 +172,28 @@ public class Main extends javax.swing.JFrame {
         j.setVisible(true);
     }//GEN-LAST:event_MnMahasiswaActionPerformed
 
+    private void MTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MTransaksiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MTransaksiActionPerformed
+
+    private void mnTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnTransaksiActionPerformed
+        // TODO add your handling code here:
+        try {
+        // Panggil koneksi database dulu agar siap digunakan oleh class transaksi
+        pdbaru.koneksi.getKoneksi(); 
+        
+        // Membuka class transaksi (sesuai nama class yang kamu buat)
+        transaksi t = new transaksi();
+        t.setExtendedState(javax.swing.JFrame.NORMAL);
+        t.setVisible(true);
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Gagal membuka form transaksi!\nPenyebab: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_mnTransaksiActionPerformed
+
+  
+                      
     /**
      * @param args the command line arguments
      */
@@ -196,6 +233,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuItem mnPenduduk;
+    private javax.swing.JMenuItem mnTransaksi;
     private javax.swing.JMenuItem mnkeluar;
     // End of variables declaration//GEN-END:variables
 }

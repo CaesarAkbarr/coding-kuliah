@@ -21,7 +21,7 @@ import static pdbaru.koneksi.stm;
  * @author Nowo
  */
 public class frmmhs extends javax.swing.JFrame {
-
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(frmmhs.class.getName());
     LocalDateTime now = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -45,9 +45,9 @@ public class frmmhs extends javax.swing.JFrame {
         txtnim.setText("");
         autonumber();
        // autonumbertanggal(tgl);
-
+        
     }
-
+    
     private void tabelmhs(){
         ResultSet res;
         DefaultTableModel tb= new DefaultTableModel();
@@ -64,14 +64,14 @@ public class frmmhs extends javax.swing.JFrame {
             con = DriverManager.getConnection(url,user,pass);
             stm = con.createStatement();*/
             koneksi.getKoneksi();
-            String query="Select * from mhs";
+            String query="Select * from tbmahasiswa";
             res=stm.executeQuery(query);
             while (res.next()){
                 tb.addRow(new Object[]{
-                    res.getString("nim"),
+                    res.getString("nim"), 
                     res.getString("nama"),
                     res.getString("alamat"),
-                    res.getString("hp"),
+                    res.getString("Handphone"),
                     res.getString("kota")
                 });
             }
@@ -303,7 +303,7 @@ public class frmmhs extends javax.swing.JFrame {
         autonumberparam(kode);
         /*try {
             koneksi.getKoneksi();
-            String query="insert into mhs  values ('"+txtnim.getText()+"','"+txtnama.getText()+"','"+txtalamat.getText()+"','"+txtnohp.getText()+"','"+txtkota.getText()+"','"+tgl+"', '"+autonumberparam+"')";
+            String query="insert into tbmahasiswa  values ('"+txtnim.getText()+"','"+txtnama.getText()+"','"+txtalamat.getText()+"','"+txtnohp.getText()+"','"+txtkota.getText()+"','"+tgl+"', '"+autonumberparam+"')";
             stm.executeUpdate(query);
             bersih();
             tabelmhs();
@@ -330,10 +330,10 @@ public class frmmhs extends javax.swing.JFrame {
     private void autonumber(){
         ResultSet res;
         String strnim;
-        Integer intnim;
+        Integer intnim;        
         try {
             koneksi.getKoneksi();
-            String query="Select nim from mhs Order By nim";
+            String query="Select nim from tbmahasiswa Order By nim";
             res=stm.executeQuery(query);
             //res.last();
             while (res.next()){
@@ -345,17 +345,17 @@ public class frmmhs extends javax.swing.JFrame {
         } catch (Exception e) {
             System.err.println("koneksi gagal"+e.getMessage());
             txtnim.setText("000000001");
-        }
+        }        
     }
-
+    
     private void autonumberparam(String kode){
         ResultSet res;
         String strnim, strkode;
-        Integer intnim;
+        Integer intnim;       
         strkode=kode.substring(0,1);
         try {
             koneksi.getKoneksi();
-            String query="Select right(Kode,9)as kd from mhs where left(nama,1)='"+strkode+"' Order By Kode";
+            String query="Select right(Kode,9)as kd from tbmahasiswa where left(nama,1)='"+strkode+"' Order By Kode";
             res=stm.executeQuery(query);
             while (res.next()){
             //res.last();
@@ -370,17 +370,17 @@ public class frmmhs extends javax.swing.JFrame {
             autonumberparam=strkode+"000000001";
         }
     }
-
+    
     private void autonumbertanggal(String tgl){
         ResultSet res;
         String strnim, strkode, y, m, d;
-        Integer intnim;
+        Integer intnim;       
         y=tgl.substring(0,4);
         m=tgl.substring(5,7);
         d=tgl.substring(8,10);
         try {
             koneksi.getKoneksi();
-            String query="Select nim from mhs where tanggal='"+tgl+"'Order By nim";
+            String query="Select nim from tbmahasiswa where tanggal='"+tgl+"'Order By nim";
             res=stm.executeQuery(query);
             while (res.next()){
               strnim=res.getString("nim");
@@ -393,25 +393,25 @@ public class frmmhs extends javax.swing.JFrame {
             txtnim.setText(y+m+d+"00001");
         }
     }
-
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         Object[] options = {"Ya ", "Tidak "};
         int choice = JOptionPane.showOptionDialog(
-            null,
-            "Data dengan primary kay " + txtnim.getText() + " Akan dirubah?",
-            "Confirmation Dialog",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            options,
-            options[0]
+            null,                                
+            "Data dengan primary kay " + txtnim.getText() + " Akan dirubah?",   
+            "Confirmation Dialog",               
+            JOptionPane.YES_NO_OPTION,    
+            JOptionPane.QUESTION_MESSAGE,        
+            null,                                
+            options,                             
+            options[0]                           
         );
 
         if (choice == JOptionPane.YES_OPTION) {
             try {
                koneksi.getKoneksi();
-               String query="update mhs set  nama = '"+txtnama.getText()+"',alamat = '"+txtalamat.getText()+"',hp = '"+txtnohp.getText()+"',kota = '"+txtkota.getText()+"' where nim = '"+txtnim.getText()+"'";
+               String query="update tbmahasiswa set  nama = '"+txtnama.getText()+"',alamat = '"+txtalamat.getText()+"',handphone = '"+txtnohp.getText()+"',kota = '"+txtkota.getText()+"' where nim = '"+txtnim.getText()+"'";
                stm.executeUpdate(query);
                bersih();
                tabelmhs();
@@ -428,20 +428,20 @@ public class frmmhs extends javax.swing.JFrame {
         // TODO add your handling code here:
         Object[] options = {"Ya ", "Tidak "};
         int choice = JOptionPane.showOptionDialog(
-            null,
-            "Data dengan primary kay " + txtnim.getText() + " Akan dihapus?",
-            "Confirmation Dialog",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            options,
-            options[0]
+            null,                                
+            "Data dengan primary kay " + txtnim.getText() + " Akan dihapus?",   
+            "Confirmation Dialog",               
+            JOptionPane.YES_NO_OPTION,    
+            JOptionPane.QUESTION_MESSAGE,        
+            null,                                
+            options,                             
+            options[0]                           
         );
 
         if (choice == JOptionPane.YES_OPTION) {
             try {
                koneksi.getKoneksi();
-               String query="delete from mhs where nim = '"+txtnim.getText()+"'";
+               String query="delete from tbmahasiswa where nim = '"+txtnim.getText()+"'";
                stm.executeUpdate(query);
                bersih();
                tabelmhs();
@@ -451,7 +451,7 @@ public class frmmhs extends javax.swing.JFrame {
         } else if (choice == JOptionPane.NO_OPTION) {
             System.out.println("Data tidak jadi dirubah");
             bersih();
-        }
+        } 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtnamaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtnamaFocusLost
@@ -467,7 +467,7 @@ public class frmmhs extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
