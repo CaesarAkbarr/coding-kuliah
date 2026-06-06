@@ -4,9 +4,16 @@
  */
 package tugasakhirrentalwarnet;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.Duration;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -28,7 +35,6 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public void loadDataPC() {
-        // 1. Desain kolom tabel sesuai rancangan kita kemarin
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID PC");
         model.addColumn("Nama PC");
@@ -36,13 +42,10 @@ public class MainFrame extends javax.swing.JFrame {
         model.addColumn("Status");
 
         try {
-            // 2. Panggil class Koneksi
             Connection conn = Koneksi.getKoneksi();
             Statement stmt = conn.createStatement();
-            String sql = "SELECT * FROM computer"; // Ambil data dari tabel computer
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM computer");
 
-            // 3. Masukkan datanya baris demi baris
             while (rs.next()) {
                 model.addRow(new Object[] {
                     rs.getInt("computer_id"),
@@ -52,12 +55,9 @@ public class MainFrame extends javax.swing.JFrame {
                 });
             }
 
-            // 4. Set modelnya ke JTable lo.
-            // PENTING: Pastikan nama variabel JTable lo di kanan bawah NetBeans adalah "jTable1" (atau sesuaikan)
-            tabelPC.setModel(model);
-            System.out.println("Data PC Sukses Ditampilkan, Cik! 🚀");
+            tabelPC.setModel(model); // Pastikan nama variabel JTable lo adalah tabelPC
         } catch (Exception e) {
-            System.err.println("Gagal memuat data tabel: " + e.getMessage());
+            System.err.println("Gagal load tabel: " + e.getMessage());
         }
     }
 
@@ -91,8 +91,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         buttonCheckIn.setText("Check In");
         buttonCheckIn.addActionListener(
-            new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
+            new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
                     buttonCheckInActionPerformed(evt);
                 }
             }
@@ -100,8 +100,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         buttonCheckOut.setText("CheckOut");
         buttonCheckOut.addActionListener(
-            new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
+            new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
                     buttonCheckOutActionPerformed(evt);
                 }
             }
@@ -195,136 +195,200 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     } // </editor-fold>//GEN-END:initComponents
 
-    private void buttonCheckInActionPerformed(java.awt.event.ActionEvent evt) {
+    private void buttonCheckInActionPerformed(ActionEvent evt) {
         //GEN-FIRST:event_buttonCheckInActionPerformed
         // TODO add your handling code here:
-        // 1. Ambil baris tabel yang sedang dipilih/diklik oleh user
         int selectedRow = tabelPC.getSelectedRow();
-
-        // Validasi: Pastikan user sudah milih PC di tabel sebelum klik tombol
         if (selectedRow == -1) {
-            javax.swing.JOptionPane.showMessageDialog(
+            JOptionPane.showMessageDialog(
                 this,
-                "Pilih PC di tabel dulu, Bro! 😹",
-                "Peringatan",
-                javax.swing.JOptionPane.WARNING_MESSAGE
+                "Pilih PC di tabel terlebih dahulu!"
             );
             return;
         }
 
-        // 2. Ambil data ID PC dan Status dari baris tabel yang dipilih
         String idPC = tabelPC.getValueAt(selectedRow, 0).toString();
         String status = tabelPC.getValueAt(selectedRow, 3).toString();
 
-        // Validasi: Kalau statusnya sudah OCCUPIED, gak boleh disewa lagi!
         if (status.equals("OCCUPIED")) {
-            javax.swing.JOptionPane.showMessageDialog(
+            JOptionPane.showMessageDialog(
                 this,
-                "PC ini lagi dipake main, cari yang kosong! 😂",
-                "Error",
-                javax.swing.JOptionPane.ERROR_MESSAGE
+                "PC ini sedang dipakai!"
             );
             return;
         }
 
-        // 3. Munculkan pop-up input data pelanggan
-        String namaCust = javax.swing.JOptionPane.showInputDialog(
+        // 1. DROPDOWN COMBOBOX UNTUK PILIH JENIS BILLING
+        String[] opsiBilling = {
+            "Argo (Bayar Belakangan)",
+            "Paket 1 Jam (Rp 5.000)",
+            "Paket 3 Jam (Rp 12.000)",
+            "Paket 5 Jam (Rp 18.000)",
+        };
+        String pilihan = (String) JOptionPane.showInputDialog(
+            this,
+            "Pilih Jenis Billing / Paket Semu:",
+            "Menu Registrasi PC",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opsiBilling,
+            opsiBilling[0]
+        );
+
+        if (pilihan == null) return; // Batal jika klik cancel
+
+        int durasiMenit = 0;
+        long totalBiaya = 0;
+        boolean isArgo = false;
+
+        // Tentukan logika berdasarkan ComboBox yang dipilih
+        if (pilihan.equals(opsiBilling[0])) {
+            isArgo = true; // Mode Argo Aktif!
+        } else if (pilihan.equals(opsiBilling[1])) {
+            durasiMenit = 60;
+            totalBiaya = 5000;
+        } else if (pilihan.equals(opsiBilling[2])) {
+            durasiMenit = 180;
+            totalBiaya = 12000;
+        } else if (pilihan.equals(opsiBilling[3])) {
+            durasiMenit = 300;
+            totalBiaya = 18000;
+        }
+
+        // 2. INPUT DATA CUSTOMER
+        String namaCust = JOptionPane.showInputDialog(
             this,
             "Masukkan Nama Pelanggan:"
         );
-        if (namaCust == null || namaCust.trim().isEmpty()) return; // Batalkan jika input kosong
-
-        String phoneCust = javax.swing.JOptionPane.showInputDialog(
+        if (namaCust == null || namaCust.trim().isEmpty()) return;
+        String phoneCust = JOptionPane.showInputDialog(
             this,
             "Masukkan No HP Pelanggan:"
         );
         if (phoneCust == null || phoneCust.trim().isEmpty()) return;
 
-        // 4. Proses Eksekusi ke Database SQL
-        java.sql.Connection conn = Koneksi.getKoneksi();
+        long uangBayar = 0;
+        long kembalian = 0;
+
+        // 3. VALIDASI DUIT DI AWAL HANYA JIKA MEMILIH PAKET
+        if (!isArgo) {
+            String inputBayar = JOptionPane.showInputDialog(
+                this,
+                "Total Tagihan Paket: Rp " +
+                    totalBiaya +
+                    "\nMasukkan Uang Cash:"
+            );
+            if (inputBayar == null || inputBayar.trim().isEmpty()) return;
+
+            uangBayar = Long.parseLong(inputBayar);
+            if (uangBayar < totalBiaya) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Duit kurang, Cik! Gak ada utang paket ya. 😹",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+            kembalian = uangBayar - totalBiaya;
+        }
+
+        // 4. EKSEKUSI KE DATABASE SQL
+        Connection conn = Koneksi.getKoneksi();
         try {
-            // Matikan auto-commit untuk mengaktifkan fitur ACID Transaction (Biar dosen makin bangga! 😎)
             conn.setAutoCommit(false);
 
-            // A. Insert data pelanggan baru ke tabel customer
+            // A. Insert Customer
             String sqlCustomer =
                 "INSERT INTO customer (cust_name, phone) VALUES (?, ?)";
-            java.sql.PreparedStatement psCust = conn.prepareStatement(
+            PreparedStatement psCust = conn.prepareStatement(
                 sqlCustomer,
-                java.sql.Statement.RETURN_GENERATED_KEYS
+                Statement.RETURN_GENERATED_KEYS
             );
             psCust.setString(1, namaCust);
             psCust.setString(2, phoneCust);
             psCust.executeUpdate();
 
-            // Ambil ID Customer yang barusan digenerate otomatis oleh SQL
-            java.sql.ResultSet rsCust = psCust.getGeneratedKeys();
+            ResultSet rsCust = psCust.getGeneratedKeys();
             int idCust = 0;
-            if (rsCust.next()) {
-                idCust = rsCust.getInt(1);
-            }
+            if (rsCust.next()) idCust = rsCust.getInt(1);
 
-            // B. Bikin nomor nota transaksi otomatis (Contoh: TRX-WaktuSekarang)
             String idTrans = "TRX-" + System.currentTimeMillis();
 
-            // C. Insert data ke tabel transaksi rental_tran (start_time pake NOW() bawaan SQL)
-            String sqlTransaksi =
-                "INSERT INTO rental_tran (tran_id, computer_id, customer_id, start_time) VALUES (?, ?, ?, NOW())";
-            java.sql.PreparedStatement psTrans = conn.prepareStatement(
-                sqlTransaksi
-            );
-            psTrans.setString(1, idTrans);
-            psTrans.setString(2, idPC);
-            psTrans.setInt(3, idCust);
+            // B. Insert Transaksi Dinamis
+            String sqlTransaksi;
+            PreparedStatement psTrans;
+
+            if (isArgo) {
+                // Jika Argo, biarkan duration_minutes dan total_cost bernilai NULL di awal
+                sqlTransaksi =
+                    "INSERT INTO rental_tran (tran_id, computer_id, customer_id, start_time) VALUES (?, ?, ?, NOW())";
+                psTrans = conn.prepareStatement(sqlTransaksi);
+                psTrans.setString(1, idTrans);
+                psTrans.setString(2, idPC);
+                psTrans.setInt(3, idCust);
+            } else {
+                // Jika Paket, langsung masukkan durasi dan biayanya karena sudah LUNAS
+                sqlTransaksi =
+                    "INSERT INTO rental_tran (tran_id, computer_id, customer_id, start_time, duration_minutes, total_cost) VALUES (?, ?, ?, NOW(), ?, ?)";
+                psTrans = conn.prepareStatement(sqlTransaksi);
+                psTrans.setString(1, idTrans);
+                psTrans.setString(2, idPC);
+                psTrans.setInt(3, idCust);
+                psTrans.setInt(4, durasiMenit);
+                psTrans.setLong(5, totalBiaya);
+            }
             psTrans.executeUpdate();
 
-            // D. Update status PC di tabel computer menjadi 'OCCUPIED'
+            // C. Update Status PC jadi OCCUPIED
             String sqlUpdatePC =
                 "UPDATE computer SET status = 'OCCUPIED' WHERE computer_id = ?";
-            java.sql.PreparedStatement psPC = conn.prepareStatement(
-                sqlUpdatePC
-            );
+            PreparedStatement psPC = conn.prepareStatement(sqlUpdatePC);
             psPC.setString(1, idPC);
             psPC.executeUpdate();
 
-            // Jika semua query sukses tanpa error, commit datanya secara permanen
             conn.commit();
             conn.setAutoCommit(true);
 
-            javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Check In Berhasil! PC " + idPC + " resmi aktif. 🚀"
-            );
+            // Tampilkan Pesan Sukses Sesuai Jenis Metode
+            if (isArgo) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Check In ARGO Berhasil! Billing waktu mulai berjalan... ⏱️"
+                );
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "=== NOTA PAKET LUNAS ===" +
+                        "\nID Transaksi : " +
+                        idTrans +
+                        "\nPilihan      : " +
+                        pilihan +
+                        "\nKembalian    : Rp " +
+                        kembalian +
+                        "\n\nPC " +
+                        idPC +
+                        " Aktif! 🚀"
+                );
+            }
 
-            // 5. Refresh isi JTable biar statusnya langsung berubah jadi OCCUPIED secara real-time
-            loadDataPC();
+            loadDataPC(); // Refresh tabel UI
         } catch (Exception e) {
             try {
-                conn.rollback(); // Batalkan semua query jika di tengah jalan ada yang error
-            } catch (java.sql.SQLException ex) {
-                System.err.println("Rollback gagal: " + ex.getMessage());
-            }
-            javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Transaksi Gagal: " + e.getMessage(),
-                "Error Database",
-                javax.swing.JOptionPane.ERROR_MESSAGE
-            );
+                conn.rollback();
+            } catch (Exception ex) {}
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
     } //GEN-LAST:event_buttonCheckInActionPerformed
 
-    private void buttonCheckOutActionPerformed(java.awt.event.ActionEvent evt) {
+    private void buttonCheckOutActionPerformed(ActionEvent evt) {
         //GEN-FIRST:event_buttonCheckOutActionPerformed
         // TODO add your handling code here:
-        // 1. Ambil baris tabel yang dipilih
         int selectedRow = tabelPC.getSelectedRow();
-
         if (selectedRow == -1) {
-            javax.swing.JOptionPane.showMessageDialog(
+            JOptionPane.showMessageDialog(
                 this,
-                "Pilih PC yang mau di-CheckOut dulu, Bro! 😹",
-                "Peringatan",
-                javax.swing.JOptionPane.WARNING_MESSAGE
+                "Pilih PC yang mau di-CheckOut! 😹"
             );
             return;
         }
@@ -332,145 +396,123 @@ public class MainFrame extends javax.swing.JFrame {
         String idPC = tabelPC.getValueAt(selectedRow, 0).toString();
         String status = tabelPC.getValueAt(selectedRow, 3).toString();
 
-        // Validasi: Pastikan PC yang dipilih memang lagi dipakai
         if (!status.equals("OCCUPIED")) {
-            javax.swing.JOptionPane.showMessageDialog(
+            JOptionPane.showMessageDialog(
                 this,
-                "PC ini emang lagi nganggur, gak bisa di-CheckOut! 😂",
-                "Error",
-                javax.swing.JOptionPane.ERROR_MESSAGE
+                "PC ini emang lagi kosong, Bos! 😂"
             );
             return;
         }
 
-        java.sql.Connection conn = Koneksi.getKoneksi();
+        Connection conn = Koneksi.getKoneksi();
         try {
-            // 2. Ambil data start_time dan tarif_per_jam dari database berdasarkan sesi aktif
-            String sqlCariSesi =
-                "SELECT r.tran_id, r.start_time, c.hourly_rate FROM rental_tran r " +
+            // Cek dulu, ini sesi Argo atau Paket?
+            String sqlCari =
+                "SELECT r.tran_id, r.start_time, r.total_cost, c.hourly_rate FROM rental_tran r " +
                 "JOIN computer c ON r.computer_id = c.computer_id " +
                 "WHERE r.computer_id = ? AND r.end_time IS NULL";
-
-            java.sql.PreparedStatement psCari = conn.prepareStatement(
-                sqlCariSesi
-            );
+            PreparedStatement psCari = conn.prepareStatement(sqlCari);
             psCari.setString(1, idPC);
-            java.sql.ResultSet rsSesi = psCari.executeQuery();
+            ResultSet rs = psCari.executeQuery();
 
-            if (rsSesi.next()) {
-                String idTrans = rsSesi.getString("tran_id");
-                java.sql.Timestamp startTime = rsSesi.getTimestamp(
-                    "start_time"
-                );
-                int hourlyRate = rsSesi.getInt("hourly_rate");
+            if (rs.next()) {
+                String idTrans = rs.getString("tran_id");
+                Timestamp startTime = rs.getTimestamp("start_time");
+                long totalCostExist = rs.getLong("total_cost");
+                boolean isPaket = !rs.wasNull(); // Kalo total_cost gak kosong, berarti Paket
+                int hourlyRate = rs.getInt("hourly_rate");
 
-                // Waktu check-out = waktu sekarang
-                java.sql.Timestamp endTime = new java.sql.Timestamp(
-                    System.currentTimeMillis()
-                );
-
-                // 3. Hitung selisih waktu dalam menit menggunakan java.time
-                java.time.LocalDateTime startLDT = startTime.toLocalDateTime();
-                java.time.LocalDateTime endLDT = endTime.toLocalDateTime();
-                long durationMinutes = java.time.Duration.between(
-                    startLDT,
-                    endLDT
-                ).toMinutes();
-
-                // Pengaman minimal billing (Jika baru main < 1 menit, anggap aja 1 menit biar gak 0 rupiah)
-                if (durationMinutes <= 0) durationMinutes = 1;
-
-                // 4. Hitung total biaya (Tarif per menit = hourlyRate / 60)
-                long totalCost = (durationMinutes * hourlyRate) / 60;
-
-                // Tampilkan info billing ke kasir
-                javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "--- rincian billing ---" +
-                        "\nDurasi Bermain: " +
-                        durationMinutes +
-                        " Menit" +
-                        "\nTotal Tagihan: Rp " +
-                        totalCost,
-                    "Billing Terhitung",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE
-                );
-
-                // 5. Minta input uang pembayaran dari kasir
-                String inputBayar = javax.swing.JOptionPane.showInputDialog(
-                    this,
-                    "Total: Rp " + totalCost + "\nMasukkan Uang Pembayaran:"
-                );
-                if (inputBayar == null || inputBayar.trim().isEmpty()) return;
-
-                long uangBayar = Long.parseLong(inputBayar);
-
-                // Validasi uang cukup/kurang
-                if (uangBayar < totalCost) {
-                    javax.swing.JOptionPane.showMessageDialog(
-                        this,
-                        "Uang kurang, Cik! Gak bisa diskon otomatis. 😹",
-                        "Transaksi Gagal",
-                        javax.swing.JOptionPane.ERROR_MESSAGE
-                    );
-                    return;
-                }
-
-                long kembalian = uangBayar - totalCost;
-
-                // 6. UPDATE DATA KE DATABASE (Gunakan ACID Transaction lagi)
                 conn.setAutoCommit(false);
 
-                // A. Update tabel rental_tran (isi end_time, duration, total_cost)
-                String sqlUpdateTrans =
-                    "UPDATE rental_tran SET end_time = NOW(), duration_minutes = ?, total_cost = ? WHERE tran_id = ?";
-                java.sql.PreparedStatement psUpTrans = conn.prepareStatement(
-                    sqlUpdateTrans
-                );
-                psUpTrans.setLong(1, durationMinutes);
-                psUpTrans.setLong(2, totalCost);
-                psUpTrans.setString(3, idTrans);
-                psUpTrans.executeUpdate();
+                if (isPaket) {
+                    // LOGIKA PAKET: Cuma numpang lewat buat update jam selesai aja
+                    int konfirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Pelanggan PAKET sudah selesai?\nKosongkan PC " +
+                            idPC +
+                            "?",
+                        "CheckOut Paket",
+                        JOptionPane.YES_NO_OPTION
+                    );
+                    if (konfirm != JOptionPane.YES_OPTION) return;
 
-                // B. Kembalikan status PC menjadi 'AVAILABLE'
-                String sqlUpdatePC =
+                    String sqlUpTrans =
+                        "UPDATE rental_tran SET end_time = NOW() WHERE tran_id = ?";
+                    PreparedStatement psUp = conn.prepareStatement(sqlUpTrans);
+                    psUp.setString(1, idTrans);
+                    psUp.executeUpdate();
+                } else {
+                    // LOGIKA ARGO: Hitung durasi dan malak duit pembeli
+                    Timestamp endTime = new Timestamp(
+                        System.currentTimeMillis()
+                    );
+                    long durationMinutes = Duration.between(
+                        startTime.toLocalDateTime(),
+                        endTime.toLocalDateTime()
+                    ).toMinutes();
+                    if (durationMinutes <= 0) durationMinutes = 1;
+
+                    long hitungBiaya = (durationMinutes * hourlyRate) / 60;
+
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "--- ARGO SELESAI ---\nDurasi: " +
+                            durationMinutes +
+                            " Menit\nTagihan: Rp " +
+                            hitungBiaya
+                    );
+
+                    String inputBayar = JOptionPane.showInputDialog(
+                        this,
+                        "Masukkan Uang Pembayaran:"
+                    );
+                    if (
+                        inputBayar == null || inputBayar.trim().isEmpty()
+                    ) return;
+
+                    long uangBayar = Long.parseLong(inputBayar);
+                    if (uangBayar < hitungBiaya) {
+                        JOptionPane.showMessageDialog(
+                            this,
+                            "Duit kurang! Jangan kabur. 😹"
+                        );
+                        return;
+                    }
+
+                    // Update durasi & biaya ke SQL
+                    String sqlUpTrans =
+                        "UPDATE rental_tran SET end_time = NOW(), duration_minutes = ?, total_cost = ? WHERE tran_id = ?";
+                    PreparedStatement psUp = conn.prepareStatement(sqlUpTrans);
+                    psUp.setLong(1, durationMinutes);
+                    psUp.setLong(2, hitungBiaya);
+                    psUp.setString(3, idTrans);
+                    psUp.executeUpdate();
+
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "Lunas! Kembalian: Rp " + (uangBayar - hitungBiaya)
+                    );
+                }
+
+                // KEMBALIKAN PC JADI AVAILABLE (Berlaku buat Argo & Paket)
+                String sqlUpPC =
                     "UPDATE computer SET status = 'AVAILABLE' WHERE computer_id = ?";
-                java.sql.PreparedStatement psUpPC = conn.prepareStatement(
-                    sqlUpdatePC
-                );
-                psUpPC.setString(1, idPC);
-                psUpPC.executeUpdate();
+                PreparedStatement psPC = conn.prepareStatement(sqlUpPC);
+                psPC.setString(1, idPC);
+                psPC.executeUpdate();
 
                 conn.commit();
                 conn.setAutoCommit(true);
 
-                // 7. Cetak Struk Kembalian ke User
-                javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "=== STRUK PEMBAYARAN SUKSES ===" +
-                        "\nID Transaksi: " +
-                        idTrans +
-                        "\nTotal Biaya: Rp " +
-                        totalCost +
-                        "\nUang Bayar : Rp " +
-                        uangBayar +
-                        "\nKembalian  : Rp " +
-                        kembalian +
-                        "\n\nStatus PC kembali AVAILABLE! 🚀"
-                );
-
-                // 8. Refresh tabel
-                loadDataPC();
+                loadDataPC(); // Refresh tabel layar
             }
         } catch (Exception e) {
             try {
                 conn.rollback();
             } catch (Exception ex) {}
-            javax.swing.JOptionPane.showMessageDialog(
+            JOptionPane.showMessageDialog(
                 this,
-                "Gagal CheckOut: " + e.getMessage(),
-                "Error",
-                javax.swing.JOptionPane.ERROR_MESSAGE
+                "Error CheckOut: " + e.getMessage()
             );
         }
     } //GEN-LAST:event_buttonCheckOutActionPerformed
