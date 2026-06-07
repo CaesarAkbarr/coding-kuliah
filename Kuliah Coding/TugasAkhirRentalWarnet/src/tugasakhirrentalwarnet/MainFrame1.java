@@ -21,24 +21,20 @@ import javax.swing.SwingConstants;
  *
  * @author ROG G513RM
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame1 extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger =
-        java.util.logging.Logger.getLogger(MainFrame.class.getName());
+        java.util.logging.Logger.getLogger(MainFrame1.class.getName());
 
     /**
      * Creates new form MainFrame1
      */
-    public MainFrame() {
+    public MainFrame1() {
         initComponents();
 
         setLocationRelativeTo(null);
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-        ((javax.swing.JPanel) getContentPane()).setBorder(
-            javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20)
-        );
-
-        loadDataPC();
+        ((javax.swing.JPanel)getContentPane()).setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
     }
 
     public void loadDataPC() {
@@ -138,9 +134,6 @@ public class MainFrame extends javax.swing.JFrame {
             // 3. Render ulang wadah biar kotak-kotak barunya muncul di layar
             wadahCardPC.revalidate();
             wadahCardPC.repaint();
-            // Paksa JScrollPane untuk mendeteksi perubahan ukuran panel di dalamnya
-            wadahCardPC.getParent().revalidate();
-            wadahCardPC.getParent().repaint();
         } catch (Exception e) {
             System.err.println("Gagal load data PC Dinamis: " + e.getMessage());
         }
@@ -159,10 +152,22 @@ public class MainFrame extends javax.swing.JFrame {
         wadahCardPC = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.FlowLayout());
+
+        javax.swing.GroupLayout wadahCardPCLayout = new javax.swing.GroupLayout(wadahCardPC);
+        wadahCardPC.setLayout(wadahCardPCLayout);
+        wadahCardPCLayout.setHorizontalGroup(
+            wadahCardPCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        wadahCardPCLayout.setVerticalGroup(
+            wadahCardPCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         jScrollPane1.setViewportView(wadahCardPC);
 
-        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jScrollPane1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -192,7 +197,9 @@ public class MainFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MainFrame().setVisible(true));
+        java.awt.EventQueue.invokeLater(() ->
+            new MainFrame1().setVisible(true)
+        );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

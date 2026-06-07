@@ -21,7 +21,7 @@ public class TugasAkhirRentalWarnet {
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception ex) {
-            System.err.println("Gagal mengaktifkan FlatLaf! 😹");
+            System.err.println("Gagal mengaktifkan FlatLaf");
         }
 
         java.awt.EventQueue.invokeLater(() -> {
