@@ -110,7 +110,7 @@ public class MainFrame extends javax.swing.JFrame {
                 btnAksi.addActionListener(e -> {
                     if (status.equals("AVAILABLE")) {
                         // Lari ke FrameLoginMember (Langkah lo selanjutnya)
-                        // new FrameLoginMember(idPC).setVisible(true);
+                        new FrameLoginMember(idPC).setVisible(true);
                         javax.swing.JOptionPane.showMessageDialog(
                             this,
                             "Akan membuka Frame Login untuk " + namaPC + " 😂"
@@ -121,6 +121,7 @@ public class MainFrame extends javax.swing.JFrame {
                             this,
                             "Akan memproses Check-Out untuk " + namaPC + " 🚀"
                         );
+                        prosesCheckOutDinamis(idPC);
                     }
                 });
 
@@ -146,6 +147,174 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
+    public void prosesCheckOutDinamis(String idPC) {
+        java.sql.Connection conn = Koneksi.getKoneksi();
+        try {
+            // 1. Cari data transaksi yang sedang aktif (end_time masih NULL) berdasarkan ID PC
+            String sqlCari =
+                "SELECT r.tran_id, r.start_time, r.total_cost, c.hourly_rate FROM rental_tran r " +
+                "JOIN computer c ON r.computer_id = c.computer_id " +
+                "WHERE r.computer_id = ? AND r.end_time IS NULL";
+            java.sql.PreparedStatement psCari = conn.prepareStatement(sqlCari);
+            psCari.setString(1, idPC);
+            java.sql.ResultSet rs = psCari.executeQuery();
+
+            if (rs.next()) {
+                String idTrans = rs.getString("tran_id");
+                java.sql.Timestamp startTime = rs.getTimestamp("start_time");
+                long totalCostExist = rs.getLong("total_cost");
+
+                // Trik gaib mendeteksi tipe billing: Kalau total_cost di awal sudah terisi, berarti dia PAKET
+                boolean isPaket = !rs.wasNull();
+                int hourlyRate = rs.getInt("hourly_rate");
+
+                conn.setAutoCommit(false); // Aktifkan fitur transaksi ACID
+
+                if (isPaket) {
+                    // ---------------------------------------------------------
+                    // KONDISI A: PELANGGAN PAKETAN (Sudah Lunas di Awal)
+                    // ---------------------------------------------------------
+                    int konfirm = javax.swing.JOptionPane.showConfirmDialog(
+                        this,
+                        "Pelanggan PC " +
+                            idPC +
+                            " menggunakan PAKETAN dan sudah lunas.\nKosongkan PC sekarang?",
+                        "CheckOut Paket",
+                        javax.swing.JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (konfirm != javax.swing.JOptionPane.YES_OPTION) return;
+
+                    // Cukup update end_time saja menjadi waktu sekarang
+                    String sqlUpTrans =
+                        "UPDATE rental_tran SET end_time = NOW() WHERE tran_id = ?";
+                    java.sql.PreparedStatement psUp = conn.prepareStatement(
+                        sqlUpTrans
+                    );
+                    psUp.setString(1, idTrans);
+                    psUp.executeUpdate();
+
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Sesi paket selesai! PC " +
+                            idPC +
+                            " kembali AVAILABLE. 🚀"
+                    );
+                } else {
+                    // ---------------------------------------------------------
+                    // KONDISI B: PELANGGAN ARGO (Wajib Hitung Waktu & Bayar)
+                    // ---------------------------------------------------------
+                    java.sql.Timestamp endTime = new java.sql.Timestamp(
+                        System.currentTimeMillis()
+                    );
+
+                    // Hitung selisih durasi bermain dalam satuan menit
+                    long durationMinutes = java.time.Duration.between(
+                        startTime.toLocalDateTime(),
+                        endTime.toLocalDateTime()
+                    ).toMinutes();
+                    if (durationMinutes <= 0) durationMinutes = 1; // Minimal charge 1 menit biar gak gratisan 😹
+
+                    // Hitung total biaya rumus argo: (Menit * Tarif per jam) / 60
+                    long hitungBiaya = (durationMinutes * hourlyRate) / 60;
+
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "--- BILLING ARGO SELESAI ---\n" +
+                            "Durasi Bermain: " +
+                            durationMinutes +
+                            " Menit\n" +
+                            "Total Tagihan  : Rp " +
+                            hitungBiaya,
+                        "Tagihan Pascabayar",
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE
+                    );
+
+                    // Minta input duit pembayaran dari kasir
+                    String inputBayar = javax.swing.JOptionPane.showInputDialog(
+                        this,
+                        "Durasi: " +
+                            durationMinutes +
+                            " Menit\nTotal Tagihan Argo: Rp " +
+                            hitungBiaya +
+                            "\n\nMasukkan Uang Pembayaran:"
+                    );
+                    if (
+                        inputBayar == null || inputBayar.trim().isEmpty()
+                    ) return; // Kasir klik cancel, checkout batal
+
+                    long uangBayar = 0;
+                    try {
+                        uangBayar = Long.parseLong(inputBayar.trim());
+                    } catch (NumberFormatException e) {
+                        javax.swing.JOptionPane.showMessageDialog(
+                            this,
+                            "Cukup angka saja"
+                        );
+                        return; // Batal checkout
+                    }
+
+                    if (uangBayar < hitungBiaya) {
+                        javax.swing.JOptionPane.showMessageDialog(
+                            this,
+                            "Duitnya kurang Rp " +
+                                (hitungBiaya - uangBayar) +
+                                "!\nPelanggan gak boleh pulang sebelum lunas! 😹",
+                            "Kurang Bayar",
+                            javax.swing.JOptionPane.ERROR_MESSAGE
+                        );
+                        return; // BLOKIR KERAS! Jangan ganti PC jadi Available.
+                    }
+
+                    // Update end_time, durasi, dan total_cost argo ke database
+                    String sqlUpTrans =
+                        "UPDATE rental_tran SET end_time = NOW(), duration_minutes = ?, total_cost = ? WHERE tran_id = ?";
+                    java.sql.PreparedStatement psUp = conn.prepareStatement(
+                        sqlUpTrans
+                    );
+                    psUp.setLong(1, durationMinutes);
+                    psUp.setLong(2, hitungBiaya);
+                    psUp.setString(3, idTrans);
+                    psUp.executeUpdate();
+
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Argo Lunas!\nKembalian: Rp " +
+                            (uangBayar - hitungBiaya) +
+                            "\n\nTerima kasih! 😊"
+                    );
+                }
+
+                // ---------------------------------------------------------
+                // RITUAL BERSAMA: Kembalikan status PC di MySQL jadi AVAILABLE
+                // ---------------------------------------------------------
+                String sqlUpPC =
+                    "UPDATE computer SET status = 'AVAILABLE' WHERE computer_id = ?";
+                java.sql.PreparedStatement psPC = conn.prepareStatement(
+                    sqlUpPC
+                );
+                psPC.setString(1, idPC);
+                psPC.executeUpdate();
+
+                conn.commit(); // Eksekusi sukses permanen
+                conn.setAutoCommit(true);
+
+                // Panggil pabrik card lagi biar border PC langsung auto berubah jadi HIJAU REFRESH!
+                loadDataPC();
+            }
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {}
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Error CheckOut: " + e.getMessage(),
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -154,7 +323,6 @@ public class MainFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         jScrollPane1 = new javax.swing.JScrollPane();
         wadahCardPC = new javax.swing.JPanel();
 
@@ -165,7 +333,7 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * @param args the command line arguments
