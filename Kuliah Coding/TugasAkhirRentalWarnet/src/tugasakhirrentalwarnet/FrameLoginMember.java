@@ -73,6 +73,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtPhone = new javax.swing.JTextField();
@@ -97,60 +98,54 @@ public class FrameLoginMember extends javax.swing.JFrame {
         btnLogin.setBackground(new java.awt.Color(34, 139, 34));
         btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("Login");
-        btnLogin.addActionListener(
-            new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btnLoginActionPerformed(evt);
-                }
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
             }
-        );
+        });
 
         btnDaftar.setBackground(new java.awt.Color(218, 165, 32));
         btnDaftar.setForeground(new java.awt.Color(255, 255, 255));
         btnDaftar.setText("Daftar");
-        btnDaftar.addActionListener(
-            new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btnDaftarActionPerformed(evt);
-                }
+        btnDaftar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDaftarActionPerformed(evt);
             }
-        );
+        });
 
         btnGuest.setBackground(new java.awt.Color(105, 105, 105));
         btnGuest.setForeground(new java.awt.Color(255, 255, 255));
         btnGuest.setText("Guest");
-        btnGuest.addActionListener(
-            new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btnGuestActionPerformed(evt);
-                }
+        btnGuest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuestActionPerformed(evt);
             }
-        );
+        });
 
-        tabelCustomer.setModel(
-            new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                    { null, null, null },
-                    { null, null, null },
-                    { null, null, null },
-                    { null, null, null },
-                },
-                new String[] { "Title 1", "Title 2", "Title 3" }
-            ) {
-                boolean[] canEdit = new boolean[] { false, false, false };
+        tabelCustomer.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                    return canEdit[columnIndex];
-                }
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
-        );
-        tabelCustomer.addMouseListener(
-            new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    tabelCustomerMouseClicked(evt);
-                }
+        });
+        tabelCustomer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelCustomerMouseClicked(evt);
             }
-        );
+        });
         jScrollPane1.setViewportView(tabelCustomer);
         if (tabelCustomer.getColumnModel().getColumnCount() > 0) {
             tabelCustomer.getColumnModel().getColumn(0).setResizable(false);
@@ -158,127 +153,51 @@ public class FrameLoginMember extends javax.swing.JFrame {
             tabelCustomer.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
-            getContentPane()
-        );
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout
-                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(
-                    layout
-                        .createSequentialGroup()
-                        .addGap(136, 136, 136)
-                        .addGroup(
-                            layout
-                                .createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.LEADING,
-                                    false
-                                )
-                                .addGroup(
-                                    layout
-                                        .createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(
-                                            txtPhone,
-                                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                                            121,
-                                            javax.swing.GroupLayout.PREFERRED_SIZE
-                                        )
-                                )
-                                .addGroup(
-                                    layout
-                                        .createSequentialGroup()
-                                        .addComponent(
-                                            btnLogin,
-                                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                                            100,
-                                            javax.swing.GroupLayout.PREFERRED_SIZE
-                                        )
-                                        .addPreferredGap(
-                                            javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                                            Short.MAX_VALUE
-                                        )
-                                        .addComponent(
-                                            btnDaftar,
-                                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                                            100,
-                                            javax.swing.GroupLayout.PREFERRED_SIZE
-                                        )
-                                        .addGap(50, 50, 50)
-                                        .addComponent(
-                                            btnGuest,
-                                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                                            100,
-                                            javax.swing.GroupLayout.PREFERRED_SIZE
-                                        )
-                                )
-                                .addComponent(
-                                    jScrollPane1,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                                    0,
-                                    Short.MAX_VALUE
-                                )
-                                .addComponent(
-                                    jLabel1,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    Short.MAX_VALUE
-                                )
-                        )
-                        .addContainerGap(64, Short.MAX_VALUE)
-                )
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(136, 136, 136)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDaftar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(btnGuest, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout
-                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(
-                    layout
-                        .createSequentialGroup()
-                        .addGap(75, 75, 75)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(
-                            jScrollPane1,
-                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                            117,
-                            javax.swing.GroupLayout.PREFERRED_SIZE
-                        )
-                        .addGap(15, 15, 15)
-                        .addGroup(
-                            layout
-                                .createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.BASELINE
-                                )
-                                .addComponent(jLabel2)
-                                .addComponent(
-                                    txtPhone,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE
-                                )
-                        )
-                        .addGap(21, 21, 21)
-                        .addGroup(
-                            layout
-                                .createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.BASELINE
-                                )
-                                .addComponent(btnDaftar)
-                                .addComponent(btnLogin)
-                                .addComponent(btnGuest)
-                        )
-                        .addContainerGap(135, Short.MAX_VALUE)
-                )
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(75, 75, 75)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDaftar)
+                    .addComponent(btnLogin)
+                    .addComponent(btnGuest))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
 
         pack();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
-        //GEN-FIRST:event_btnLoginActionPerformed
+//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         String phoneCust = txtPhone.getText().trim();
         if (phoneCust.isEmpty()) {
@@ -330,10 +249,10 @@ public class FrameLoginMember extends javax.swing.JFrame {
                 "Error Login: " + e.getMessage()
             );
         }
-    } //GEN-LAST:event_btnLoginActionPerformed
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnDaftarActionPerformed(java.awt.event.ActionEvent evt) {
-        //GEN-FIRST:event_btnDaftarActionPerformed
+//GEN-FIRST:event_btnDaftarActionPerformed
         // TODO add your handling code here:
         String phoneCust = txtPhone.getText().trim();
         if (phoneCust.isEmpty()) {
@@ -382,27 +301,27 @@ public class FrameLoginMember extends javax.swing.JFrame {
                 "Gagal Daftar: " + e.getMessage()
             );
         }
-    } //GEN-LAST:event_btnDaftarActionPerformed
+    }//GEN-LAST:event_btnDaftarActionPerformed
 
     private void btnGuestActionPerformed(java.awt.event.ActionEvent evt) {
-        //GEN-FIRST:event_btnGuestActionPerformed
+//GEN-FIRST:event_btnGuestActionPerformed
         // TODO add your handling code here:
         // Lempar data khusus: ID customer diset 0, nama diset "Guest Pelanggan", status isGuest = true
         new FramePembayaran(idPCKirim, 0, "Guest Pelanggan", true).setVisible(
             true
         );
         this.dispose();
-    } //GEN-LAST:event_btnGuestActionPerformed
+    }//GEN-LAST:event_btnGuestActionPerformed
 
     private void tabelCustomerMouseClicked(java.awt.event.MouseEvent evt) {
-        //GEN-FIRST:event_tabelCustomerMouseClicked
+//GEN-FIRST:event_tabelCustomerMouseClicked
         // TODO add your handling code here:
         int row = tabelCustomer.getSelectedRow();
         if (row != -1) {
             String phone = tabelCustomer.getValueAt(row, 2).toString();
             txtPhone.setText(phone); // Auto-fill ke textfield No HP! 🚀
         }
-    } //GEN-LAST:event_tabelCustomerMouseClicked
+    }//GEN-LAST:event_tabelCustomerMouseClicked
 
     /**
      * @param args the command line arguments

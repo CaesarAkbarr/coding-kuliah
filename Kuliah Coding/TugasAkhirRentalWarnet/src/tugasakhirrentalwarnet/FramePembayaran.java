@@ -122,6 +122,9 @@ public class FramePembayaran extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblInfoUser = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -139,249 +142,134 @@ public class FramePembayaran extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(700, 550));
         setPreferredSize(new java.awt.Dimension(700, 550));
 
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 22)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("=== MENU BILLING & PEMBAYARAN ===");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.insets = new java.awt.Insets(6, 18, 0, 6);
+        jPanel1.add(jLabel1, gridBagConstraints);
 
-        lblInfoUser.setText("jLabel2");
+        lblInfoUser.setText("Info User");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.ipadx = 78;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        jPanel1.add(lblInfoUser, gridBagConstraints);
 
         jLabel3.setText("Pilih Jenis Paket :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(21, 6, 0, 0);
+        jPanel1.add(jLabel3, gridBagConstraints);
 
-        cmbPaket.setModel(
-            new javax.swing.DefaultComboBoxModel<>(new String[] {
-                "Argo (Bayar Belakangan)",
-                "Paket 1 Jam (Rp 5.000)",
-                "Paket 3 Jam (Rp 12.000)",
-                "Paket 5 Jam (Rp 18.000)",
-            })
-        );
+        cmbPaket.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Argo (Bayar Belakangan)", "Paket 1 Jam (Rp 5.000)", "Paket 3 Jam (Rp 12.000)", "Paket 5 Jam (Rp 18.000)" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(18, 18, 0, 0);
+        jPanel1.add(cmbPaket, gridBagConstraints);
 
         jLabel2.setText("Metode Pembayaran :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(21, 6, 0, 0);
+        jPanel1.add(jLabel2, gridBagConstraints);
 
-        cmbMetodeBayar.setModel(
-            new javax.swing.DefaultComboBoxModel<>(new String[] {
-                "Cash",
-                "QRIS",
-                "Transfer Bank",
-            })
-        );
+        cmbMetodeBayar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "QRIS", "Transfer Bank" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.ipadx = 61;
+        gridBagConstraints.insets = new java.awt.Insets(21, 18, 0, 0);
+        jPanel1.add(cmbMetodeBayar, gridBagConstraints);
 
         jLabel4.setText("Total Tagihan :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 6, 0, 0);
+        jPanel1.add(jLabel4, gridBagConstraints);
 
         lblTotalTagihan.setText("Rp 0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.ipadx = 47;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(18, 8, 0, 0);
+        jPanel1.add(lblTotalTagihan, gridBagConstraints);
 
         jLabel5.setText("Uang Dibayar :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(21, 6, 0, 0);
+        jPanel1.add(jLabel5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.ipadx = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(18, 8, 0, 0);
+        jPanel1.add(txtUangBayar, gridBagConstraints);
 
         btnSimpanBayar.setBackground(new java.awt.Color(46, 139, 87));
         btnSimpanBayar.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         btnSimpanBayar.setForeground(new java.awt.Color(255, 255, 255));
         btnSimpanBayar.setText("Bayar");
-        btnSimpanBayar.addActionListener(
-            new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btnSimpanBayarActionPerformed(evt);
-                }
+        btnSimpanBayar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpanBayarActionPerformed(evt);
             }
-        );
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 265;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        jPanel1.add(btnSimpanBayar, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
-            getContentPane()
-        );
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout
-                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(
-                    layout
-                        .createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addGroup(
-                            layout
-                                .createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.LEADING,
-                                    false
-                                )
-                                .addGroup(
-                                    layout
-                                        .createSequentialGroup()
-                                        .addGroup(
-                                            layout
-                                                .createParallelGroup(
-                                                    javax.swing.GroupLayout.Alignment.TRAILING,
-                                                    false
-                                                )
-                                                .addComponent(
-                                                    jLabel5,
-                                                    javax.swing.GroupLayout.Alignment.LEADING,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    Short.MAX_VALUE
-                                                )
-                                                .addComponent(
-                                                    jLabel4,
-                                                    javax.swing.GroupLayout.Alignment.LEADING,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    Short.MAX_VALUE
-                                                )
-                                        )
-                                        .addGap(18, 18, 18)
-                                        .addGroup(
-                                            layout
-                                                .createParallelGroup(
-                                                    javax.swing.GroupLayout.Alignment.LEADING,
-                                                    false
-                                                )
-                                                .addComponent(
-                                                    txtUangBayar,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    71,
-                                                    Short.MAX_VALUE
-                                                )
-                                                .addComponent(
-                                                    lblTotalTagihan,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    Short.MAX_VALUE
-                                                )
-                                        )
-                                )
-                                .addComponent(
-                                    btnSimpanBayar,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    Short.MAX_VALUE
-                                )
-                                .addGroup(
-                                    layout
-                                        .createSequentialGroup()
-                                        .addGroup(
-                                            layout
-                                                .createParallelGroup(
-                                                    javax.swing.GroupLayout.Alignment.TRAILING,
-                                                    false
-                                                )
-                                                .addComponent(
-                                                    lblInfoUser,
-                                                    javax.swing.GroupLayout.Alignment.LEADING,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    Short.MAX_VALUE
-                                                )
-                                                .addComponent(
-                                                    jLabel2,
-                                                    javax.swing.GroupLayout.Alignment.LEADING,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    Short.MAX_VALUE
-                                                )
-                                                .addComponent(
-                                                    jLabel3,
-                                                    javax.swing.GroupLayout.Alignment.LEADING
-                                                )
-                                        )
-                                        .addGap(18, 18, 18)
-                                        .addGroup(
-                                            layout
-                                                .createParallelGroup(
-                                                    javax.swing.GroupLayout.Alignment.LEADING,
-                                                    false
-                                                )
-                                                .addComponent(
-                                                    cmbPaket,
-                                                    0,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    Short.MAX_VALUE
-                                                )
-                                                .addComponent(
-                                                    cmbMetodeBayar,
-                                                    0,
-                                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                    Short.MAX_VALUE
-                                                )
-                                        )
-                                )
-                                .addComponent(
-                                    jLabel1,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    Short.MAX_VALUE
-                                )
-                        )
-                        .addContainerGap(91, Short.MAX_VALUE)
-                )
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout
-                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(
-                    layout
-                        .createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblInfoUser)
-                        .addGap(18, 18, 18)
-                        .addGroup(
-                            layout
-                                .createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.BASELINE
-                                )
-                                .addComponent(jLabel3)
-                                .addComponent(
-                                    cmbPaket,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE
-                                )
-                        )
-                        .addGap(21, 21, 21)
-                        .addGroup(
-                            layout
-                                .createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.LEADING
-                                )
-                                .addComponent(jLabel2)
-                                .addComponent(
-                                    cmbMetodeBayar,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE
-                                )
-                        )
-                        .addGap(18, 18, 18)
-                        .addGroup(
-                            layout
-                                .createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.BASELINE
-                                )
-                                .addComponent(jLabel4)
-                                .addComponent(lblTotalTagihan)
-                        )
-                        .addGap(18, 18, 18)
-                        .addGroup(
-                            layout
-                                .createParallelGroup(
-                                    javax.swing.GroupLayout.Alignment.BASELINE
-                                )
-                                .addComponent(jLabel5)
-                                .addComponent(
-                                    txtUangBayar,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE
-                                )
-                        )
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSimpanBayar)
-                        .addContainerGap(61, Short.MAX_VALUE)
-                )
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         pack();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     private void btnSimpanBayarActionPerformed(java.awt.event.ActionEvent evt) {
-        //GEN-FIRST:event_btnSimpanBayarActionPerformed
+//GEN-FIRST:event_btnSimpanBayarActionPerformed
         // TODO add your handling code here:
         String metodeBayar = cmbMetodeBayar.getSelectedItem().toString();
         long uangBayar = 0;
@@ -501,7 +389,7 @@ public class FramePembayaran extends javax.swing.JFrame {
                 javax.swing.JOptionPane.ERROR_MESSAGE
             );
         }
-    } //GEN-LAST:event_btnSimpanBayarActionPerformed
+    }//GEN-LAST:event_btnSimpanBayarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -542,6 +430,7 @@ public class FramePembayaran extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblInfoUser;
     private javax.swing.JLabel lblTotalTagihan;
     private javax.swing.JTextField txtUangBayar;
