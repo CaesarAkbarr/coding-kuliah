@@ -109,19 +109,38 @@ public class MainFrame extends javax.swing.JFrame {
                 // Logika ketika tombol di dalam kotak tersebut diklik
                 btnAksi.addActionListener(e -> {
                     if (status.equals("AVAILABLE")) {
-                        // Lari ke FrameLoginMember (Langkah lo selanjutnya)
+                        // Masuk ke FrameLoginMember
+                        javax.swing.JOptionPane.showMessageDialog(
+                            this,
+                            "Akan membuka Frame Login untuk " + namaPC
+                        );
                         new FrameLoginMember(idPC).setVisible(true);
-                        javax.swing.JOptionPane.showMessageDialog(
-                            this,
-                            "Akan membuka Frame Login untuk " + namaPC + " 😂"
-                        );
                     } else {
-                        // Nanti lari ke logika Check-Out
-                        javax.swing.JOptionPane.showMessageDialog(
+                        // PC lagi dipake? Kasih pop-up pilihan!
+                        Object[] options = {
+                            "Check-Out",
+                            "Tambah Billing",
+                            "Batal",
+                        };
+                        int pilihan = javax.swing.JOptionPane.showOptionDialog(
                             this,
-                            "Akan memproses Check-Out untuk " + namaPC + " 🚀"
+                            "Check-Out " + namaPC + "?",
+                            "Aksi PC Aktif",
+                            javax.swing.JOptionPane.YES_NO_CANCEL_OPTION,
+                            javax.swing.JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[2]
                         );
-                        prosesCheckOutDinamis(idPC);
+
+                        if (pilihan == javax.swing.JOptionPane.YES_OPTION) {
+                            prosesCheckOutDinamis(idPC); // Jalankan checkout
+                        } else if (
+                            pilihan == javax.swing.JOptionPane.NO_OPTION
+                        ) {
+                            // Panggil fungsi Top-Up (Akan kita buat pintunya)
+                            prosesTopUpDinamis(idPC);
+                        }
                     }
                 });
 
@@ -196,9 +215,7 @@ public class MainFrame extends javax.swing.JFrame {
 
                     javax.swing.JOptionPane.showMessageDialog(
                         this,
-                        "Sesi paket selesai! PC " +
-                            idPC +
-                            " kembali AVAILABLE. 🚀"
+                        "Sesi paket selesai! PC " + idPC + " kembali AVAILABLE."
                     );
                 } else {
                     // ---------------------------------------------------------
@@ -213,7 +230,7 @@ public class MainFrame extends javax.swing.JFrame {
                         startTime.toLocalDateTime(),
                         endTime.toLocalDateTime()
                     ).toMinutes();
-                    if (durationMinutes <= 0) durationMinutes = 1; // Minimal charge 1 menit biar gak gratisan 😹
+                    if (durationMinutes <= 0) durationMinutes = 1; // Minimal charge 1 menit biar gak gratisan
 
                     // Hitung total biaya rumus argo: (Menit * Tarif per jam) / 60
                     long hitungBiaya = (durationMinutes * hourlyRate) / 60;
@@ -259,7 +276,7 @@ public class MainFrame extends javax.swing.JFrame {
                             this,
                             "Duitnya kurang Rp " +
                                 (hitungBiaya - uangBayar) +
-                                "!\nPelanggan gak boleh pulang sebelum lunas! 😹",
+                                "!\nPelanggan wajib membayar sebelum pulang.",
                             "Kurang Bayar",
                             javax.swing.JOptionPane.ERROR_MESSAGE
                         );
@@ -311,6 +328,150 @@ public class MainFrame extends javax.swing.JFrame {
                 "Error CheckOut: " + e.getMessage(),
                 "Error",
                 javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    public void prosesTopUpDinamis(String idPC) {
+        Connection conn = Koneksi.getKoneksi();
+        try {
+            // 1. Ambil data transaksi paket yang sedang berjalan
+            String sqlCari =
+                "SELECT r.tran_id, r.duration_minutes, r.total_cost, c.hourly_rate FROM rental_tran r " +
+                "JOIN computer c ON r.computer_id = c.computer_id " +
+                "WHERE r.computer_id = ? AND r.end_time IS NULL";
+            java.sql.PreparedStatement psCari = conn.prepareStatement(sqlCari);
+            psCari.setString(1, idPC);
+            ResultSet rs = psCari.executeQuery();
+
+            if (rs.next()) {
+                String idTrans = rs.getString("tran_id");
+                int durasiLama = rs.getInt("duration_minutes");
+                long biayaLama = rs.getLong("total_cost");
+                boolean isArgo = rs.wasNull(); // True jika total_cost nilainya NULL (User Argo)
+                int hourlyRate = rs.getInt("hourly_rate");
+
+                // 2. VALIDASI: Kalau user bertipe ARGO, haram hukumnya buat di Top-Up!
+                if (isArgo) {
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Pelanggan ini pake sistem ARGO (Pascabayar)",
+                        " cannot Top-Up",
+                        javax.swing.JOptionPane.WARNING_MESSAGE
+                    );
+                    return;
+                }
+
+                // 3. Tampilkan Pilihan Paket Top-Up
+                String[] opsiTopUp = {
+                    "Tambah 1 Jam",
+                    "Tambah 3 Jam (Diskon Rp 3.000)",
+                    "Tambah 5 Jam (Diskon Rp 5.000)",
+                };
+                String pilihan =
+                    (String) javax.swing.JOptionPane.showInputDialog(
+                        this,
+                        "Pilih Durasi Tambahan Paket:",
+                        "Menu Top-Up Billing",
+                        javax.swing.JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opsiTopUp,
+                        opsiTopUp[0]
+                    );
+
+                if (pilihan == null) return; // User klik batal
+
+                int tambahMenit = 0;
+                long tambahBiaya = 0;
+
+                if (pilihan.equals(opsiTopUp[0])) {
+                    tambahMenit = 60;
+                    tambahBiaya = hourlyRate * 1;
+                } else if (pilihan.equals(opsiTopUp[1])) {
+                    tambahMenit = 180;
+                    tambahBiaya = (hourlyRate * 3) - 3000;
+                } else if (pilihan.equals(opsiTopUp[2])) {
+                    tambahMenit = 300;
+                    tambahBiaya = (hourlyRate * 5) - 5000;
+                }
+
+                // 4. Nagih Duit Cash di Depan (Prabayar)
+                String inputBayar = javax.swing.JOptionPane.showInputDialog(
+                    this,
+                    "Harga Top-Up: Rp " +
+                        tambahBiaya +
+                        "\nMasukkan Uang Pembayaran:"
+                );
+                if (inputBayar == null || inputBayar.trim().isEmpty()) return;
+
+                long uangBayar = 0;
+                try {
+                    uangBayar = Long.parseLong(inputBayar.trim());
+                } catch (NumberFormatException e) {
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Input harus angka murni tanpa titik/huruf!"
+                    );
+                    return;
+                }
+
+                if (uangBayar < tambahBiaya) {
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Duit kurang Rp " +
+                            (tambahBiaya - uangBayar) +
+                            "!\nTop-Up batal.",
+                        "Error",
+                        javax.swing.JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+
+                // 5. Eksekusi Akumulasi Data ke SQL (ACID Transaction)
+                conn.setAutoCommit(false);
+
+                int durasiBaru = durasiLama + tambahMenit;
+                long biayaBaru = biayaLama + tambahBiaya;
+
+                String sqlUpdate =
+                    "UPDATE rental_tran SET duration_minutes = ?, total_cost = ? WHERE tran_id = ?";
+                java.sql.PreparedStatement psUp = conn.prepareStatement(
+                    sqlUpdate
+                );
+                psUp.setInt(1, durasiBaru);
+                psUp.setLong(2, biayaBaru);
+                psUp.setString(3, idTrans);
+                psUp.executeUpdate();
+
+                conn.commit();
+                conn.setAutoCommit(true);
+
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "=== NOTA TOP-UP LUNAS ===\n" +
+                        "ID Transaksi : " +
+                        idTrans +
+                        "\n" +
+                        "Tambahan     : " +
+                        pilihan +
+                        "\n" +
+                        "Total Durasi : " +
+                        durasiBaru +
+                        " Menit\n" +
+                        "Kembalian    : Rp " +
+                        (uangBayar - tambahBiaya) +
+                        "\n\nBilling sukses diperpanjang!"
+                );
+
+                loadDataPC(); // Refresh dashboard
+            }
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {}
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Gagal Top-Up: " + e.getMessage()
             );
         }
     }
