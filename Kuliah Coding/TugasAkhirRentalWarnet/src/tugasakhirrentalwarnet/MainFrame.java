@@ -484,10 +484,59 @@ public class MainFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        btnTutup = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         wadahCardPC = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(500, 350));
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jButton1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jButton1.setText("Lihat Histori Transaksi & Omset");
+        jButton1.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            }
+        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.insets = new java.awt.Insets(25, 6, 6, 6);
+        jPanel1.add(jButton1, gridBagConstraints);
+
+        btnTutup.setBackground(new java.awt.Color(199, 0, 0));
+        btnTutup.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnTutup.setForeground(new java.awt.Color(255, 255, 255));
+        btnTutup.setText("Tutup");
+        btnTutup.setMaximumSize(new java.awt.Dimension(72, 26));
+        btnTutup.setPreferredSize(new java.awt.Dimension(72, 26));
+        btnTutup.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnTutupActionPerformed(evt);
+                }
+            }
+        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 483;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.insets = new java.awt.Insets(25, 6, 6, 6);
+        jPanel1.add(btnTutup, gridBagConstraints);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
         jScrollPane1.setViewportView(wadahCardPC);
 
@@ -495,6 +544,18 @@ public class MainFrame extends javax.swing.JFrame {
 
         pack();
     } // </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        new FrameHistoriTransaksi().setVisible(true);
+    } //GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnTutupActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_btnTutupActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    } //GEN-LAST:event_btnTutupActionPerformed
 
     /**
      * @param args the command line arguments
@@ -525,6 +586,9 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnTutup;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel wadahCardPC;
     // End of variables declaration//GEN-END:variables
