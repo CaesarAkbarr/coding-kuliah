@@ -91,13 +91,13 @@ public class FrameLoginMember extends javax.swing.JFrame {
         setMaximumSize(new java.awt.Dimension(700, 550));
         setMinimumSize(new java.awt.Dimension(700, 550));
         setPreferredSize(new java.awt.Dimension(700, 550));
+        setResizable(false);
         setType(java.awt.Window.Type.POPUP);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(700, 550));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 22)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 204, 204));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("=== REGISTRASI PELANGGAN PC ===");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -107,9 +107,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
         jPanel1.add(jLabel1, gridBagConstraints);
 
         jScrollPane1.setMaximumSize(new java.awt.Dimension(500, 350));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(0, 0));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(400, 350));
-        jScrollPane1.setVerifyInputWhenFocusTarget(false);
 
         tabelCustomer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
