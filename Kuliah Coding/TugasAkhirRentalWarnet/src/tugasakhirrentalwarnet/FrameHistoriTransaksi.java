@@ -30,7 +30,7 @@ public class FrameHistoriTransaksi extends javax.swing.JFrame {
         loadHistoriTabel();
         hitungDuitHariIni();
     }
-
+    
     public void loadHistoriTabel() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID Transaksi");
@@ -178,6 +178,7 @@ public class FrameHistoriTransaksi extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         btnTutup.setBackground(new java.awt.Color(199, 0, 0));
+        btnTutup.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnTutup.setForeground(new java.awt.Color(255, 255, 255));
         btnTutup.setText("Tutup");
         btnTutup.addActionListener(new java.awt.event.ActionListener() {

@@ -489,6 +489,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         btnTutup = new javax.swing.JButton();
+        btnTambahPC = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         wadahCardPC = new javax.swing.JPanel();
 
@@ -507,7 +508,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         );
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 5;
@@ -518,8 +519,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnTutup.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         btnTutup.setForeground(new java.awt.Color(255, 255, 255));
         btnTutup.setText("Tutup");
-        btnTutup.setMaximumSize(new java.awt.Dimension(72, 26));
-        btnTutup.setPreferredSize(new java.awt.Dimension(72, 26));
+        btnTutup.setPreferredSize(new java.awt.Dimension(250, 26));
         btnTutup.addActionListener(
             new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -528,13 +528,32 @@ public class MainFrame extends javax.swing.JFrame {
             }
         );
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 483;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.insets = new java.awt.Insets(25, 6, 6, 6);
         jPanel1.add(btnTutup, gridBagConstraints);
+
+        btnTambahPC.setBackground(new java.awt.Color(218, 165, 32));
+        btnTambahPC.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnTambahPC.setForeground(new java.awt.Color(255, 255, 255));
+        btnTambahPC.setText("Tambah PC");
+        btnTambahPC.setPreferredSize(new java.awt.Dimension(250, 26));
+        btnTambahPC.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnTambahPCActionPerformed(evt);
+                }
+            }
+        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.insets = new java.awt.Insets(25, 6, 6, 6);
+        jPanel1.add(btnTambahPC, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
@@ -556,6 +575,12 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
     } //GEN-LAST:event_btnTutupActionPerformed
+
+    private void btnTambahPCActionPerformed(java.awt.event.ActionEvent evt) {
+        //GEN-FIRST:event_btnTambahPCActionPerformed
+        // TODO add your handling code here:
+        new FrameTambahPC().setVisible(true);
+    } //GEN-LAST:event_btnTambahPCActionPerformed
 
     /**
      * @param args the command line arguments
@@ -586,6 +611,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnTambahPC;
     private javax.swing.JButton btnTutup;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
