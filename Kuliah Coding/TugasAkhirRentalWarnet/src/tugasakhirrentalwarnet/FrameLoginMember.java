@@ -25,6 +25,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
         loadDataCustomer();
+        initTablePopup();
     }
 
     // Variabel penampung ID PC yang diklik dari MainFrame
@@ -33,9 +34,12 @@ public class FrameLoginMember extends javax.swing.JFrame {
     // Constructor custom agar bisa menerima lemparan data ID PC
     public FrameLoginMember(String idPC) {
         initComponents();
-        this.idPCKirim = idPC;
+        this.idPCKirim = idPC; // Simpan ID PC yang diterima untuk nanti dilempar ke FramePembayaran
+
         setLocationRelativeTo(null);
+
         loadDataCustomer();
+        initTablePopup();
     }
 
     public void loadDataCustomer() {
@@ -49,7 +53,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
             java.sql.Connection conn = Koneksi.getKoneksi();
             java.sql.Statement stmt = conn.createStatement();
             java.sql.ResultSet rs = stmt.executeQuery(
-                "SELECT * FROM customer WHERE phone != 'GUEST'"
+                "SELECT * FROM customer WHERE phone != 'GUEST' AND status = 'ACTIVE'"
             );
 
             while (rs.next()) {
@@ -63,6 +67,119 @@ public class FrameLoginMember extends javax.swing.JFrame {
         } catch (Exception e) {
             System.err.println("Gagal load tabel member: " + e.getMessage());
         }
+    }
+
+    // --- METHOD SAKTI POPUP KLIK KANAN (RUD MEMBER) ---
+    private void initTablePopup() {
+        javax.swing.JPopupMenu memberPopup = new javax.swing.JPopupMenu();
+        javax.swing.JMenuItem menuEditNama = new javax.swing.JMenuItem(
+            "Ubah Nama Member"
+        );
+        javax.swing.JMenuItem menuHapusMember = new javax.swing.JMenuItem(
+            "Hapus Member dari DB"
+        );
+
+        // KONDISI UPDATE: Ubah Nama Member lewat Pop-up Input Dialog
+        menuEditNama.addActionListener(evt -> {
+            int row = tabelCustomer.getSelectedRow();
+            if (row == -1) return;
+            String idCust = tabelCustomer.getValueAt(row, 0).toString();
+            String namaLama = tabelCustomer.getValueAt(row, 1).toString();
+
+            String namaBaru = javax.swing.JOptionPane.showInputDialog(
+                this,
+                "Masukkan Nama Baru untuk ID Member " + idCust + ":",
+                namaLama
+            );
+            if (namaBaru != null && !namaBaru.trim().isEmpty()) {
+                try {
+                    Connection conn = Koneksi.getKoneksi();
+                    PreparedStatement ps = conn.prepareStatement(
+                        "UPDATE customer SET cust_name = ? WHERE customer_id = ?"
+                    );
+                    ps.setString(1, namaBaru.trim());
+                    ps.setString(2, idCust);
+                    ps.executeUpdate();
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Nama member berhasil diperbarui!"
+                    );
+                    loadDataCustomer(); // Auto-refresh isi tabel member biar gak planga-plongo!
+                } catch (Exception e) {
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Gagal merubah data: " + e.getMessage()
+                    );
+                }
+            }
+        });
+
+        // KONDISI DELETE: Hapus Member dari Semesta Database Warnet
+        menuHapusMember.addActionListener(evt -> {
+            int row = tabelCustomer.getSelectedRow();
+            if (row == -1) return;
+            String idCust = tabelCustomer.getValueAt(row, 0).toString();
+            String name = tabelCustomer.getValueAt(row, 1).toString();
+
+            int konfirm = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                "Yakin mau menghapus member '" + name + "'?",
+                "Hapus Data",
+                javax.swing.JOptionPane.YES_NO_OPTION
+            );
+            if (konfirm != javax.swing.JOptionPane.YES_OPTION) return;
+
+            try {
+                Connection conn = Koneksi.getKoneksi();
+                PreparedStatement ps = conn.prepareStatement(
+                    "UPDATE customer SET status = 'DELETED' WHERE customer_id = ?"
+                );
+                ps.setString(1, idCust);
+                ps.executeUpdate();
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Member '" + name + "' resmi ditendang dari database!"
+                );
+                loadDataCustomer(); // Auto-refresh isi tabel!
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Gagal hapus!: " + e.getMessage()
+                );
+            }
+        });
+
+        memberPopup.add(menuEditNama);
+        memberPopup.add(menuHapusMember);
+
+        // Daftarkan MouseListener ke tabelCustomer agar peka terhadap sentuhan klik kanan kasir
+        tabelCustomer.addMouseListener(
+            new java.awt.event.MouseAdapter() {
+                @Override
+                public void mousePressed(java.awt.event.MouseEvent e) {
+                    handlePopup(e);
+                }
+
+                @Override
+                public void mouseReleased(java.awt.event.MouseEvent e) {
+                    handlePopup(e);
+                }
+
+                private void handlePopup(java.awt.event.MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        int row = tabelCustomer.rowAtPoint(e.getPoint());
+                        if (row >= 0 && row < tabelCustomer.getRowCount()) {
+                            tabelCustomer.setRowSelectionInterval(row, row); // Auto-select baris yang ditunjuk pas diklik kanan
+                            memberPopup.show(
+                                e.getComponent(),
+                                e.getX(),
+                                e.getY()
+                            );
+                        }
+                    }
+                }
+            }
+        );
     }
 
     /**
@@ -99,7 +216,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 22)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("=== REGISTRASI PELANGGAN PC ===");
+        jLabel1.setText("=== STARK-COMP REGISTRASI PELANGGAN PC ===");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -109,33 +226,33 @@ public class FrameLoginMember extends javax.swing.JFrame {
         jScrollPane1.setMaximumSize(new java.awt.Dimension(500, 350));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(400, 350));
 
-        tabelCustomer.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
+        tabelCustomer.setModel(
+            new javax.swing.table.DefaultTableModel(
+                new Object[][] {
+                    { null, null, null },
+                    { null, null, null },
+                    { null, null, null },
+                    { null, null, null },
+                },
+                new String[] { "Title 1", "Title 2", "Title 3" }
+            ) {
+                boolean[] canEdit = new boolean[] { false, false, false };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit[columnIndex];
+                }
             }
-        });
+        );
         tabelCustomer.setMaximumSize(new java.awt.Dimension(700, 550));
         tabelCustomer.setMinimumSize(new java.awt.Dimension(0, 0));
         tabelCustomer.setPreferredSize(new java.awt.Dimension(400, 550));
-        tabelCustomer.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelCustomerMouseClicked(evt);
+        tabelCustomer.addMouseListener(
+            new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    tabelCustomerMouseClicked(evt);
+                }
             }
-        });
+        );
         jScrollPane1.setViewportView(tabelCustomer);
         if (tabelCustomer.getColumnModel().getColumnCount() > 0) {
             tabelCustomer.getColumnModel().getColumn(0).setResizable(false);
@@ -160,11 +277,13 @@ public class FrameLoginMember extends javax.swing.JFrame {
         btnLogin.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("Login");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
+        btnLogin.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnLoginActionPerformed(evt);
+                }
             }
-        });
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -178,11 +297,13 @@ public class FrameLoginMember extends javax.swing.JFrame {
         btnDaftar.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnDaftar.setForeground(new java.awt.Color(255, 255, 255));
         btnDaftar.setText("Daftar");
-        btnDaftar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDaftarActionPerformed(evt);
+        btnDaftar.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnDaftarActionPerformed(evt);
+                }
             }
-        });
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -195,11 +316,13 @@ public class FrameLoginMember extends javax.swing.JFrame {
         btnGuest.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnGuest.setForeground(new java.awt.Color(255, 255, 255));
         btnGuest.setText("Guest");
-        btnGuest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuestActionPerformed(evt);
+        btnGuest.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnGuestActionPerformed(evt);
+                }
             }
-        });
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -236,27 +359,47 @@ public class FrameLoginMember extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jPanel3, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
+            getContentPane()
+        );
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(
+                            jPanel1,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addContainerGap()
+                )
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(
+                            jPanel1,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                )
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
-//GEN-FIRST:event_btnLoginActionPerformed
+        //GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         String phoneCust = txtPhone.getText().trim();
         if (phoneCust.isEmpty()) {
@@ -308,10 +451,10 @@ public class FrameLoginMember extends javax.swing.JFrame {
                 "Error Login: " + e.getMessage()
             );
         }
-    }//GEN-LAST:event_btnLoginActionPerformed
+    } //GEN-LAST:event_btnLoginActionPerformed
 
     private void btnDaftarActionPerformed(java.awt.event.ActionEvent evt) {
-//GEN-FIRST:event_btnDaftarActionPerformed
+        //GEN-FIRST:event_btnDaftarActionPerformed
         // TODO add your handling code here:
         String phoneCust = txtPhone.getText().trim();
         if (phoneCust.isEmpty()) {
@@ -360,27 +503,27 @@ public class FrameLoginMember extends javax.swing.JFrame {
                 "Gagal Daftar: " + e.getMessage()
             );
         }
-    }//GEN-LAST:event_btnDaftarActionPerformed
+    } //GEN-LAST:event_btnDaftarActionPerformed
 
     private void btnGuestActionPerformed(java.awt.event.ActionEvent evt) {
-//GEN-FIRST:event_btnGuestActionPerformed
+        //GEN-FIRST:event_btnGuestActionPerformed
         // TODO add your handling code here:
         // Lempar data khusus: ID customer diset 0, nama diset "Guest Pelanggan", status isGuest = true
         new FramePembayaran(idPCKirim, 0, "Guest Pelanggan", true).setVisible(
             true
         );
         this.dispose();
-    }//GEN-LAST:event_btnGuestActionPerformed
+    } //GEN-LAST:event_btnGuestActionPerformed
 
     private void tabelCustomerMouseClicked(java.awt.event.MouseEvent evt) {
-//GEN-FIRST:event_tabelCustomerMouseClicked
+        //GEN-FIRST:event_tabelCustomerMouseClicked
         // TODO add your handling code here:
         int row = tabelCustomer.getSelectedRow();
         if (row != -1) {
             String phone = tabelCustomer.getValueAt(row, 2).toString();
             txtPhone.setText(phone); // Auto-fill ke textfield No HP! 🚀
         }
-    }//GEN-LAST:event_tabelCustomerMouseClicked
+    } //GEN-LAST:event_tabelCustomerMouseClicked
 
     /**
      * @param args the command line arguments

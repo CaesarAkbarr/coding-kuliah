@@ -24,13 +24,13 @@ public class FrameHistoriTransaksi extends javax.swing.JFrame {
     public FrameHistoriTransaksi() {
         initComponents();
 
-        this.setSize(850, 600);
         this.setLocationRelativeTo(null);
 
         loadHistoriTabel();
         hitungDuitHariIni();
+        hitungDuitTotal();
     }
-    
+
     public void loadHistoriTabel() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID Transaksi");
@@ -96,6 +96,24 @@ public class FrameHistoriTransaksi extends javax.swing.JFrame {
         }
     }
 
+    public void hitungDuitTotal() {
+        Connection conn = Koneksi.getKoneksi();
+        try {
+            // Query SUM untuk menghitung semua uang yang masuk di TOTAL
+            String sqlSum =
+                "SELECT SUM(total_cost) AS total_duit FROM rental_tran";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sqlSum);
+
+            if (rs.next()) {
+                long totalDuit = rs.getLong("total_duit");
+                lblPendapatanTotal.setText("TOTAL PENDAPATAN: Rp " + totalDuit);
+            }
+        } catch (Exception e) {
+            System.err.println("Gagal hitung omset harian: " + e.getMessage());
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -112,12 +130,11 @@ public class FrameHistoriTransaksi extends javax.swing.JFrame {
         tabelTransaksi = new javax.swing.JTable();
         btnTutup = new javax.swing.JButton();
         lblPendapatanHariIni = new javax.swing.JLabel();
+        lblPendapatanTotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMaximumSize(new java.awt.Dimension(700, 550));
         setMinimumSize(new java.awt.Dimension(700, 550));
-        setPreferredSize(new java.awt.Dimension(700, 550));
         setResizable(false);
         setType(java.awt.Window.Type.POPUP);
 
@@ -139,25 +156,28 @@ public class FrameHistoriTransaksi extends javax.swing.JFrame {
         jScrollPane1.setName(""); // NOI18N
         jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 100));
 
-        tabelTransaksi.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
+        tabelTransaksi.setModel(
+            new javax.swing.table.DefaultTableModel(
+                new Object[][] {
+                    { null, null, null, null },
+                    { null, null, null, null },
+                    { null, null, null, null },
+                    { null, null, null, null },
+                },
+                new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }
+            ) {
+                boolean[] canEdit = new boolean[] {
+                    false,
+                    false,
+                    false,
+                    false,
+                };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit[columnIndex];
+                }
             }
-        });
+        );
         jScrollPane1.setViewportView(tabelTransaksi);
         if (tabelTransaksi.getColumnModel().getColumnCount() > 0) {
             tabelTransaksi.getColumnModel().getColumn(0).setResizable(false);
@@ -181,14 +201,16 @@ public class FrameHistoriTransaksi extends javax.swing.JFrame {
         btnTutup.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnTutup.setForeground(new java.awt.Color(255, 255, 255));
         btnTutup.setText("Tutup");
-        btnTutup.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTutupActionPerformed(evt);
+        btnTutup.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnTutupActionPerformed(evt);
+                }
             }
-        });
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 483;
         gridBagConstraints.ipady = 5;
@@ -206,31 +228,66 @@ public class FrameHistoriTransaksi extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(25, 6, 3, 6);
         jPanel1.add(lblPendapatanHariIni, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        lblPendapatanTotal.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblPendapatanTotal.setForeground(new java.awt.Color(46, 204, 113));
+        lblPendapatanTotal.setText("Total pendapatan: Rp 0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 423;
+        gridBagConstraints.insets = new java.awt.Insets(25, 6, 3, 6);
+        jPanel1.add(lblPendapatanTotal, gridBagConstraints);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
+            getContentPane()
+        );
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    javax.swing.GroupLayout.Alignment.TRAILING,
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(
+                            jPanel1,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addContainerGap()
+                )
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(
+                            jPanel1,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addContainerGap(
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            Short.MAX_VALUE
+                        )
+                )
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     private void btnTutupActionPerformed(java.awt.event.ActionEvent evt) {
-//GEN-FIRST:event_btnTutupActionPerformed
+        //GEN-FIRST:event_btnTutupActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    }//GEN-LAST:event_btnTutupActionPerformed
+    } //GEN-LAST:event_btnTutupActionPerformed
 
     /**
      * @param args the command line arguments
@@ -268,6 +325,7 @@ public class FrameHistoriTransaksi extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPendapatanHariIni;
+    private javax.swing.JLabel lblPendapatanTotal;
     private javax.swing.JTable tabelTransaksi;
     // End of variables declaration//GEN-END:variables
 }

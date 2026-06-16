@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.BorderFactory;
@@ -48,7 +49,14 @@ public class MainFrame extends javax.swing.JFrame {
 
             Connection conn = Koneksi.getKoneksi();
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM computer");
+
+            // QUERY HYBRID: Tarik data PC sekaligus deskripsi speknya! 🚀
+            String sql =
+                "SELECT c.computer_id, c.pc_name, c.hourly_rate, c.status, s.description " +
+                "FROM computer c " +
+                "LEFT JOIN computer_spec s ON c.computer_id = s.computer_id " +
+                "WHERE c.status != 'DELETED'";
+            ResultSet rs = stmt.executeQuery(sql);
 
             // 2. Looping data SQL untuk menciptakan kotak secara ajaib
             while (rs.next()) {
@@ -57,10 +65,178 @@ public class MainFrame extends javax.swing.JFrame {
                 String tarif = "Rp " + rs.getInt("hourly_rate") + " / Jam";
                 String status = rs.getString("status");
 
+                // Ambil data deskripsi spek untuk fitur Read-Hover
+                String deskripsi = rs.getString("description");
+                if (rs.wasNull() || deskripsi == null) {
+                    deskripsi = "Spek & Gear belum diinput";
+                }
+
                 // --- DESAIN KOTAK (CARD) ---
                 JPanel card = new JPanel();
                 card.setPreferredSize(new Dimension(220, 160)); // Ukuran kotak
                 card.setLayout(new GridLayout(5, 1, 5, 5)); // Tata letak tumpuk ke bawah
+
+                // FEATURE 1 (READ SPEK): Munculin pop-up spek gahar pake HTML pas kursor kasir HOVER ke kotak PC! 🧙‍♂️
+                card.setToolTipText(
+                    "<html><body style='padding:5px;'><b>🛠️ SPEK & GEAR " +
+                        namaPC +
+                        ":</b><br>" +
+                        deskripsi.replace("\n", "<br>") +
+                        "</body></html>"
+                );
+
+                // FEATURE 2 (UPDATE & DELETE PC): Ciptakan klik kanan menu sakti pada Card PC
+                javax.swing.JPopupMenu pcPopup = new javax.swing.JPopupMenu();
+                javax.swing.JMenuItem menuEditTarif = new javax.swing.JMenuItem(
+                    "Ubah Tarif / Jam"
+                );
+                javax.swing.JMenuItem menuEditSpec = new javax.swing.JMenuItem(
+                    "Ubah Deskripsi Spek"
+                );
+                javax.swing.JMenuItem menuHapusPC = new javax.swing.JMenuItem(
+                    "Hapus PC dari Aset️"
+                );
+
+                // Logika UPDATE A: Ubah Tarif PC
+                menuEditTarif.addActionListener(evt -> {
+                    String input = javax.swing.JOptionPane.showInputDialog(
+                        this,
+                        "Masukkan Tarif per Jam Baru untuk " + namaPC + ":",
+                        "5000"
+                    );
+                    if (input != null && !input.trim().isEmpty()) {
+                        try {
+                            int tarifBaru = Integer.parseInt(input.trim());
+                            Connection c = Koneksi.getKoneksi();
+                            PreparedStatement ps = c.prepareStatement(
+                                "UPDATE computer SET hourly_rate = ? WHERE computer_id = ?"
+                            );
+                            ps.setInt(1, tarifBaru);
+                            ps.setString(2, idPC);
+                            ps.executeUpdate();
+                            javax.swing.JOptionPane.showMessageDialog(
+                                this,
+                                "Tarif " +
+                                    namaPC +
+                                    " sukses diubah! Lumayan tambah modal seblak! 💸"
+                            );
+                            loadDataPC(); // Auto-refresh dashboard!
+                        } catch (Exception ex) {
+                            javax.swing.JOptionPane.showMessageDialog(
+                                this,
+                                "Tarif harus berupa angka murni, Cik! 😂"
+                            );
+                        }
+                    }
+                });
+
+                // Logika UPDATE B: Ubah Deskripsi Spek PC
+                menuEditSpec.addActionListener(evt -> {
+                    String specBaru = javax.swing.JOptionPane.showInputDialog(
+                        this,
+                        "Ubah Deskripsi Spek & Gear untuk " + namaPC + ":",
+                        card.getToolTipText().replaceAll("<[^>]*>", "")
+                    );
+                    if (specBaru != null) {
+                        try {
+                            Connection c = Koneksi.getKoneksi();
+                            PreparedStatement psCek = c.prepareStatement(
+                                "SELECT * FROM computer_spec WHERE computer_id = ?"
+                            );
+                            psCek.setString(1, idPC);
+                            ResultSet rsCek = psCek.executeQuery();
+
+                            if (rsCek.next()) {
+                                PreparedStatement psUp = c.prepareStatement(
+                                    "UPDATE computer_spec SET description = ? WHERE computer_id = ?"
+                                );
+                                psUp.setString(1, specBaru.trim());
+                                psUp.setString(2, idPC);
+                                psUp.executeUpdate();
+                            } else {
+                                PreparedStatement psIn = c.prepareStatement(
+                                    "INSERT INTO computer_spec (computer_id, pc_type, description) VALUES (?, 'REGULAR', ?)"
+                                );
+                                psIn.setString(1, idPC);
+                                psIn.setString(2, specBaru.trim());
+                                psIn.executeUpdate();
+                            }
+                            javax.swing.JOptionPane.showMessageDialog(
+                                this,
+                                "Deskripsi Spek " +
+                                    namaPC +
+                                    " berhasil di-update! 🚀"
+                            );
+                            loadDataPC();
+                        } catch (Exception ex) {
+                            javax.swing.JOptionPane.showMessageDialog(
+                                this,
+                                "Gagal update spek: " + ex.getMessage()
+                            );
+                        }
+                    }
+                });
+
+                // Logika DELETE: Hapus Armada PC dari Aset Warnet
+                menuHapusPC.addActionListener(evt -> {
+                    int konfirm = javax.swing.JOptionPane.showConfirmDialog(
+                        this,
+                        "Yakin mau menghapus total " +
+                            namaPC +
+                            " dari database?",
+                        "Hapus PC",
+                        javax.swing.JOptionPane.YES_NO_OPTION
+                    );
+                    if (konfirm == javax.swing.JOptionPane.YES_OPTION) {
+                        try {
+                            Connection c = Koneksi.getKoneksi();
+                            // PreparedStatement ps1 = c.prepareStatement(
+                            //     "DELETE FROM computer_spec WHERE computer_id = ?"
+                            // );
+                            // ps1.setString(1, idPC);
+                            // ps1.executeUpdate();
+
+                            PreparedStatement ps2 = c.prepareStatement(
+                                "UPDATE computer SET status = 'DELETED' WHERE computer_id = ?"
+                            );
+                            ps2.setString(1, idPC);
+                            ps2.executeUpdate();
+                            javax.swing.JOptionPane.showMessageDialog(
+                                this,
+                                namaPC +
+                                    " resmi dipensiunkan dari dunia persewaan!"
+                            );
+                            loadDataPC();
+                        } catch (Exception ex) {
+                            javax.swing.JOptionPane.showMessageDialog(
+                                this,
+                                "Gagal hapus! PC ini kemungkinan masih tersangkut data riwayat transaksi kasir"
+                            );
+                        }
+                    }
+                });
+
+                pcPopup.add(menuEditTarif);
+                pcPopup.add(menuEditSpec);
+                pcPopup.add(new javax.swing.JSeparator());
+                pcPopup.add(menuHapusPC);
+
+                // Pasang pemicu pop-up klik kanan pada panel card PC
+                card.addMouseListener(
+                    new java.awt.event.MouseAdapter() {
+                        public void mousePressed(java.awt.event.MouseEvent e) {
+                            if (e.isPopupTrigger()) showMenu(e);
+                        }
+
+                        public void mouseReleased(java.awt.event.MouseEvent e) {
+                            if (e.isPopupTrigger()) showMenu(e);
+                        }
+
+                        private void showMenu(java.awt.event.MouseEvent e) {
+                            pcPopup.show(e.getComponent(), e.getX(), e.getY());
+                        }
+                    }
+                );
 
                 // Ubah warna border berdasarkan status (Biar kelihatan gahar!)
                 if (status.equals("AVAILABLE")) {
@@ -106,17 +282,11 @@ public class MainFrame extends javax.swing.JFrame {
                 );
                 btnAksi.setFocusPainted(false);
 
-                // Logika ketika tombol di dalam kotak tersebut diklik
+                // Logika ketika tombol di dalam kotak tersebut diklik (Tetap pertahankan kode lama lo)
                 btnAksi.addActionListener(e -> {
                     if (status.equals("AVAILABLE")) {
-                        // Masuk ke FrameLoginMember
-                        javax.swing.JOptionPane.showMessageDialog(
-                            this,
-                            "Akan membuka Frame Login untuk " + namaPC
-                        );
                         new FrameLoginMember(idPC).setVisible(true);
                     } else {
-                        // PC lagi dipake? Kasih pop-up pilihan!
                         Object[] options = {
                             "Check-Out",
                             "Tambah Billing",
@@ -138,8 +308,7 @@ public class MainFrame extends javax.swing.JFrame {
                         } else if (
                             pilihan == javax.swing.JOptionPane.NO_OPTION
                         ) {
-                            // Panggil fungsi Top-Up (Akan kita buat pintunya)
-                            prosesTopUpDinamis(idPC);
+                            prosesTopUpDinamis(idPC); // Jalankan top up
                         }
                     }
                 });
@@ -158,7 +327,6 @@ public class MainFrame extends javax.swing.JFrame {
             // 3. Render ulang wadah biar kotak-kotak barunya muncul di layar
             wadahCardPC.revalidate();
             wadahCardPC.repaint();
-            // Paksa JScrollPane untuk mendeteksi perubahan ukuran panel di dalamnya
             wadahCardPC.getParent().revalidate();
             wadahCardPC.getParent().repaint();
         } catch (Exception e) {
@@ -355,7 +523,7 @@ public class MainFrame extends javax.swing.JFrame {
                 if (isArgo) {
                     javax.swing.JOptionPane.showMessageDialog(
                         this,
-                        "Pelanggan ini pake sistem ARGO (Pascabayar)",
+                        "Pelanggan ini menggunakan sistem ARGO (Pascabayar)",
                         " cannot Top-Up",
                         javax.swing.JOptionPane.WARNING_MESSAGE
                     );

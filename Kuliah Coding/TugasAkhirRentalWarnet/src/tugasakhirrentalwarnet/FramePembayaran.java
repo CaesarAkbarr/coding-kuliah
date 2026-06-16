@@ -149,7 +149,7 @@ public class FramePembayaran extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 22)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("=== MENU BILLING & PEMBAYARAN ===");
+        jLabel1.setText("=== STARK-COMP BILLING ===");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

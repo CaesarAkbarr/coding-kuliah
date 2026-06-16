@@ -68,7 +68,7 @@
               <Font name="SansSerif" size="22" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="=== REGISTRASI PELANGGAN PC ==="/>
+            <Property name="text" type="java.lang.String" value="=== STARK-COMP REGISTRASI PELANGGAN PC ==="/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
