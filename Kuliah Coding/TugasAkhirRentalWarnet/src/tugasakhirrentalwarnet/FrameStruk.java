@@ -22,7 +22,7 @@ public class FrameStruk extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    // 1. Siapkan variabel penampung internal di paling atas kelas (di dalam class FrameStruk)
+    // Variabel penampung data transaksi di tingkat kelas
     private String idTrans;
     private String nama;
     private String paket;
@@ -31,7 +31,7 @@ public class FrameStruk extends javax.swing.JFrame {
     private long kembali;
     private String metode;
 
-    // 2. Pasang Constructor Kustom penerima 7 data (Biar error di FramePembayaran lenyap! 🚀)
+    // Konstruktor kustom penerima tujuh parameter data untuk mengatasi error pada modul pembayaran
     public FrameStruk(
         String idTrans,
         String nama,
@@ -50,14 +50,15 @@ public class FrameStruk extends javax.swing.JFrame {
         this.kembali = kembali;
         this.metode = metode;
 
-        setLocationRelativeTo(null); // Biar posisi frame pas di tengah layar pas muncul
+        // Atur posisi frame di tengah layar saat muncul
+        setLocationRelativeTo(null);
 
-        // 3. LANGSUNG TEMBAK NILAINYA KE LABEL UI LO SECARA OTOMATIS
-        // (Pastikan nama variabel JLabel di bawah ini sesuai dengan yang lo bikin di Design!)
+        // Langsung tetapkan nilai ke label UI secara otomatis
+        // (Pastikan nama variabel JLabel di bawah ini sesuai dengan nama yang dibuat di Designer!)
         lblIDTransaksi.setText("ID: " + idTrans);
         lblNamaPelanggan.setText("Nama: " + nama);
         lblPaketTerpilih.setText("Item: " + paket + " (" + metode + ")");
-        lblTotalBiaya.setText("TOTAL TAGIHAN: Rp " + total); // Tetap muncul harga paket asli
+        lblTotalBiaya.setText("TOTAL TAGIHAN: Rp " + total); // Tetap tampilkan harga paket asli
         lblUangBayar.setText("UANG DIBAYAR: Rp " + bayar);
         lblUangKembalian.setText("KEMBALIAN: Rp " + kembali);
     }

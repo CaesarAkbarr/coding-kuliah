@@ -64,41 +64,44 @@ public class MainFrame extends javax.swing.JFrame {
                 String status = rs.getString("status");
 
                 String deskripsi = rs.getString("description");
+                // Jika deskripsi masih kosong, tampilkan pesan placeholder
                 if (rs.wasNull() || deskripsi == null) {
                     deskripsi = "Spek belum diisi!";
                 }
-                final String deskripsiFinal = deskripsi; // Variabel buat di dalem klik tombol "i"
+                // Variabel untuk digunakan di dalam event listener tombol info
+                final String deskripsiFinal = deskripsi;
 
-                // --- DESAIN KOTAK (CARD) ---
+                // --- Desain kotak kartu komputer ---
                 JPanel card = new JPanel();
                 card.setPreferredSize(new Dimension(220, 160));
                 card.setLayout(new GridLayout(5, 1, 5, 5));
 
-                // ToolTip bawaan tetep aktif buat cadangan
+                // Tooltip standar tetap aktif sebagai cadangan
                 card.setToolTipText(
-                    "<html><body><b>🛠️ SPEK " +
+                    "<html><body><b>Spesifikasi " +
                         namaPC +
                         ":</b><br>" +
                         deskripsiFinal.replace("\n", "<br>") +
                         "</body></html>"
                 );
 
-                // --- 🛠️ TRICK SAKTI BARIS ATAS (NAMA PC + TOMBOL INFO "i") ---
+                // --- Trik khusus baris atas (Nama PC + Tombol Info "i") ---
                 JPanel panelAtas = new JPanel(new java.awt.BorderLayout());
                 panelAtas.setOpaque(false);
 
                 JLabel lblNama = new JLabel(namaPC, SwingConstants.CENTER);
                 lblNama.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-                // Ciptakan Huruf "i" sebagai Label bergaya tombol di pojok kanan atas 🧙‍♂️
+                // Buat huruf "i" sebagai label bergaya tombol di pojok kanan atas
                 JLabel lblInfo = new JLabel(" i  ", SwingConstants.CENTER);
                 lblInfo.setFont(new Font("Segoe UI", Font.BOLD, 14));
                 lblInfo.setForeground(new Color(52, 152, 219));
+                // Ubah kursor menjadi tangan saat didekatkan ke tombol
                 lblInfo.setCursor(
                     new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)
-                ); // Kursor berubah jadi jari pas dideketin
+                );
 
-                // Logika ketika huruf "i" ditekan kasir!! 💥
+                // Logika ketika huruf "i" ditekan oleh pengguna
                 lblInfo.addMouseListener(
                     new java.awt.event.MouseAdapter() {
                         @Override
@@ -109,17 +112,18 @@ public class MainFrame extends javax.swing.JFrame {
                                     namaPC +
                                     " ===\n\n" +
                                     deskripsiFinal,
-                                "Spesifikasi & Gear Komputer",
+                                "Spesifikasi & Perangkat Komputer",
                                 javax.swing.JOptionPane.INFORMATION_MESSAGE
                             );
                         }
                     }
                 );
 
-                panelAtas.add(lblNama, java.awt.BorderLayout.CENTER); // Nama PC tetep gagah di tengah
-                panelAtas.add(lblInfo, java.awt.BorderLayout.EAST); // Tombol "i" mepet manja di kanan atas 🚀
+                // Tambahkan nama PC di tengah dan tombol info di kanan atas
+                panelAtas.add(lblNama, java.awt.BorderLayout.CENTER);
+                panelAtas.add(lblInfo, java.awt.BorderLayout.EAST);
 
-                // --- POPUP REKAYASA KLIK KANAN CARD (RUD LAMA LU AMAN) ---
+                // --- Menu popup klik kanan kartu (untuk kelola PC) ---
                 javax.swing.JPopupMenu pcPopup = new javax.swing.JPopupMenu();
                 javax.swing.JMenuItem menuEditTarif = new javax.swing.JMenuItem(
                     "Ubah Tarif / Jam"
@@ -302,7 +306,7 @@ public class MainFrame extends javax.swing.JFrame {
                     }
                 });
 
-                // SUSUN KOMPONEN MASUK CARD (Baris 1 diisi panelAtas kustom kita bray!)
+                // --- Susun komponen ke dalam kartu (Baris 1 diisi panel atas kustom) ---
                 card.add(panelAtas);
                 card.add(lblTarif);
                 card.add(lblStatus);
@@ -324,7 +328,7 @@ public class MainFrame extends javax.swing.JFrame {
     public void prosesCheckOutDinamis(String idPC) {
         java.sql.Connection conn = Koneksi.getKoneksi();
         try {
-            // 1. Cari data transaksi yang sedang aktif (end_time masih NULL) berdasarkan ID PC
+            // Cari data transaksi yang sedang aktif (end_time masih NULL) berdasarkan ID PC
             String sqlCari =
                 "SELECT r.tran_id, r.start_time, r.total_cost, c.hourly_rate FROM rental_tran r " +
                 "JOIN computer c ON r.computer_id = c.computer_id " +
@@ -338,28 +342,28 @@ public class MainFrame extends javax.swing.JFrame {
                 java.sql.Timestamp startTime = rs.getTimestamp("start_time");
                 long totalCostExist = rs.getLong("total_cost");
 
-                // Trik gaib mendeteksi tipe billing: Kalau total_cost di awal sudah terisi, berarti dia PAKET
+                // Deteksi tipe billing: Jika total_cost sudah terisi sejak awal, maka tipe PAKET
                 boolean isPaket = !rs.wasNull();
                 int hourlyRate = rs.getInt("hourly_rate");
 
-                conn.setAutoCommit(false); // Aktifkan fitur transaksi ACID
+                conn.setAutoCommit(false); // Aktifkan mode transaksi aman
 
                 if (isPaket) {
                     // ---------------------------------------------------------
-                    // KONDISI A: PELANGGAN PAKETAN (Sudah Lunas di Awal)
+                    // Kondisi A: Pelanggan menggunakan paket (Sudah lunas di awal)
                     // ---------------------------------------------------------
                     int konfirm = javax.swing.JOptionPane.showConfirmDialog(
                         this,
                         "Pelanggan PC " +
                             idPC +
-                            " menggunakan PAKETAN dan sudah lunas.\nKosongkan PC sekarang?",
-                        "CheckOut Paket",
+                            " menggunakan paket dan sudah lunas.\nKosongkan PC sekarang?",
+                        "Proses Checkout Paket",
                         javax.swing.JOptionPane.YES_NO_OPTION
                     );
 
                     if (konfirm != javax.swing.JOptionPane.YES_OPTION) return;
 
-                    // Cukup update end_time saja menjadi waktu sekarang
+                    // Hanya perlu perbarui waktu selesai menjadi waktu sekarang
                     String sqlUpTrans =
                         "UPDATE rental_tran SET end_time = NOW() WHERE tran_id = ?";
                     java.sql.PreparedStatement psUp = conn.prepareStatement(
@@ -374,7 +378,7 @@ public class MainFrame extends javax.swing.JFrame {
                     );
                 } else {
                     // ---------------------------------------------------------
-                    // KONDISI B: PELANGGAN ARGO (Wajib Hitung Waktu & Bayar)
+                    // Kondisi B: Pelanggan menggunakan argo (Harus hitung waktu & bayar)
                     // ---------------------------------------------------------
                     java.sql.Timestamp endTime = new java.sql.Timestamp(
                         System.currentTimeMillis()
@@ -385,9 +389,9 @@ public class MainFrame extends javax.swing.JFrame {
                         startTime.toLocalDateTime(),
                         endTime.toLocalDateTime()
                     ).toMinutes();
-                    if (durationMinutes <= 0) durationMinutes = 1; // Minimal charge 1 menit biar gak gratisan
+                    // Tarif minimal 1 menit agar tidak ada transaksi gratisan
+                    if (durationMinutes <= 0) durationMinutes = 1;
 
-                    // Hitung total biaya rumus argo: (Menit * Tarif per jam) / 60
                     long hitungBiaya = (durationMinutes * hourlyRate) / 60;
 
                     javax.swing.JOptionPane.showMessageDialog(
@@ -402,7 +406,7 @@ public class MainFrame extends javax.swing.JFrame {
                         javax.swing.JOptionPane.INFORMATION_MESSAGE
                     );
 
-                    // Minta input duit pembayaran dari kasir
+                    // Minta input pembayaran dari pengguna
                     String inputBayar = javax.swing.JOptionPane.showInputDialog(
                         this,
                         "Durasi: " +
@@ -411,9 +415,10 @@ public class MainFrame extends javax.swing.JFrame {
                             hitungBiaya +
                             "\n\nMasukkan Uang Pembayaran:"
                     );
+                    // Jika pengguna klik cancel, checkout dibatalkan
                     if (
                         inputBayar == null || inputBayar.trim().isEmpty()
-                    ) return; // Kasir klik cancel, checkout batal
+                    ) return;
 
                     long uangBayar = 0;
                     try {
@@ -421,24 +426,24 @@ public class MainFrame extends javax.swing.JFrame {
                     } catch (NumberFormatException e) {
                         javax.swing.JOptionPane.showMessageDialog(
                             this,
-                            "Cukup angka saja"
+                            "Masukkan hanya angka saja"
                         );
-                        return; // Batal checkout
+                        return; // Batalkan checkout
                     }
 
                     if (uangBayar < hitungBiaya) {
                         javax.swing.JOptionPane.showMessageDialog(
                             this,
-                            "Duitnya kurang Rp " +
+                            "Pembayaran kurang Rp " +
                                 (hitungBiaya - uangBayar) +
                                 "!\nPelanggan wajib membayar sebelum pulang.",
                             "Kurang Bayar",
                             javax.swing.JOptionPane.ERROR_MESSAGE
                         );
-                        return; // BLOKIR KERAS! Jangan ganti PC jadi Available.
+                        return; // Blokir keras! Jangan ubah status PC menjadi Available.
                     }
 
-                    // Update end_time, durasi, dan total_cost argo ke database
+                    // Perbarui waktu selesai, durasi, dan total biaya argo ke database
                     String sqlUpTrans =
                         "UPDATE rental_tran SET end_time = NOW(), duration_minutes = ?, total_cost = ? WHERE tran_id = ?";
                     java.sql.PreparedStatement psUp = conn.prepareStatement(
@@ -453,12 +458,12 @@ public class MainFrame extends javax.swing.JFrame {
                         this,
                         "Argo Lunas!\nKembalian: Rp " +
                             (uangBayar - hitungBiaya) +
-                            "\n\nTerima kasih! 😊"
+                            "\n\nTerima kasih!"
                     );
                 }
 
                 // ---------------------------------------------------------
-                // RITUAL BERSAMA: Kembalikan status PC di MySQL jadi AVAILABLE
+                // Ritual bersama: Kembalikan status PC di database menjadi AVAILABLE
                 // ---------------------------------------------------------
                 String sqlUpPC =
                     "UPDATE computer SET status = 'AVAILABLE' WHERE computer_id = ?";
@@ -468,10 +473,10 @@ public class MainFrame extends javax.swing.JFrame {
                 psPC.setString(1, idPC);
                 psPC.executeUpdate();
 
-                conn.commit(); // Eksekusi sukses permanen
+                conn.commit(); // Simpan semua perubahan secara permanen
                 conn.setAutoCommit(true);
 
-                // Panggil pabrik card lagi biar border PC langsung auto berubah jadi HIJAU REFRESH!
+                // Panggil pembuat kartu lagi agar border PC langsung berubah warna menjadi hijau
                 loadDataPC();
             }
         } catch (Exception e) {
@@ -490,7 +495,7 @@ public class MainFrame extends javax.swing.JFrame {
     public void prosesTopUpDinamis(String idPC) {
         Connection conn = Koneksi.getKoneksi();
         try {
-            // 1. Ambil data transaksi paket yang sedang berjalan
+            // Ambil data transaksi paket yang sedang berjalan
             String sqlCari =
                 "SELECT r.tran_id, r.duration_minutes, r.total_cost, c.hourly_rate FROM rental_tran r " +
                 "JOIN computer c ON r.computer_id = c.computer_id " +
@@ -503,21 +508,22 @@ public class MainFrame extends javax.swing.JFrame {
                 String idTrans = rs.getString("tran_id");
                 int durasiLama = rs.getInt("duration_minutes");
                 long biayaLama = rs.getLong("total_cost");
-                boolean isArgo = rs.wasNull(); // True jika total_cost nilainya NULL (User Argo)
+                // True jika total_cost nilainya NULL (pengguna tipe Argo)
+                boolean isArgo = rs.wasNull();
                 int hourlyRate = rs.getInt("hourly_rate");
 
-                // 2. VALIDASI: Kalau user bertipe ARGO, haram hukumnya buat di Top-Up!
+                // Validasi: Jika pengguna tipe ARGO, tidak boleh melakukan Top-Up
                 if (isArgo) {
                     javax.swing.JOptionPane.showMessageDialog(
                         this,
                         "Pelanggan ini menggunakan sistem ARGO (Pascabayar)",
-                        " cannot Top-Up",
+                        "Tidak Dapat Top-Up",
                         javax.swing.JOptionPane.WARNING_MESSAGE
                     );
                     return;
                 }
 
-                // 3. Tampilkan Pilihan Paket Top-Up
+                // Tampilkan pilihan paket Top-Up
                 String[] opsiTopUp = {
                     "Tambah 1 Jam",
                     "Tambah 3 Jam (Diskon Rp 3.000)",
@@ -534,7 +540,7 @@ public class MainFrame extends javax.swing.JFrame {
                         opsiTopUp[0]
                     );
 
-                if (pilihan == null) return; // User klik batal
+                if (pilihan == null) return; // Pengguna klik batal
 
                 int tambahMenit = 0;
                 long tambahBiaya = 0;
@@ -550,7 +556,7 @@ public class MainFrame extends javax.swing.JFrame {
                     tambahBiaya = (hourlyRate * 5) - 5000;
                 }
 
-                // 4. Nagih Duit Cash di Depan (Prabayar)
+                // Minta pembayaran secara tunai di depan (Prabayar)
                 String inputBayar = javax.swing.JOptionPane.showInputDialog(
                     this,
                     "Harga Top-Up: Rp " +
@@ -565,7 +571,7 @@ public class MainFrame extends javax.swing.JFrame {
                 } catch (NumberFormatException e) {
                     javax.swing.JOptionPane.showMessageDialog(
                         this,
-                        "Input harus angka murni tanpa titik/huruf!"
+                        "Input harus berupa angka murni tanpa titik atau huruf!"
                     );
                     return;
                 }
@@ -573,16 +579,16 @@ public class MainFrame extends javax.swing.JFrame {
                 if (uangBayar < tambahBiaya) {
                     javax.swing.JOptionPane.showMessageDialog(
                         this,
-                        "Duit kurang Rp " +
+                        "Pembayaran kurang Rp " +
                             (tambahBiaya - uangBayar) +
-                            "!\nTop-Up batal.",
+                            "!\nTop-Up dibatalkan.",
                         "Error",
                         javax.swing.JOptionPane.ERROR_MESSAGE
                     );
                     return;
                 }
 
-                // 5. Eksekusi Akumulasi Data ke SQL (ACID Transaction)
+                // Eksekusi akumulasi data ke SQL (mode transaksi aman)
                 conn.setAutoCommit(false);
 
                 int durasiBaru = durasiLama + tambahMenit;
@@ -618,7 +624,8 @@ public class MainFrame extends javax.swing.JFrame {
                         "\n\nBilling sukses diperpanjang!"
                 );
 
-                loadDataPC(); // Refresh dashboard
+                // Perbarui dasbor
+                loadDataPC();
             }
         } catch (Exception e) {
             try {

@@ -28,13 +28,14 @@ public class FrameLoginMember extends javax.swing.JFrame {
         initTablePopup();
     }
 
-    // Variabel penampung ID PC yang diklik dari MainFrame
+    // Variabel penampung ID komputer yang dikirim dari MainFrame
     private String idPCKirim;
 
-    // Constructor custom agar bisa menerima lemparan data ID PC
+    // Konstruktor kustom untuk menerima pengiriman data ID komputer
     public FrameLoginMember(String idPC) {
         initComponents();
-        this.idPCKirim = idPC; // Simpan ID PC yang diterima untuk nanti dilempar ke FramePembayaran
+        // Simpan ID komputer yang diterima untuk nanti dikirim ke FramePembayaran
+        this.idPCKirim = idPC;
 
         setLocationRelativeTo(null);
 
@@ -69,7 +70,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
         }
     }
 
-    // --- METHOD SAKTI POPUP KLIK KANAN (RUD MEMBER) ---
+    // --- Metode pemicu menu popup klik kanan untuk mengelola data member (Create-Read-Update-Delete) ---
     private void initTablePopup() {
         javax.swing.JPopupMenu memberPopup = new javax.swing.JPopupMenu();
         javax.swing.JMenuItem menuEditData = new javax.swing.JMenuItem(
@@ -79,17 +80,17 @@ public class FrameLoginMember extends javax.swing.JFrame {
             "Hapus Member dari DB"
         );
 
-        // KONDISI UPDATE ADVANCED: Mengubah Nama DAN Nomor HP Sekaligus dalam 1 Pop-up (Opsi A)
+        // Opsi perbaruan lanjutan: Mengubah Nama DAN Nomor HP Sekaligus dalam satu dialog (Opsi A)
         menuEditData.addActionListener(evt -> {
             int row = tabelCustomer.getSelectedRow();
             if (row == -1) return;
 
-            // Mengambil data lama langsung dari baris tabel JTable yang diklik
+            // Ambil data lama langsung dari baris tabel JTable yang dipilih
             String idCust = tabelCustomer.getValueAt(row, 0).toString();
             String namaLama = tabelCustomer.getValueAt(row, 1).toString();
             String phoneLama = tabelCustomer.getValueAt(row, 2).toString();
 
-            // Membuat komponen input field kustom secara dinamis tanpa emoji
+            // Buat komponen input field kustom secara dinamis tanpa emoji
             javax.swing.JTextField txtNama = new javax.swing.JTextField(
                 namaLama
             );
@@ -97,7 +98,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
                 phoneLama
             );
 
-            // Mengatur tata letak berjejer rapi atas bawah menggunakan GridLayout 2x2
+            // Atur tata letak berjejer rapi atas bawah menggunakan GridLayout 2x2
             javax.swing.JPanel panelInput = new javax.swing.JPanel(
                 new java.awt.GridLayout(2, 2, 5, 5)
             );
@@ -106,7 +107,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
             panelInput.add(new javax.swing.JLabel("No HP Baru:"));
             panelInput.add(txtPhone);
 
-            // Meluncurkan kotak dialog hybrid di tengah monitor kasir
+            // Tampilkan kotak dialog hybrid di tengah layar
             int result = javax.swing.JOptionPane.showConfirmDialog(
                 this,
                 panelInput,
@@ -115,12 +116,12 @@ public class FrameLoginMember extends javax.swing.JFrame {
                 javax.swing.JOptionPane.PLAIN_MESSAGE
             );
 
-            // Jika kasir menekan tombol OK, eksekusi validasi dan update database
+            // Jika pengguna menekan tombol OK, lakukan validasi dan perbarui database
             if (result == javax.swing.JOptionPane.OK_OPTION) {
                 String namaBaru = txtNama.getText().trim();
                 String phoneBaru = txtPhone.getText().trim();
 
-                // Validasi input kosong agar database tidak korup data kosong
+                // Validasi input kosong agar database tidak terkontaminasi data kosong
                 if (namaBaru.isEmpty() || phoneBaru.isEmpty()) {
                     javax.swing.JOptionPane.showMessageDialog(
                         this,
@@ -143,7 +144,8 @@ public class FrameLoginMember extends javax.swing.JFrame {
                         this,
                         "Data member berhasil diperbarui."
                     );
-                    loadDataCustomer(); // Auto-refresh isi JTable member
+                    // Perbarui tampilan tabel member secara otomatis
+                    loadDataCustomer();
                 } catch (Exception e) {
                     javax.swing.JOptionPane.showMessageDialog(
                         this,
@@ -153,7 +155,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
             }
         });
 
-        // KONDISI DELETE: Soft Delete Merubah Status Menjadi DELETED (Lama)
+        // Opsi penghapusan: Soft Delete dengan mengubah status menjadi DELETED
         menuHapusMember.addActionListener(evt -> {
             int row = tabelCustomer.getSelectedRow();
             if (row == -1) return;
@@ -162,7 +164,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
 
             int konfirm = javax.swing.JOptionPane.showConfirmDialog(
                 this,
-                "Yakin mau menghapus member '" + name + "'?",
+                "Yakin ingin menghapus member '" + name + "'?",
                 "Hapus Data",
                 javax.swing.JOptionPane.YES_NO_OPTION
             );
@@ -189,10 +191,10 @@ public class FrameLoginMember extends javax.swing.JFrame {
             }
         });
 
-        memberPopup.add(menuEditData); // Menempelkan menu ubah data gabungan
+        memberPopup.add(menuEditData); // Tambahkan menu ubah data gabungan
         memberPopup.add(menuHapusMember);
 
-        // Listener pendengar klik kanan tikus kasir pada JTable
+        // Pendengar klik kanan tikus pada JTable
         tabelCustomer.addMouseListener(
             new java.awt.event.MouseAdapter() {
                 @Override

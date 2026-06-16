@@ -258,30 +258,30 @@ public class FrameTambahPC extends javax.swing.JFrame {
         String tipePC = cmbTipePC.getSelectedItem().toString();
         String deskripsi = txtDeskripsi.getText().trim();
 
-        // 1. Validasi Input Kosong
+        // Validasi input kosong
         if (namaPC.isEmpty() || txtHarga.isEmpty() || deskripsi.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Semua kotak wajib diisi!");
             return;
         }
 
-        // 2. Validasi Angka Tarif Harga
+        // Validasi angka untuk tarif harga
         int harga = 0;
         try {
             harga = Integer.parseInt(txtHarga);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(
                 this,
-                "Harga per jam harus murni ANGKA tanpa titik/koma! 😂"
+                "Tarif per jam harus berupa angka murni tanpa titik atau koma!"
             );
             return;
         }
 
         Connection conn = Koneksi.getKoneksi();
         try {
-            // Aktifkan mode transaksi aman (ACID) biar kedua tabel terisi bersamaan tanpa cacat
+            // Aktifkan mode transaksi aman untuk menjamin integritas data saat pengisian kedua tabel
             conn.setAutoCommit(false);
 
-            // 3. QUERY 1: Suntik ke tabel computer utama (computer_id AUTO_INCREMENT, status 'AVAILABLE' otomatis)
+            // Masukkan data komputer ke tabel utama (computer_id otomatis increment, status 'AVAILABLE' otomatis)
             String sqlPC =
                 "INSERT INTO computer (pc_name, hourly_rate, status) VALUES (?, ?, 'AVAILABLE')";
             PreparedStatement psPC = conn.prepareStatement(
@@ -292,14 +292,14 @@ public class FrameTambahPC extends javax.swing.JFrame {
             psPC.setInt(2, harga);
             psPC.executeUpdate();
 
-            // Ambil ID PC yang baru saja lahir secara otomatis dari database
+            // Ambil ID komputer yang baru saja dibuat secara otomatis dari database
             ResultSet rsKeys = psPC.getGeneratedKeys();
             int generatedId = 0;
             if (rsKeys.next()) {
                 generatedId = rsKeys.getInt(1);
             }
 
-            // 4. QUERY 2: Suntik deskripsi ke tabel baru computer_spec berdasarkan ID yang baru lahir tadi
+            // Masukkan deskripsi spesifikasi ke tabel terpisah computer_spec berdasarkan ID yang baru dibuat tadi
             String sqlSpec =
                 "INSERT INTO computer_spec (computer_id, pc_type, description) VALUES (?, ?, ?)";
             PreparedStatement psSpec = conn.prepareStatement(sqlSpec);
@@ -308,16 +308,16 @@ public class FrameTambahPC extends javax.swing.JFrame {
             psSpec.setString(3, deskripsi);
             psSpec.executeUpdate();
 
-            // Commit data bersamaan ke MySQL
+            // Simpan semua perubahan ke database
             conn.commit();
             conn.setAutoCommit(true);
 
             JOptionPane.showMessageDialog(
                 this,
-                "PC " + namaPC + " berstatus AVAILABLE berhasil dilahirkan! 🚀"
+                "Komputer " + namaPC + " dengan status AVAILABLE berhasil ditambahkan!"
             );
 
-            // 5. Sihir pemaksa untuk me-refresh MainFrame secara real-time agar kotaknya langsung muncul
+            // Lakukan pembaruan data pada MainFrame secara real-time agar kotak baru langsung muncul
             for (java.awt.Window window : java.awt.Window.getWindows()) {
                 if (window instanceof MainFrame) {
                     ((MainFrame) window).loadDataPC();

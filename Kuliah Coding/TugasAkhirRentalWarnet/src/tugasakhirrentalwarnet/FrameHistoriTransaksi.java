@@ -56,8 +56,9 @@ public class FrameHistoriTransaksi extends javax.swing.JFrame {
 
             while (rs.next()) {
                 String endTimeStr = rs.getString("r.end_time");
+                // Jika waktu selesai masih kosong, tampilkan status sedang bermain
                 if (rs.wasNull() || endTimeStr == null) {
-                    endTimeStr = "Masih Bermain... ⏱️";
+                    endTimeStr = "Masih Bermain...";
                 }
 
                 model.addRow(new Object[] {

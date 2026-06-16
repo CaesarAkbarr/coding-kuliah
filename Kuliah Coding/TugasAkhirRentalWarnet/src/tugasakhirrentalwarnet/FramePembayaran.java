@@ -28,7 +28,7 @@ public class FramePembayaran extends javax.swing.JFrame {
 
     private void initComboListener() {
         cmbPaket.removeAllItems();
-        // Item dropdown ngikut harga PC (VIP 8rb, Reg 5rb)
+        // Item dropdown menyesuaikan harga PC (VIP 8 ribu, Regular 5 ribu)
         cmbPaket.addItem("Argo (Bayar Belakangan)");
         cmbPaket.addItem("Paket 1 Jam (Rp " + (tarifPerJam * 1) + ")");
         cmbPaket.addItem("Paket 3 Jam (Rp " + ((tarifPerJam * 3) - 3000) + ")");
@@ -66,7 +66,7 @@ public class FramePembayaran extends javax.swing.JFrame {
         });
     }
 
-    // 1. Tambahkan variabel penampung gaib di paling atas kelas
+    // Variabel penampung data pelanggan di tingkat kelas
     private String idPC;
     private int idCustomer;
     private String namaCustomer;
@@ -74,9 +74,9 @@ public class FramePembayaran extends javax.swing.JFrame {
     private long totalBiaya = 0;
     private int durasiMenit = 0;
     private boolean isModeArgo = false;
-    private int tarifPerJam = 5000; // Harga default
+    private int tarifPerJam = 5000; // Harga standar default
 
-    // 2. Pasang Constructor Kustom yang menerima 4 parameter (BIAR KODE LOGIN GA ERROR)
+    // Konstruktor kustom yang menerima empat parameter untuk mengatasi error pada modul login
     public FramePembayaran(
         String idPC,
         int idCust,
@@ -90,7 +90,7 @@ public class FramePembayaran extends javax.swing.JFrame {
         this.isGuest = isGuest;
         setLocationRelativeTo(null);
 
-        // Ambil tarif per jam asli dari database berdasarkan PC VIP/Regular yang diklik
+        // Ambil tarif per jam asli dari database berdasarkan PC VIP atau Regular yang dipilih
         try {
             java.sql.Connection c = Koneksi.getKoneksi();
             java.sql.PreparedStatement ps = c.prepareStatement(
@@ -110,7 +110,7 @@ public class FramePembayaran extends javax.swing.JFrame {
             "PC: " + idPC + " | Pelanggan: " + namaCustomer + tipeUser
         );
 
-        // MAN_TRA UTAMA DIPANGGIL DISINI BIAR COMBOBOX-NYA HIDUP! 🚀
+        // Metode inisialisasi utama dipanggil di sini agar combobox dapat berfungsi
         initComboListener();
     }
 
@@ -282,13 +282,13 @@ public class FramePembayaran extends javax.swing.JFrame {
         long uangBayar = 0;
         long kembalian = 0;
 
-        // 1. Validasi duit kasir super ketat untuk mode Paket (Prabayar)
+        // Validasi nominal pembayaran secara ketat untuk mode Paket (Prabayar)
         if (!isModeArgo) {
             String txtUang = txtUangBayar.getText().trim();
             if (txtUang.isEmpty()) {
                 JOptionPane.showMessageDialog(
                     this,
-                    "Isi nominal duitnya dulu!"
+                    "Isi nominal pembayaran terlebih dahulu!"
                 );
                 return;
             }
@@ -297,26 +297,27 @@ public class FramePembayaran extends javax.swing.JFrame {
                 if (uangBayar < totalBiaya) {
                     JOptionPane.showMessageDialog(
                         this,
-                        "Duit kurang Rp " +
+                        "Nominal pembayaran kurang Rp " +
                             (totalBiaya - uangBayar) +
-                            "! Transaksi BATAL.",
+                            "! Transaksi dibatalkan.",
                         "Warning",
                         JOptionPane.ERROR_MESSAGE
                     );
-                    return; // STOP EKSEKUSI! Gak boleh masuk DB!
+                    return; // Hentikan eksekusi! Data tidak boleh masuk database!
                 }
                 kembalian = uangBayar - totalBiaya;
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Input harus angka!");
+                JOptionPane.showMessageDialog(this, "Input harus berupa angka!");
                 return;
             }
         }
 
         java.sql.Connection conn = Koneksi.getKoneksi();
         try {
-            conn.setAutoCommit(false); // Kunci transaksi database biar aman dari crash (ACID)
+            // Aktifkan mode transaksi aman untuk menjamin integritas data dari kerusakan sistem
+            conn.setAutoCommit(false);
 
-            // 2. Jika pelanggan masuk sebagai GUEST, buatkan record otomatis di tabel customer
+            // Jika pelanggan masuk sebagai GUEST, buatkan rekam otomatis di tabel customer
             if (isGuest) {
                 String sqlGuest =
                     "INSERT INTO customer (cust_name, phone) VALUES (?, 'GUEST')";
@@ -334,7 +335,7 @@ public class FramePembayaran extends javax.swing.JFrame {
             String sqlTransaksi;
             java.sql.PreparedStatement psTrans;
 
-            // 3. Insert data transaksi dinamis berdasarkan pilihan dropdown paket
+            // Masukkan data transaksi secara dinamis berdasarkan pilihan dropdown paket
             if (isModeArgo) {
                 sqlTransaksi =
                     "INSERT INTO rental_tran (tran_id, computer_id, customer_id, start_time) VALUES (?, ?, ?, NOW())";
@@ -354,7 +355,7 @@ public class FramePembayaran extends javax.swing.JFrame {
             }
             psTrans.executeUpdate();
 
-            // 4. Update status PC di MySQL menjadi OCCUPIED
+            // Perbarui status PC di database menjadi OCCUPIED
             String sqlUpdatePC =
                 "UPDATE computer SET status = 'OCCUPIED' WHERE computer_id = ?";
             java.sql.PreparedStatement psPC = conn.prepareStatement(
@@ -363,10 +364,10 @@ public class FramePembayaran extends javax.swing.JFrame {
             psPC.setString(1, idPC);
             psPC.executeUpdate();
 
-            conn.commit(); // Simpan permanen ke MySQL bersamaan
+            conn.commit(); // Simpan semua perubahan secara permanen ke database
             conn.setAutoCommit(true);
 
-            // 5. Buka FrameStruk untuk memamerkan Nota Lunas Digital buatan lo!
+            // Buka FrameStruk untuk menampilkan Nota Digital yang telah dibuat
             String paketTxt = cmbPaket.getSelectedItem().toString();
             new FrameStruk(
                 idTrans,
@@ -378,13 +379,13 @@ public class FramePembayaran extends javax.swing.JFrame {
                 metodeBayar
             ).setVisible(true);
 
-            // 6. Sihir pemaksa refresh untuk meng-update warna border MainFrame secara real-time
+            // Lakukan pembaruan data pada MainFrame secara real-time untuk menampilkan perubahan warna border
             for (java.awt.Window window : java.awt.Window.getWindows()) {
                 if (window instanceof MainFrame) {
                     ((MainFrame) window).loadDataPC();
                 }
             }
-            this.dispose(); // Hancurkan frame pembayaran karena urusan duit kasir udah beres
+            this.dispose(); // Tutup frame pembayaran karena transaksi pembayaran telah selesai
         } catch (Exception e) {
             try {
                 conn.rollback();
