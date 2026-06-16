@@ -107,7 +107,12 @@ public class FrameTambahPC extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
-        cmbTipePC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "REGULAR", "VIP" }));
+        cmbTipePC.setModel(
+            new javax.swing.DefaultComboBoxModel<>(new String[] {
+                "REGULAR",
+                "VIP",
+            })
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -121,11 +126,13 @@ public class FrameTambahPC extends javax.swing.JFrame {
         btnBatal.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnBatal.setForeground(new java.awt.Color(255, 255, 255));
         btnBatal.setText("Batal");
-        btnBatal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBatalActionPerformed(evt);
+        btnBatal.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnBatalActionPerformed(evt);
+                }
             }
-        });
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -139,11 +146,13 @@ public class FrameTambahPC extends javax.swing.JFrame {
         btnSimpan.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnSimpan.setForeground(new java.awt.Color(255, 255, 255));
         btnSimpan.setText("Simpan");
-        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSimpanActionPerformed(evt);
+        btnSimpan.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnSimpanActionPerformed(evt);
+                }
             }
-        });
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -192,34 +201,57 @@ public class FrameTambahPC extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(18, 6, 6, 6);
         jPanel1.add(jLabel4, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
+            getContentPane()
+        );
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(
+                            jPanel1,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addContainerGap()
+                )
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(
+                            jPanel1,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addContainerGap(
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            Short.MAX_VALUE
+                        )
+                )
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {
-//GEN-FIRST:event_btnBatalActionPerformed
+        //GEN-FIRST:event_btnBatalActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    }//GEN-LAST:event_btnBatalActionPerformed
+    } //GEN-LAST:event_btnBatalActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {
-//GEN-FIRST:event_btnSimpanActionPerformed
+        //GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
         String namaPC = txtNamaPC.getText().trim();
         String txtHarga = txtHargaPC.getText().trim();
@@ -228,10 +260,7 @@ public class FrameTambahPC extends javax.swing.JFrame {
 
         // 1. Validasi Input Kosong
         if (namaPC.isEmpty() || txtHarga.isEmpty() || deskripsi.isEmpty()) {
-            JOptionPane.showMessageDialog(
-                this,
-                "Semua kotak wajib diisi, Cik! Jangan males ngetik speknya! 😹"
-            );
+            JOptionPane.showMessageDialog(this, "Semua kotak wajib diisi!");
             return;
         }
 
@@ -306,7 +335,7 @@ public class FrameTambahPC extends javax.swing.JFrame {
                 JOptionPane.ERROR_MESSAGE
             );
         }
-    }//GEN-LAST:event_btnSimpanActionPerformed
+    } //GEN-LAST:event_btnSimpanActionPerformed
 
     /**
      * @param args the command line arguments

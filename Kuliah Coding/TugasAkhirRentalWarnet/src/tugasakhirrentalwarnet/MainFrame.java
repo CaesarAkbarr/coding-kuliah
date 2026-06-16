@@ -44,48 +44,82 @@ public class MainFrame extends javax.swing.JFrame {
 
     public void loadDataPC() {
         try {
-            // 1. Bersihkan wadah sebelum diisi ulang (biar gak numpuk pas di-refresh)
             wadahCardPC.removeAll();
 
             Connection conn = Koneksi.getKoneksi();
             Statement stmt = conn.createStatement();
 
-            // QUERY HYBRID: Tarik data PC sekaligus deskripsi speknya! 🚀
             String sql =
                 "SELECT c.computer_id, c.pc_name, c.hourly_rate, c.status, s.description " +
                 "FROM computer c " +
                 "LEFT JOIN computer_spec s ON c.computer_id = s.computer_id " +
-                "WHERE c.status != 'DELETED'";
+                "WHERE c.status != 'DELETED' " +
+                "ORDER BY c.computer_id ASC";
             ResultSet rs = stmt.executeQuery(sql);
 
-            // 2. Looping data SQL untuk menciptakan kotak secara ajaib
             while (rs.next()) {
                 String idPC = rs.getString("computer_id");
                 String namaPC = rs.getString("pc_name");
                 String tarif = "Rp " + rs.getInt("hourly_rate") + " / Jam";
                 String status = rs.getString("status");
 
-                // Ambil data deskripsi spek untuk fitur Read-Hover
                 String deskripsi = rs.getString("description");
                 if (rs.wasNull() || deskripsi == null) {
-                    deskripsi = "Spek & Gear belum diinput";
+                    deskripsi = "Spek belum diisi!";
                 }
+                final String deskripsiFinal = deskripsi; // Variabel buat di dalem klik tombol "i"
 
                 // --- DESAIN KOTAK (CARD) ---
                 JPanel card = new JPanel();
-                card.setPreferredSize(new Dimension(220, 160)); // Ukuran kotak
-                card.setLayout(new GridLayout(5, 1, 5, 5)); // Tata letak tumpuk ke bawah
+                card.setPreferredSize(new Dimension(220, 160));
+                card.setLayout(new GridLayout(5, 1, 5, 5));
 
-                // FEATURE 1 (READ SPEK): Munculin pop-up spek gahar pake HTML pas kursor kasir HOVER ke kotak PC! 🧙‍♂️
+                // ToolTip bawaan tetep aktif buat cadangan
                 card.setToolTipText(
-                    "<html><body style='padding:5px;'><b>🛠️ SPEK & GEAR " +
+                    "<html><body><b>🛠️ SPEK " +
                         namaPC +
                         ":</b><br>" +
-                        deskripsi.replace("\n", "<br>") +
+                        deskripsiFinal.replace("\n", "<br>") +
                         "</body></html>"
                 );
 
-                // FEATURE 2 (UPDATE & DELETE PC): Ciptakan klik kanan menu sakti pada Card PC
+                // --- 🛠️ TRICK SAKTI BARIS ATAS (NAMA PC + TOMBOL INFO "i") ---
+                JPanel panelAtas = new JPanel(new java.awt.BorderLayout());
+                panelAtas.setOpaque(false);
+
+                JLabel lblNama = new JLabel(namaPC, SwingConstants.CENTER);
+                lblNama.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+                // Ciptakan Huruf "i" sebagai Label bergaya tombol di pojok kanan atas 🧙‍♂️
+                JLabel lblInfo = new JLabel(" i  ", SwingConstants.CENTER);
+                lblInfo.setFont(new Font("Segoe UI", Font.BOLD, 14));
+                lblInfo.setForeground(new Color(52, 152, 219));
+                lblInfo.setCursor(
+                    new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)
+                ); // Kursor berubah jadi jari pas dideketin
+
+                // Logika ketika huruf "i" ditekan kasir!! 💥
+                lblInfo.addMouseListener(
+                    new java.awt.event.MouseAdapter() {
+                        @Override
+                        public void mouseClicked(java.awt.event.MouseEvent e) {
+                            javax.swing.JOptionPane.showMessageDialog(
+                                MainFrame.this,
+                                "=== RENCANA SPESIFIKASI " +
+                                    namaPC +
+                                    " ===\n\n" +
+                                    deskripsiFinal,
+                                "Spesifikasi & Gear Komputer",
+                                javax.swing.JOptionPane.INFORMATION_MESSAGE
+                            );
+                        }
+                    }
+                );
+
+                panelAtas.add(lblNama, java.awt.BorderLayout.CENTER); // Nama PC tetep gagah di tengah
+                panelAtas.add(lblInfo, java.awt.BorderLayout.EAST); // Tombol "i" mepet manja di kanan atas 🚀
+
+                // --- POPUP REKAYASA KLIK KANAN CARD (RUD LAMA LU AMAN) ---
                 javax.swing.JPopupMenu pcPopup = new javax.swing.JPopupMenu();
                 javax.swing.JMenuItem menuEditTarif = new javax.swing.JMenuItem(
                     "Ubah Tarif / Jam"
@@ -94,48 +128,34 @@ public class MainFrame extends javax.swing.JFrame {
                     "Ubah Deskripsi Spek"
                 );
                 javax.swing.JMenuItem menuHapusPC = new javax.swing.JMenuItem(
-                    "Hapus PC dari Aset️"
+                    "Hapus PC dari Aset"
                 );
 
-                // Logika UPDATE A: Ubah Tarif PC
                 menuEditTarif.addActionListener(evt -> {
                     String input = javax.swing.JOptionPane.showInputDialog(
                         this,
-                        "Masukkan Tarif per Jam Baru untuk " + namaPC + ":",
+                        "Masukkan Tarif Baru:",
                         "5000"
                     );
                     if (input != null && !input.trim().isEmpty()) {
                         try {
-                            int tarifBaru = Integer.parseInt(input.trim());
                             Connection c = Koneksi.getKoneksi();
                             PreparedStatement ps = c.prepareStatement(
                                 "UPDATE computer SET hourly_rate = ? WHERE computer_id = ?"
                             );
-                            ps.setInt(1, tarifBaru);
+                            ps.setInt(1, Integer.parseInt(input.trim()));
                             ps.setString(2, idPC);
                             ps.executeUpdate();
-                            javax.swing.JOptionPane.showMessageDialog(
-                                this,
-                                "Tarif " +
-                                    namaPC +
-                                    " sukses diubah! Lumayan tambah modal seblak! 💸"
-                            );
-                            loadDataPC(); // Auto-refresh dashboard!
-                        } catch (Exception ex) {
-                            javax.swing.JOptionPane.showMessageDialog(
-                                this,
-                                "Tarif harus berupa angka murni, Cik! 😂"
-                            );
-                        }
+                            loadDataPC();
+                        } catch (Exception ex) {}
                     }
                 });
 
-                // Logika UPDATE B: Ubah Deskripsi Spek PC
                 menuEditSpec.addActionListener(evt -> {
                     String specBaru = javax.swing.JOptionPane.showInputDialog(
                         this,
-                        "Ubah Deskripsi Spek & Gear untuk " + namaPC + ":",
-                        card.getToolTipText().replaceAll("<[^>]*>", "")
+                        "Ubah Deskripsi Spek:",
+                        deskripsiFinal
                     );
                     if (specBaru != null) {
                         try {
@@ -144,9 +164,8 @@ public class MainFrame extends javax.swing.JFrame {
                                 "SELECT * FROM computer_spec WHERE computer_id = ?"
                             );
                             psCek.setString(1, idPC);
-                            ResultSet rsCek = psCek.executeQuery();
-
-                            if (rsCek.next()) {
+                            ResultSet rCek = psCek.executeQuery();
+                            if (rCek.next()) {
                                 PreparedStatement psUp = c.prepareStatement(
                                     "UPDATE computer_spec SET description = ? WHERE computer_id = ?"
                                 );
@@ -157,60 +176,40 @@ public class MainFrame extends javax.swing.JFrame {
                                 PreparedStatement psIn = c.prepareStatement(
                                     "INSERT INTO computer_spec (computer_id, pc_type, description) VALUES (?, 'REGULAR', ?)"
                                 );
-                                psIn.setString(1, idPC);
+                                psIn.setInt(1, Integer.parseInt(idPC));
                                 psIn.setString(2, specBaru.trim());
                                 psIn.executeUpdate();
                             }
-                            javax.swing.JOptionPane.showMessageDialog(
-                                this,
-                                "Deskripsi Spek " +
-                                    namaPC +
-                                    " berhasil di-update! 🚀"
-                            );
                             loadDataPC();
-                        } catch (Exception ex) {
-                            javax.swing.JOptionPane.showMessageDialog(
-                                this,
-                                "Gagal update spek: " + ex.getMessage()
-                            );
-                        }
+                        } catch (Exception ex) {}
                     }
                 });
 
-                // Logika DELETE: Hapus Armada PC dari Aset Warnet
                 menuHapusPC.addActionListener(evt -> {
                     int konfirm = javax.swing.JOptionPane.showConfirmDialog(
                         this,
-                        "Yakin mau menghapus total " +
-                            namaPC +
-                            " dari database?",
+                        "Yakin hapus?",
                         "Hapus PC",
                         javax.swing.JOptionPane.YES_NO_OPTION
                     );
                     if (konfirm == javax.swing.JOptionPane.YES_OPTION) {
                         try {
                             Connection c = Koneksi.getKoneksi();
-                            // PreparedStatement ps1 = c.prepareStatement(
-                            //     "DELETE FROM computer_spec WHERE computer_id = ?"
-                            // );
-                            // ps1.setString(1, idPC);
-                            // ps1.executeUpdate();
-
+                            PreparedStatement ps1 = c.prepareStatement(
+                                "DELETE FROM computer_spec WHERE computer_id = ?"
+                            );
+                            ps1.setString(1, idPC);
+                            ps1.executeUpdate();
                             PreparedStatement ps2 = c.prepareStatement(
                                 "UPDATE computer SET status = 'DELETED' WHERE computer_id = ?"
                             );
                             ps2.setString(1, idPC);
                             ps2.executeUpdate();
-                            javax.swing.JOptionPane.showMessageDialog(
-                                this,
-                                namaPC +
-                                    " resmi dipensiunkan dari dunia persewaan!"
-                            );
                             loadDataPC();
                         } catch (Exception ex) {
                             javax.swing.JOptionPane.showMessageDialog(
                                 this,
-                                "Gagal hapus! PC ini kemungkinan masih tersangkut data riwayat transaksi kasir"
+                                "Gagal hapus, data masih berelasi keuangan!"
                             );
                         }
                     }
@@ -221,7 +220,6 @@ public class MainFrame extends javax.swing.JFrame {
                 pcPopup.add(new javax.swing.JSeparator());
                 pcPopup.add(menuHapusPC);
 
-                // Pasang pemicu pop-up klik kanan pada panel card PC
                 card.addMouseListener(
                     new java.awt.event.MouseAdapter() {
                         public void mousePressed(java.awt.event.MouseEvent e) {
@@ -238,7 +236,6 @@ public class MainFrame extends javax.swing.JFrame {
                     }
                 );
 
-                // Ubah warna border berdasarkan status (Biar kelihatan gahar!)
                 if (status.equals("AVAILABLE")) {
                     card.setBorder(
                         BorderFactory.createTitledBorder(
@@ -248,7 +245,7 @@ public class MainFrame extends javax.swing.JFrame {
                             ),
                             idPC
                         )
-                    ); // Hijau
+                    );
                 } else {
                     card.setBorder(
                         BorderFactory.createTitledBorder(
@@ -258,12 +255,8 @@ public class MainFrame extends javax.swing.JFrame {
                             ),
                             idPC
                         )
-                    ); // Merah
+                    );
                 }
-
-                // --- ISI KOTAK (LABEL) ---
-                JLabel lblNama = new JLabel(namaPC, SwingConstants.CENTER);
-                lblNama.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
                 JLabel lblTarif = new JLabel(tarif, SwingConstants.CENTER);
                 JLabel lblStatus = new JLabel(
@@ -276,13 +269,10 @@ public class MainFrame extends javax.swing.JFrame {
                 );
                 else lblStatus.setForeground(new Color(231, 76, 60));
 
-                // --- TOMBOL AKSI OTOMATIS ---
                 JButton btnAksi = new JButton(
                     status.equals("AVAILABLE") ? "Check-In" : "Check-Out"
                 );
                 btnAksi.setFocusPainted(false);
-
-                // Logika ketika tombol di dalam kotak tersebut diklik (Tetap pertahankan kode lama lo)
                 btnAksi.addActionListener(e -> {
                     if (status.equals("AVAILABLE")) {
                         new FrameLoginMember(idPC).setVisible(true);
@@ -302,29 +292,26 @@ public class MainFrame extends javax.swing.JFrame {
                             options,
                             options[2]
                         );
-
                         if (pilihan == javax.swing.JOptionPane.YES_OPTION) {
-                            prosesCheckOutDinamis(idPC); // Jalankan checkout
+                            prosesCheckOutDinamis(idPC);
                         } else if (
                             pilihan == javax.swing.JOptionPane.NO_OPTION
                         ) {
-                            prosesTopUpDinamis(idPC); // Jalankan top up
+                            prosesTopUpDinamis(idPC);
                         }
                     }
                 });
 
-                // --- MASUKKAN KOMPONEN KE DALAM KOTAK ---
-                card.add(lblNama);
+                // SUSUN KOMPONEN MASUK CARD (Baris 1 diisi panelAtas kustom kita bray!)
+                card.add(panelAtas);
                 card.add(lblTarif);
                 card.add(lblStatus);
-                card.add(new JLabel("")); // Spasi kosong biar rapi
+                card.add(new JLabel(""));
                 card.add(btnAksi);
 
-                // --- MASUKKAN KOTAK KE DALAM WADAH UTAMA ---
                 wadahCardPC.add(card);
             }
 
-            // 3. Render ulang wadah biar kotak-kotak barunya muncul di layar
             wadahCardPC.revalidate();
             wadahCardPC.repaint();
             wadahCardPC.getParent().revalidate();

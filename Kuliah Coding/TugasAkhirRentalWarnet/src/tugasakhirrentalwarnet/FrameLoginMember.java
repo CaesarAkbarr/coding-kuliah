@@ -72,39 +72,78 @@ public class FrameLoginMember extends javax.swing.JFrame {
     // --- METHOD SAKTI POPUP KLIK KANAN (RUD MEMBER) ---
     private void initTablePopup() {
         javax.swing.JPopupMenu memberPopup = new javax.swing.JPopupMenu();
-        javax.swing.JMenuItem menuEditNama = new javax.swing.JMenuItem(
-            "Ubah Nama Member"
+        javax.swing.JMenuItem menuEditData = new javax.swing.JMenuItem(
+            "Ubah Data Member"
         );
         javax.swing.JMenuItem menuHapusMember = new javax.swing.JMenuItem(
             "Hapus Member dari DB"
         );
 
-        // KONDISI UPDATE: Ubah Nama Member lewat Pop-up Input Dialog
-        menuEditNama.addActionListener(evt -> {
+        // KONDISI UPDATE ADVANCED: Mengubah Nama DAN Nomor HP Sekaligus dalam 1 Pop-up (Opsi A)
+        menuEditData.addActionListener(evt -> {
             int row = tabelCustomer.getSelectedRow();
             if (row == -1) return;
+
+            // Mengambil data lama langsung dari baris tabel JTable yang diklik
             String idCust = tabelCustomer.getValueAt(row, 0).toString();
             String namaLama = tabelCustomer.getValueAt(row, 1).toString();
+            String phoneLama = tabelCustomer.getValueAt(row, 2).toString();
 
-            String namaBaru = javax.swing.JOptionPane.showInputDialog(
-                this,
-                "Masukkan Nama Baru untuk ID Member " + idCust + ":",
+            // Membuat komponen input field kustom secara dinamis tanpa emoji
+            javax.swing.JTextField txtNama = new javax.swing.JTextField(
                 namaLama
             );
-            if (namaBaru != null && !namaBaru.trim().isEmpty()) {
-                try {
-                    Connection conn = Koneksi.getKoneksi();
-                    PreparedStatement ps = conn.prepareStatement(
-                        "UPDATE customer SET cust_name = ? WHERE customer_id = ?"
-                    );
-                    ps.setString(1, namaBaru.trim());
-                    ps.setString(2, idCust);
-                    ps.executeUpdate();
+            javax.swing.JTextField txtPhone = new javax.swing.JTextField(
+                phoneLama
+            );
+
+            // Mengatur tata letak berjejer rapi atas bawah menggunakan GridLayout 2x2
+            javax.swing.JPanel panelInput = new javax.swing.JPanel(
+                new java.awt.GridLayout(2, 2, 5, 5)
+            );
+            panelInput.add(new javax.swing.JLabel("Nama Baru:"));
+            panelInput.add(txtNama);
+            panelInput.add(new javax.swing.JLabel("No HP Baru:"));
+            panelInput.add(txtPhone);
+
+            // Meluncurkan kotak dialog hybrid di tengah monitor kasir
+            int result = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                panelInput,
+                "Form Ubah Data Member ID " + idCust,
+                javax.swing.JOptionPane.OK_CANCEL_OPTION,
+                javax.swing.JOptionPane.PLAIN_MESSAGE
+            );
+
+            // Jika kasir menekan tombol OK, eksekusi validasi dan update database
+            if (result == javax.swing.JOptionPane.OK_OPTION) {
+                String namaBaru = txtNama.getText().trim();
+                String phoneBaru = txtPhone.getText().trim();
+
+                // Validasi input kosong agar database tidak korup data kosong
+                if (namaBaru.isEmpty() || phoneBaru.isEmpty()) {
                     javax.swing.JOptionPane.showMessageDialog(
                         this,
-                        "Nama member berhasil diperbarui!"
+                        "Nama dan No HP tidak boleh kosong!"
                     );
-                    loadDataCustomer(); // Auto-refresh isi tabel member biar gak planga-plongo!
+                    return;
+                }
+
+                try {
+                    Connection conn = Koneksi.getKoneksi();
+                    String sqlUpdate =
+                        "UPDATE customer SET cust_name = ?, phone = ? WHERE customer_id = ?";
+                    PreparedStatement ps = conn.prepareStatement(sqlUpdate);
+                    ps.setString(1, namaBaru);
+                    ps.setString(2, phoneBaru);
+                    ps.setString(3, idCust);
+                    ps.executeUpdate();
+
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Data member berhasil diperbarui."
+                    );
+                    loadDataCustomer(); // Auto-refresh isi JTable member
                 } catch (Exception e) {
                     javax.swing.JOptionPane.showMessageDialog(
                         this,
@@ -114,7 +153,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
             }
         });
 
-        // KONDISI DELETE: Hapus Member dari Semesta Database Warnet
+        // KONDISI DELETE: Soft Delete Merubah Status Menjadi DELETED (Lama)
         menuHapusMember.addActionListener(evt -> {
             int row = tabelCustomer.getSelectedRow();
             if (row == -1) return;
@@ -136,23 +175,24 @@ public class FrameLoginMember extends javax.swing.JFrame {
                 );
                 ps.setString(1, idCust);
                 ps.executeUpdate();
+
                 javax.swing.JOptionPane.showMessageDialog(
                     this,
-                    "Member '" + name + "' resmi ditendang dari database!"
+                    "Member '" + name + "' berhasil dihapus dari sistem."
                 );
-                loadDataCustomer(); // Auto-refresh isi tabel!
+                loadDataCustomer();
             } catch (Exception e) {
                 javax.swing.JOptionPane.showMessageDialog(
                     this,
-                    "Gagal hapus!: " + e.getMessage()
+                    "Gagal menghapus data: " + e.getMessage()
                 );
             }
         });
 
-        memberPopup.add(menuEditNama);
+        memberPopup.add(menuEditData); // Menempelkan menu ubah data gabungan
         memberPopup.add(menuHapusMember);
 
-        // Daftarkan MouseListener ke tabelCustomer agar peka terhadap sentuhan klik kanan kasir
+        // Listener pendengar klik kanan tikus kasir pada JTable
         tabelCustomer.addMouseListener(
             new java.awt.event.MouseAdapter() {
                 @Override
@@ -169,7 +209,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
                     if (e.isPopupTrigger()) {
                         int row = tabelCustomer.rowAtPoint(e.getPoint());
                         if (row >= 0 && row < tabelCustomer.getRowCount()) {
-                            tabelCustomer.setRowSelectionInterval(row, row); // Auto-select baris yang ditunjuk pas diklik kanan
+                            tabelCustomer.setRowSelectionInterval(row, row);
                             memberPopup.show(
                                 e.getComponent(),
                                 e.getX(),
