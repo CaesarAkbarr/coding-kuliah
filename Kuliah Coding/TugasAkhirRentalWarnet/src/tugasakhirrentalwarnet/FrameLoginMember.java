@@ -194,7 +194,7 @@ public class FrameLoginMember extends javax.swing.JFrame {
         memberPopup.add(menuEditData); // Tambahkan menu ubah data gabungan
         memberPopup.add(menuHapusMember);
 
-        // Pendengar klik kanan tikus pada JTable
+        // Listener klik kanan mouse pada JTable
         tabelCustomer.addMouseListener(
             new java.awt.event.MouseAdapter() {
                 @Override

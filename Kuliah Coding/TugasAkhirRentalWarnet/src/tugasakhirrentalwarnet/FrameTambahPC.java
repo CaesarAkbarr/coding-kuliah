@@ -23,18 +23,6 @@ public class FrameTambahPC extends javax.swing.JFrame {
         initComponents();
 
         this.setLocationRelativeTo(null);
-
-        // clean();
-    }
-
-    public void cleantxt() {
-        txtHargaPC.setText("");
-        txtNamaPC.setText("");
-    }
-
-    public void isitxt() {
-        txtNamaPC.setText("Nama PC");
-        txtHargaPC.setText("Harga PC");
     }
 
     /**
@@ -260,7 +248,10 @@ public class FrameTambahPC extends javax.swing.JFrame {
 
         // Validasi input kosong
         if (namaPC.isEmpty() || txtHarga.isEmpty() || deskripsi.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Semua kotak wajib diisi!");
+            JOptionPane.showMessageDialog(
+                this,
+                "Seluruh parameter input wajib diisi!"
+            );
             return;
         }
 
@@ -314,7 +305,9 @@ public class FrameTambahPC extends javax.swing.JFrame {
 
             JOptionPane.showMessageDialog(
                 this,
-                "Komputer " + namaPC + " dengan status AVAILABLE berhasil ditambahkan!"
+                "Komputer " +
+                    namaPC +
+                    " dengan status AVAILABLE berhasil ditambahkan!"
             );
 
             // Lakukan pembaruan data pada MainFrame secara real-time agar kotak baru langsung muncul
@@ -330,7 +323,7 @@ public class FrameTambahPC extends javax.swing.JFrame {
             } catch (SQLException ex) {}
             JOptionPane.showMessageDialog(
                 this,
-                "Gagal melahirkan PC baru: " + e.getMessage(),
+                "Gagal menambahkan unit komputer baru: " + e.getMessage(),
                 "SQL Error",
                 JOptionPane.ERROR_MESSAGE
             );

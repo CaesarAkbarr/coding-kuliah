@@ -66,7 +66,7 @@ public class MainFrame extends javax.swing.JFrame {
                 String deskripsi = rs.getString("description");
                 // Jika deskripsi masih kosong, tampilkan pesan placeholder
                 if (rs.wasNull() || deskripsi == null) {
-                    deskripsi = "Spek belum diisi!";
+                    deskripsi = "Spesifikasi belum dikonfigurasi.";
                 }
                 // Variabel untuk digunakan di dalam event listener tombol info
                 final String deskripsiFinal = deskripsi;
@@ -192,8 +192,8 @@ public class MainFrame extends javax.swing.JFrame {
                 menuHapusPC.addActionListener(evt -> {
                     int konfirm = javax.swing.JOptionPane.showConfirmDialog(
                         this,
-                        "Yakin hapus?",
-                        "Hapus PC",
+                        "Apakah Anda yakin ingin menonaktifkan unit komputer ini?",
+                        "Konfirmasi Hapus Data",
                         javax.swing.JOptionPane.YES_NO_OPTION
                     );
                     if (konfirm == javax.swing.JOptionPane.YES_OPTION) {
