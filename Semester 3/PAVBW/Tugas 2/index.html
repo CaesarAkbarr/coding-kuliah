@@ -3,15 +3,45 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Tugas 2</title>
+	<title>Biodata Nikola Tesla</title>
+
+	<style>
+	    .Biodata {
+			display: grid;
+			place-items: center;
+			text-align: center;
+	    }
+		img {
+			max-width: 200px;
+			width: 100%;
+		}
+	</style>
+
 </head>
 <body>
-    <img src="images.webp" alt="Praroro" width="50%" border="2" usemap="#gambar_praroro">
-    <map name="gambar_praroro">
-        <area shape="rect" coords="0,0,200,100" href="https://share.google/90zVhaWnfVFntFMd2">
-    </map>
-    <h1>Prororo Subyantoh</h1>
-    <h2>Hey antek-antek asing!</h2>
-    <p>Orang desa gapake Dollar!</p>
+    <div class="Biodata">
+
+        <h1>Biodata Nikola Tesla</h1>
+
+        <table width="50%" border="1">
+            <tr>
+                <td>Nama</td>
+                <td>Nikola Tesla</td>
+                <td rowspan="4">
+                   <img src="images.jpeg" alt="Nikola Tesla">
+                </td>
+            </tr>
+            <tr>
+                <td>Lahir</td>
+                <td>10 Juli 1856</td>
+            </tr>
+            <tr>
+                <td>Kewarganegaraan</td>
+                <td>Austria (hingga tahun 1891)
+                AS (sejak 1891)</td>
+            </tr>
+        </table>
+
+    </div>
 </body>
 </html>
