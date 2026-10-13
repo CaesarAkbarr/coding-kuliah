@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Form Pendaftaran</title>
+</head>
+<body>
+
+    <h1>Form Pendaftaran</h1>
+    <p>Silahkan isi lengkap data diri kamu</p>
+    <hr>
+
+    <form action="perkenalan.html" method="get">
+
+        <fieldset>
+
+            <legend>Data diri</legend>
+
+            <label for="nm_dpn">Nama Depan: </label>
+            <br>
+            <input type="text" name="nm_dpn" id="nm_dpn" placeholder="Budi" required>
+            <br><br>
+
+            <label for="nm_blkn">Nama Belakang: </label>
+            <br>
+            <input type="text" name="nm_blkn" id="nm_blkn" placeholder="Santoso" required>
+            <br><br>
+
+            Jenis kelamin:
+            <br>
+            <input type="radio" id="cwo" name="klmn" value="Cowo">
+            <label for="cwo">Cowo</label>
+            <br>
+            <input type="radio" id="cwe" name="klmn" value="Cewe">
+            <label for="cwe">Cewe</label>
+            <br><br>
+
+            <label for="agm">Agama: </label>
+            <select id="agm" name="agama">
+                <option value="Islam" selected>-- Pilih Agama --</option>
+                <option value="Islam">Islam</option>
+                <option value="Kristen">Kristen</option>
+                <option value="Katolik">Katolik</option>
+                <option value="Hindu">Hindu</option>
+                <option value="Buddha">Buddha</option>
+                <option value="Konghucu">Konghucu</option>
+            </select>
+            <br><br>
+
+            <label for="almt">Alamat: </label>
+            <textarea id="almt" name="alamat" rows="5" cols="40" placeholder="Jl. Selokan Mataram..."></textarea>
+
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <legend>Makanan Favorit</legend>
+
+            <input type="checkbox" id="aym_bkr" name="makanan" value="Ayam Bakar">
+            <label for="aym_bkr">Ayam Bakar</label>
+            <br>
+            <input type="checkbox" id="aym_pds_mns" name="makanan" value="Ayam Pedas Manis">
+            <label for="aym_pds_mns">Ayam Pedas Manis</label>
+            <br>
+            <input type="checkbox" id="aym_ngkp" name="makanan" value="Ayam Pedas Manis">
+            <label for="aym_ngkp">Ayam Ungkep</label>
+            <br>
+            <input type="checkbox" id="aym_gprk" name="makanan" value="Ayam Geprek">
+            <label for="aym_gptk">Ayam Geprek</label>
+            <br>
+            <input type="checkbox" id="aym_grng" name="makanan" value="Ayam Goreng">
+            <label for="aym_grng">Ayam Goreng</label>
+            <br>
+
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <legend>Akun</legend>
+
+            <label for="pswd">Password:</label>
+            <br>
+            <input type="password" id="pswd" name="password">
+
+        </fieldset>
+
+        <br>
+
+        <input type="submit" value="Kirim">
+        <input type="reset" value="Hapus Semua">
+
+    </form>
+
+</body>
+</html>
