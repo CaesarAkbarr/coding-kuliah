@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontak - Caesar Akbar</title>
+    <!-- CSS Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+
+    <!-- Navbar Navigasi -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">Portofolio Mahasiswa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Biodata</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/proyek">Proyek</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/pendidikan">Pendidikan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/keahlian">Keahlian</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/kontak">Kontak</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Konten Kontak -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-primary text-white text-center py-3">
+                        <h4 class="mb-0">Hubungi Saya</h4>
+                    </div>
+                    <div class="card-body p-4">
+
+                        <div class="row g-4">
+                            <!-- Informasi Kontak -->
+                            <div class="col-md-6 border-end-md">
+                                <h5 class="text-primary fw-bold mb-3">Informasi Langsung</h5>
+                                <p class="text-secondary small mb-4">
+                                    Silakan hubungi kontak berikut untuk kolaborasi proyek, diskusi akademik, atau urusan kepengurusan organisasi.
+                                </p>
+
+                                <div class="mb-3">
+                                    <h6 class="fw-bold mb-0 text-dark">Email Mahasiswa</h6>
+                                    <p class="text-muted small mb-0">3253111006@student.uty.ac.id</p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <h6 class="fw-bold mb-0 text-dark">Program Studi</h6>
+                                    <p class="text-muted small mb-0">D3 Sistem Informasi - Universitas Teknologi Yogyakarta</p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <h6 class="fw-bold mb-0 text-dark">Lokasi Kampus</h6>
+                                    <p class="text-muted small mb-0">Kampus 1 UTY, Jl. Ringroad Utara, Jombor, Sleman, D.I. Yogyakarta</p>
+                                </div>
+
+                                <div>
+                                    <h6 class="fw-bold mb-0 text-dark">Profil GitHub</h6>
+                                    <p class="text-muted small mb-0">github.com/caesar-akbar</p>
+                                </div>
+                            </div>
+
+                            <!-- Formulir Pesan (UI View) -->
+                            <div class="col-md-6">
+                                <h5 class="text-primary fw-bold mb-3">Kirim Pesan Cepat</h5>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="nama" class="form-label small fw-semibold">Nama Lengkap</label>
+                                        <input type="text" class="form-control form-control-sm" id="nama" placeholder="Masukkan nama Anda">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label small fw-semibold">Alamat Email</label>
+                                        <input type="email" class="form-control form-control-sm" id="email" placeholder="nama@domain.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="subjek" class="form-label small fw-semibold">Subjek</label>
+                                        <input type="text" class="form-control form-control-sm" id="subjek" placeholder="Subjek pesan">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="pesan" class="form-label small fw-semibold">Isi Pesan</label>
+                                        <textarea class="form-control form-control-sm" id="pesan" rows="3" placeholder="Tuliskan pesan Anda..."></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm w-100">Kirim Pesan</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
