@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pert 5</title>
+</head>
+<body>
+
+    <!--Tes-->
+    <svg width="300" height="200">
+
+        <!-- Rectangle -->
+        <rect x="10" y="10" width="80" height="50" rx="5" fill="#4CAF50" stroke="#388E3C" stroke-width="2" />
+
+        <!-- Circle -->
+        <circle cx="130" cy="35" r="25" fill="#2196F3" stroke="#1976D2" stroke-width="2" />
+
+        <!-- Ellipse -->
+        <ellipse cx="200" cy="35" rx="30" ry="20" fill="#9C27B0" stroke="#7B1FA2" stroke-width="2" />
+
+        <!-- Line -->
+        <line x1="250" y1="10" x2="290" y2="60" stroke="#FF5722" stroke-width="3" />
+
+        <!-- Polyline -->
+        <polyline points="10,90 30,70 50,90 70,70" fill="none" stroke="#FF9800" stroke-width="3" />
+
+        <!-- Polygon -->
+        <polygon points="100,70 120,105 80,105" fill="#E91E63" stroke="#C2185B" stroke-width="2" />
+
+        <!-- Path -->
+        <path d="M 150 90 Q 175 60, 200 90 T 250 90" fill="none" stroke="#009688" stroke-width="3" />
+
+        <!-- Text -->
+        <text x="10" y="140" font-family="Arial, sans-serif" font-size="16" fill="#333333">SVG Example Text</text>
+
+    </svg>
+
+    <!--Bendera Amrik-->
+    <svg width="300" height="200">
+
+        <!-- Background / Red Stripes -->
+        <rect width="300" height="200" fill="#B22234" />
+
+        <!-- 6 White Stripes -->
+        <rect y="15.38" width="300" height="15.38" fill="#FFFFFF" />
+        <rect y="46.15" width="300" height="15.38" fill="#FFFFFF" />
+        <rect y="76.92" width="300" height="15.38" fill="#FFFFFF" />
+        <rect y="107.69" width="300" height="15.38" fill="#FFFFFF" />
+        <rect y="138.46" width="300" height="15.38" fill="#FFFFFF" />
+        <rect y="169.23" width="300" height="15.38" fill="#FFFFFF" />
+
+        <!-- Canton (Blue Field) covering top 7 stripes -->
+        <rect width="120" height="107.69" fill="#3C3B6E" />
+
+        <!-- 50 Stars -->
+        <defs>
+            <polygon id="star" points="0,-3.5 1.08,-1.08 3.33,-0.72 1.7,0.87 2.09,3.1 0,2.05 -2.09,3.1 -1.7,0.87 -3.33,-0.72 -1.08,-1.08" fill="#FFFFFF" />
+            <!-- Row of 6 stars -->
+            <g id="row6">
+                <use href="#star" x="10" />
+                <use href="#star" x="30" />
+                <use href="#star" x="50" />
+                <use href="#star" x="70" />
+                <use href="#star" x="90" />
+                <use href="#star" x="110" />
+            </g>
+            <!-- Row of 5 stars -->
+            <g id="row5">
+                <use href="#star" x="20" />
+                <use href="#star" x="40" />
+                <use href="#star" x="60" />
+                <use href="#star" x="80" />
+                <use href="#star" x="100" />
+            </g>
+        </defs>
+
+        <!-- 9 Rows of Stars alternating 6 and 5 -->
+        <use href="#row6" y="10.77" />
+        <use href="#row5" y="21.54" />
+        <use href="#row6" y="32.31" />
+        <use href="#row5" y="43.08" />
+        <use href="#row6" y="53.85" />
+        <use href="#row5" y="64.62" />
+        <use href="#row6" y="75.38" />
+        <use href="#row5" y="86.15" />
+        <use href="#row6" y="96.92" />
+
+    </svg>
+
+
+</body>
+</html>
