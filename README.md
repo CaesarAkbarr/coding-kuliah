@@ -1,39 +1,44 @@
 # Repository Coding Kuliah
 
-Selamat datang di repositori coding saya! Repositori ini berisi kumpulan tugas-tugas pemrograman dari perkuliahan saya, khususnya untuk mata kuliah Pemrograman Dasar, serta berbagai macam kode percobaan (eksperimen) yang saya buat untuk mengasah skill coding.
+Kumpulan tugas praktikum, latihan, dan proyek pemrograman perkuliahan Program Studi D3 Sistem Informasi, Fakultas Sains & Teknologi, Universitas Teknologi Yogyakarta.
 
 ## Struktur Repositori
 
-Di dalam repositori ini, terdapat beberapa folder yang merepresentasikan tugas-tugas atau proyek tertentu:
+Repositori ini disusun berdasarkan jenjang semester perkuliahan:
 
-- **Tugas1 - Tugas6**: Berisi kode sumber untuk perancangan aplikasi maupun penyelesaian soal logik yang diberikan selama masa perkuliahan.
-- **Tugas_lebaran**: Tugas khusus yang dikerjakan pada saat libur lebaran.
-- **3253111006**: Berisi file/proyek spesifik terkait perkuliahan (biasanya menggunakan format NIM Mahasiswa).
-
-_(Folder/file lainnya mungkin akan terus bertambah seiring berjalannya waktu pembelajaran)_
-
-## Apa Saja yang Ada di Sini?
-
-- **Tugas Kuliah**: Kumpulan source code dari tugas-tugas yang diberikan oleh dosen pengampu.
-- **Eksperimen Kode**: Kodingan bebas yang saya buat untuk mengetes pemahaman tentang suatu bahasa pemrograman, algoritma dasar, sintaks, atau fungsi tertentu (misalnya algoritma _Linked List_, Sistem GUI sederhana, koneksi ke Database, dll).
-- **Proyek Kecil**: Program mini yang dibuat untuk mengaplikasikan ilmu yang baru saja dipelajari.
+- **Semester 1**: Fondasi pemrograman dasar dan struktur data (Java).
+- **Semester 2**: Lanjutan pemrograman dan eksplorasi kode.
+- **Semester 3**:
+  - `PAVBW`: Pemrograman Aplikasi Visual Berbasis Web.
+  - `PBO`: Pemrograman Berorientasi Objek.
+  - `PWP`: Pemrograman Web Praktikum (Flask, MySQL, Bootstrap).
 
 ## Teknologi & Tools
 
-Karena repositori ini adalah tempat eksplorasi belajar, teknologi yang digunakan bisa bervariasi bergantung pada mata kuliah dan eksperimen. Beberapa di antaranya meliputi:
-
-- **Java** (terutama untuk Object Oriented Programming dan latihan dasar)
-- Bahasa pemrograman lainnya yang masuk ke dalam silabus atau minat belajar saya (_Python, C++, dll_).
+- **Bahasa Pemrograman**: Python, Java
+- **Framework & Web**: Flask, Jinja2, HTML5, CSS3, Bootstrap 5
+- **Database**: MySQL (XAMPP / Laragon)
+- **Tools**: Visual Studio Code, Git
 
 ## Cara Menjalankan
 
-Sebagian besar program yang ada di repositori ini adalah program _standalone_ yang bisa dieksekusi secara langsung._(Untuk sekarang)_
+### 1. Java (Semester 1 / PBO)
+Kompilasi dan jalankan file Java:
+```bash
+javac NamaFile.java
+java NamaFile
+```
 
-- Untuk **Java**: Lakukan kompilasi dengan `javac NamaFile.java` lalu jalankan dengan `java NamaFile`.
-- Untuk **Python**: Jalankan menggunakan perintah `python NamaFile.py`.
-
-Pastikan di perangkat kalian sudah terinstal _compiler_ atau _interpreter_ yang sesuai.
+### 2. Python / Flask (Semester 3 PWP)
+Masuk ke direktori pertemuan terkait (misal `Semester 3/PWP/Pert4`):
+```bash
+python -m venv .venv
+source .venv/Scripts/activate  # Windows Git Bash
+pip install -r requirements.txt
+flask run
+```
+*Catatan: Pastikan service MySQL sudah aktif dan file konfigurasi `.env` sudah disesuaikan.*
 
 ---
 
-_Dibuat sebagai jurnal dan dokumentasi perjalanan belajar coding saya di dunia perkuliahan Universitas Teknologi Yogyakarta._ 🚀
+Dokumentasi belajar coding perkuliahan Universitas Teknologi Yogyakarta. 🚀
