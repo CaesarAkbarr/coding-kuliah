@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">Keranjang Belanja</h2>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table align-middle" id="cartTable">
+            <thead>
+                <tr>
+                    <th scope="col">Produk</th>
+                    <th scope="col">Nama Item</th>
+                    <th scope="col">Harga</th>
+                    <th scope="col" style="width: 150px;">Kuantitas</th>
+                    <th scope="col" class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr id="cart-row-{{ item.product_id }}">
+                    <td><img src="{{ item.image }}" width="50" height="50" style="object-fit: contain;"></td>
+                    <td>{{ item.title }}</td>
+                    <td>${{ item.price }}</td>
+                    <td>
+                        <div class="cart-controls" data-id="{{ item.product_id }}" data-price="{{ item.price }}">
+                            <div class="input-group input-group-sm">
+                                <button class="btn btn-outline-secondary btn-qty-minus">-</button>
+                                <input type="text" class="form-control text-center input-qty" value="{{ item.quantity }}" readonly>
+                                <button class="btn btn-outline-secondary btn-qty-plus">+</button>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-end fw-semibold" id="subtotal-{{ item.product_id }}">
+                        ${{ (item.price * item.quantity) | round(2) }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr id="empty-cart-row">
+                    <td colspan="5" class="text-center text-muted">Keranjang masih kosong.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="table-group-divider fw-bold fs-5">
+                    <td colspan="4" class="text-end">Total Pembayaran:</td>
+                    <td class="text-end text-success">$<span id="cartTotal">{{ total | round(2) }}</span></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% endblock %}
