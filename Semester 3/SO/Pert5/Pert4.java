@@ -1,7 +1,12 @@
 import java.util.Scanner;
 
-public class fcfs {
+public class Pert4 {
     public static void main(String[] args) {
+        fcfs();
+    }
+
+    public static void fcfs() {
+
         Scanner sc = new Scanner(System.in);
 
         System.out.print("Jumlah proses: ");
@@ -34,4 +39,5 @@ public class fcfs {
         sc.close();
 
     }
+
 }

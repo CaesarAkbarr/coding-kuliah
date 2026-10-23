@@ -21,7 +21,7 @@ def init_db():
     # Koneksi SQLite: Jika file db sqlite belum ada, akan otomatis terbuat
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
+
     # Tabel Users
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
@@ -30,8 +30,8 @@ def init_db():
             password TEXT NOT NULL
         )
     ''')
-    
-    # Tabel Cart 
+
+    # Tabel Cart
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS cart (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,7 +72,7 @@ def register():
             return "Username sudah terdaftar!"
         finally:
             conn.close()
-            
+
     return render_template('register.html')
 
 # ROUTE: Login
@@ -109,12 +109,12 @@ def logout():
 def home():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    
+
     # Flask HANYA mengambil data keranjang dari database lokal
     conn = get_db_connection()
     cart_rows = conn.execute('SELECT product_id, quantity FROM cart WHERE user_id = ?', (session['user_id'],)).fetchall()
     conn.close()
-    
+
     # Konversi ke dictionary agar mudah dibaca oleh JavaScript (contoh: {"1": 2, "3": 1})
     cart_data = {str(row['product_id']): row['quantity'] for row in cart_rows}
 
@@ -126,11 +126,11 @@ def home():
 def add_to_cart():
     if 'user_id' not in session:
         return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
-    
+
     data = request.json
     conn = get_db_connection()
     conn.execute('''
-        INSERT INTO cart (user_id, product_id, title, price, image) 
+        INSERT INTO cart (user_id, product_id, title, price, image)
         VALUES (?, ?, ?, ?, ?)
     ''', (session['user_id'], data['id'], data['title'], data['price'], data['image']))
     conn.commit()
@@ -143,24 +143,24 @@ def add_to_cart():
 def remove_from_cart():
     if 'user_id' not in session:
         return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
-    
+
     data = request.json
     cart_id = data.get('cart_id')
     user_id = session['user_id']
-    
+
     conn = get_db_connection()
     # Hapus item spesifik berdasarkan ID keranjang dan User ID
     conn.execute('DELETE FROM cart WHERE id = ? AND user_id = ?', (cart_id, user_id))
-    
+
     # Hitung ulang total harga setelah item dihapus
     items = conn.execute('SELECT price FROM cart WHERE user_id = ?', (user_id,)).fetchall()
     new_total = sum(item['price'] for item in items)
-    
+
     conn.commit()
     conn.close()
 
     return jsonify({
-        'status': 'success', 
+        'status': 'success',
         'message': 'Item berhasil dihapus',
         'new_total': new_total
     })
@@ -169,14 +169,14 @@ def remove_from_cart():
 def update_cart():
     if 'user_id' not in session:
         return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
-    
+
     data = request.json
     user_id = session['user_id']
     product_id = data['product_id']
     qty = data['quantity']
-    
+
     conn = get_db_connection()
-    
+
     # Jika kuantitas diatur ke 0, hapus dari database
     if qty <= 0:
         conn.execute('DELETE FROM cart WHERE user_id = ? AND product_id = ?', (user_id, product_id))
@@ -187,14 +187,14 @@ def update_cart():
             conn.execute('UPDATE cart SET quantity = ? WHERE id = ?', (qty, existing['id']))
         else:
             conn.execute('''
-                INSERT INTO cart (user_id, product_id, title, price, image, quantity) 
+                INSERT INTO cart (user_id, product_id, title, price, image, quantity)
                 VALUES (?, ?, ?, ?, ?, ?)
             ''', (user_id, product_id, data.get('title'), data.get('price'), data.get('image'), qty))
-    
+
     # Hitung ulang total harga keranjang
     items = conn.execute('SELECT price, quantity FROM cart WHERE user_id = ?', (user_id,)).fetchall()
     new_total = sum(item['price'] * item['quantity'] for item in items)
-    
+
     conn.commit()
     conn.close()
 
@@ -205,18 +205,18 @@ def update_cart():
 def cart():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-        
+
     conn = get_db_connection()
     items = conn.execute('SELECT * FROM cart WHERE user_id = ?', (session['user_id'],)).fetchall()
     conn.close()
-    
+
     # Update kalkulasi total dikali kuantitas
     total = sum(item['price'] * item['quantity'] for item in items)
     return render_template('cart.html', items=items, total=total)
 
 if __name__ == '__main__':
     app.run(
-        debug=os.getenv("FLASK_APP"), 
-        host=os.getenv("FLASK_HOST"), 
+        debug=os.getenv("FLASK_APP"),
+        host=os.getenv("FLASK_HOST"),
         port=os.getenv("FLASK_PORT"),
     )
