@@ -8,10 +8,14 @@ Repositori ini disusun berdasarkan jenjang semester perkuliahan:
 
 - **Semester 1**: Fondasi pemrograman dasar dan struktur data (Java).
 - **Semester 2**: Lanjutan pemrograman dan eksplorasi kode.
+<!-- AUTO_SEMESTER_3_START -->
 - **Semester 3**:
-  - `PAVBW`: Pemrograman Aplikasi Visual Berbasis Web.
-  - `PBO`: Pemrograman Berorientasi Objek.
-  - `PWP`: Pemrograman Web Praktikum (Flask, MySQL, Bootstrap).
+  - `PAVBW` (Pemrograman Aplikasi Visual Berbasis Web): Pert 1, Pert 2, Pert 3, Pert 4, Pert5
+  - `PBO` (Pemrograman Berorientasi Objek): Pert 1, Pert 2, Pert 3, Pert4 Quiz, Pert5
+  - `PWP` (Pemrograman Web Praktikum): Pert3, Pert4, Pert5
+  - `RPL` (Rekayasa Perangkat Lunak): Tugas-Git
+  - `SO` (Sistem Operasi): Pert5
+<!-- AUTO_SEMESTER_3_END -->
 
 ## Teknologi & Tools
 
