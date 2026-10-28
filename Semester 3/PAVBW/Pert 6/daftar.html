@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pendaftaran Akun - Pertemuan 6</title>
+</head>
+<body>
+
+    <header>
+
+        <h1>Google Gemini (Gemini AI)</h1>
+        <p>Daftarkan dirimu menjadi mitra Gemini sekarang!</p>
+
+        <nav>
+            <a href="index.html"><button type="button">Beranda</button></a>
+        </nav>
+
+    </header>
+
+    <hr>
+
+    <main>
+
+        <!--Form-->
+        <form action="perkenalan.html" method="get">
+
+            <fieldset>
+
+                <legend>Daftar Gemini</legend>
+
+                <label for="nm_dpn">Nama Depan: </label>
+                <br>
+                <input type="text" name="nm_dpn" id="nm_dpn" placeholder="Budi" required>
+                <br><br>
+
+                <label for="nm_blkn">Nama Belakang: </label>
+                <br>
+                <input type="text" name="nm_blkn" id="nm_blkn" placeholder="Santoso" required>
+                <br><br>
+
+                Jenis kelamin:
+                <br>
+                <input type="radio" id="cwo" name="klmn" value="Cowo">
+                <label for="cwo">Cowo</label>
+                <br>
+                <input type="radio" id="cwe" name="klmn" value="Cewe">
+                <label for="cwe">Cewe</label>
+                <br><br>
+
+                <label for="pkt">Paket: </label>
+                <select id="pkt" name="paket" required>
+                    <option value="" selected>-- Pilih Paket --</option>
+                    <option value="Gratis">Gratis</option>
+                    <option value="Advanced">Gemini Advanced</option>
+                    <option value="Business">Gemini Business</option>
+                    <option value="Enterprise">Gemini Enterprise</option>
+                </select>
+
+            </fieldset>
+
+            <br>
+
+            <fieldset>
+                <legend>Kenal Gemini dari mana?</legend>
+
+                <input type="checkbox" id="knl_yt" name="kenal_gemini" value="YouTube">
+                <label for="knl_yt">YouTube</label>
+                <br>
+                <input type="checkbox" id="knl_sosmed" name="kenal_gemini" value="Media Sosial">
+                <label for="knl_sosmed">Media Sosial</label>
+                <br>
+                <input type="checkbox" id="knl_teman" name="kenal_gemini" value="Teman/Keluarga">
+                <label for="knl_teman">Teman/Keluarga</label>
+                <br>
+                <input type="checkbox" id="knl_search" name="kenal_gemini" value="Google Search">
+                <label for="knl_search">Google Search</label>
+                <br>
+                <input type="checkbox" id="knl_lain" name="kenal_gemini" value="Lainnya">
+                <label for="knl_lain">Lainnya</label>
+                <br>
+
+            </fieldset>
+
+            <br>
+
+            <fieldset>
+                <legend>Akun</legend>
+
+                <label for="email">Email Google:</label>
+                <br>
+                <input type="email" id="email" name="email" placeholder="nama@gmail.com" required>
+                <br><br>
+
+                <label for="username">Username:</label>
+                <br>
+                <input type="text" id="username" name="username" placeholder="username" required>
+                <br><br>
+
+                <label for="pswd">Password:</label>
+                <br>
+                <input type="password" id="pswd" name="password" required>
+
+            </fieldset>
+
+            <br>
+
+            <input type="submit" value="Kirim">
+            <input type="reset" value="Hapus Semua">
+
+        </form>
+
+    </main>
+
+    <hr>
+
+    <footer>
+
+        <p>&copy; 2026 Praktikum Aplikasi Pemrograman Berbasis Web (PAVBW) &bull; Pertemuan 6</p>
+        <p>Universitas Teknologi Yogyakarta (UTY)</p>
+
+    </footer>
+
+</body>
+</html>

@@ -10,7 +10,7 @@ Repositori ini disusun berdasarkan jenjang semester perkuliahan:
 - **Semester 2**: Lanjutan pemrograman dan eksplorasi kode.
 <!-- AUTO_SEMESTER_3_START -->
 - **Semester 3**:
-  - `PAVBW` (Pemrograman Aplikasi Visual Berbasis Web): Pert 1, Pert 2, Pert 3, Pert 4, Pert5
+  - `PAVBW` (Pemrograman Aplikasi Visual Berbasis Web): Pert 1, Pert 2, Pert 3, Pert 4, Pert 5, Pert 6
   - `PBO` (Pemrograman Berorientasi Objek): Pert 1, Pert 2, Pert 3, Pert4 Quiz, Pert5
   - `PWP` (Pemrograman Web Praktikum): Pert3, Pert4, Pert5
   - `RPL` (Rekayasa Perangkat Lunak): Tugas-Git
