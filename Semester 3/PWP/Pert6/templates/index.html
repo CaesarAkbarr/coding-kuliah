@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemrograman Web Praktik</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Styling tambahan khusus untuk list endpoint agar tidak merusak CSS utama */
+        .endpoint-list { list-style: none; padding: 0; margin: 0; font-size: 13px; }
+        .endpoint-list li {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background-color: var(--bg-input);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .endpoint-list li:hover {
+            border-color: var(--primary);
+            background-color: rgba(64, 117, 255, 0.05);
+        }
+        .method-get { color: #10b981; font-weight: bold; margin-right: 8px; }
+        .ep-url { color: var(--text-main); font-weight: 500; }
+        .ep-desc { color: var(--text-muted); margin-top: 5px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <h1>Pemrograman Web Praktik <span class="badge">internal debug</span></h1>
+    </header>
+
+    <div class="main-container">
+        <!-- Kolom Kiri: Request Builder & Batch -->
+        <div class="left-panel">
+            <!-- REQUEST BUILDER -->
+            <div class="card">
+                <div class="card-header">REQUEST BUILDER</div>
+                
+                <div class="form-group flex-row">
+                    <select id="req-method" class="input-dark select-method">
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
+                    <input type="text" id="req-url" class="input-dark input-flex" value="/topics" placeholder="Enter endpoint URL...">
+                </div>
+
+                <div class="form-group mt-3">
+                    <label>Bearer Token <span class="text-muted">(optional — for auth:api routes)</span></label>
+                    <input type="text" id="req-token" class="input-dark w-100" placeholder="eyJhbgciOi...">
+                </div>
+
+                <!-- Headers Section -->
+                <div class="form-group mt-3">
+                    <label>Headers</label>
+                    <div id="headers-container">
+                        <div class="kv-row">
+                            <input type="text" class="input-dark header-key" value="Accept">
+                            <input type="text" class="input-dark header-value" value="application/json">
+                            <button class="btn-icon btn-remove">&times;</button>
+                        </div>
+                    </div>
+                    <button id="add-header" class="btn-secondary btn-sm mt-2">+ Add Header</button>
+                </div>
+
+                <!-- Body Section -->
+                <div class="form-group mt-3">
+                    <label>Body</label>
+                    <div class="tabs mb-2">
+                        <button class="tab-btn active" data-target="body-kv">Key / Value</button>
+                        <button class="tab-btn" data-target="body-raw">Raw JSON</button>
+                    </div>
+                    
+                    <div id="body-kv" class="tab-content active">
+                        <div id="body-container">
+                            <div class="kv-row">
+                                <input type="text" class="input-dark body-key" placeholder="Key (e.g. email)">
+                                <input type="text" class="input-dark body-value" placeholder="Value (e.g. user@mail.com)">
+                                <button class="btn-icon btn-remove">&times;</button>
+                            </div>
+                        </div>
+                        <button id="add-body" class="btn-secondary btn-sm mt-2">+ Add Field</button>
+                    </div>
+
+                    <div id="body-raw" class="tab-content" style="display: none;">
+                        <textarea id="raw-json-input" class="input-dark w-100" rows="4" placeholder='{"key": "value"}'></textarea>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-row mt-4">
+                    <button id="btn-send" class="btn-primary">Send</button>
+                    <button class="btn-secondary">+ Add to Batch</button>
+                </div>
+            </div>
+
+            <!-- AVAILABLE ENDPOINTS -->
+            <div class="card mt-4">
+                <div class="card-header">AVAILABLE ENDPOINTS</div>
+                <ul class="endpoint-list">
+                    <li onclick="document.getElementById('req-url').value='/topics'">
+                        <span class="method-get">GET</span> <span class="ep-url">/topics</span>
+                        <div class="ep-desc">Melihat semua topik pembahasan matakuliah</div>
+                    </li>
+                    <li onclick="document.getElementById('req-url').value='/tasks'">
+                        <span class="method-get">GET</span> <span class="ep-url">/tasks</span>
+                        <div class="ep-desc">Melihat semua tugas yang dibebankan kepada mahasiswa</div>
+                    </li>
+                    <li onclick="document.getElementById('req-url').value='/projects'">
+                        <span class="method-get">GET</span> <span class="ep-url">/projects</span>
+                        <div class="ep-desc">Melihat semua project (Responsi & Tugas Besar)</div>
+                    </li>
+                    <li onclick="document.getElementById('req-url').value='/projects/responsi'">
+                        <span class="method-get">GET</span> <span class="ep-url">/projects/responsi</span>
+                        <div class="ep-desc">Melihat detail informasi dan topik mengenai Practical Exam</div>
+                    </li>
+                    <li onclick="document.getElementById('req-url').value='/projects/final-project'">
+                        <span class="method-get">GET</span> <span class="ep-url">/projects/final-project</span>
+                        <div class="ep-desc">Melihat detail informasi dan topik mengenai Final Project</div>
+                    </li>
+                </ul>
+                <p class="text-muted text-sm" style="margin-top: 10px;">* Klik pada daftar endpoint di atas untuk menyalin URL otomatis ke Request Builder.</p>
+            </div>
+
+            <!-- BATCH QUEUE -->
+            <div class="card mt-4">
+                <div class="card-header">BATCH QUEUE</div>
+                <p class="text-muted text-sm">Batch is empty.</p>
+                <div class="action-row mt-3">
+                    <button class="btn-primary disabled">Run Batch</button>
+                    <button class="btn-danger-outline">Clear Batch</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Kolom Kanan: Response & Logs -->
+        <div class="right-panel">
+            
+            <!-- RESPONSE -->
+            <div class="card response-card">
+                <div class="card-header">RESPONSE</div>
+                <div id="response-status" class="text-muted text-sm mb-2">No request sent yet.</div>
+                <pre id="response-body" class="code-block"></pre>
+            </div>
+
+            <!-- SESSION LOG -->
+            <div class="card mt-4">
+                <div class="card-header flex-between">
+                    <span>SESSION LOG</span>
+                    <div>
+                        <button class="btn-secondary btn-sm">Reload</button>
+                        <button class="btn-danger-outline btn-sm">Clear Log</button>
+                    </div>
+                </div>
+                <div class="log-container mt-2">
+                    <p class="text-muted text-sm">Log is empty.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
