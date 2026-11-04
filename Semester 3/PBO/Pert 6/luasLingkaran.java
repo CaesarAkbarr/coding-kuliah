@@ -3,10 +3,18 @@ class lingkaran {
     private double phi;
     private double r;
 
+    public double total;
+
     public lingkaran() {
 
         this.phi = 3.14;
         this.r = 0;
+
+    }
+
+    public double hitungLuas() {
+
+            return phi * (r * r);
 
     }
 
@@ -42,7 +50,7 @@ public class luasLingkaran {
 
         lingkaran luas = new lingkaran();
         luas.setr(5);
-        System.
+        System.out.println("Luas: " + luas.hitungLuas());
 
     }
 
