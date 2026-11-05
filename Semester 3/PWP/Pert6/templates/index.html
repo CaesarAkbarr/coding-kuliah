@@ -38,7 +38,7 @@
             <!-- REQUEST BUILDER -->
             <div class="card">
                 <div class="card-header">REQUEST BUILDER</div>
-                
+
                 <div class="form-group flex-row">
                     <select id="req-method" class="input-dark select-method">
                         <option value="GET">GET</option>
@@ -46,7 +46,7 @@
                         <option value="PUT">PUT</option>
                         <option value="DELETE">DELETE</option>
                     </select>
-                    <input type="text" id="req-url" class="input-dark input-flex" value="/topics" placeholder="Enter endpoint URL...">
+                    <input type="text" id="req-url" class="input-dark input-flex" value="/api/v1/profile" placeholder="Enter endpoint URL...">
                 </div>
 
                 <div class="form-group mt-3">
@@ -74,7 +74,7 @@
                         <button class="tab-btn active" data-target="body-kv">Key / Value</button>
                         <button class="tab-btn" data-target="body-raw">Raw JSON</button>
                     </div>
-                    
+
                     <div id="body-kv" class="tab-content active">
                         <div id="body-container">
                             <div class="kv-row">
@@ -102,25 +102,25 @@
             <div class="card mt-4">
                 <div class="card-header">AVAILABLE ENDPOINTS</div>
                 <ul class="endpoint-list">
-                    <li onclick="document.getElementById('req-url').value='/topics'">
-                        <span class="method-get">GET</span> <span class="ep-url">/topics</span>
-                        <div class="ep-desc">Melihat semua topik pembahasan matakuliah</div>
+                    <li onclick="document.getElementById('req-url').value='/api/v1/profile'">
+                        <span class="method-get">GET</span> <span class="ep-url">/api/v1/profile</span>
+                        <div class="ep-desc">Melihat profil organisasi dan visi misi HMSI UTY</div>
                     </li>
-                    <li onclick="document.getElementById('req-url').value='/tasks'">
-                        <span class="method-get">GET</span> <span class="ep-url">/tasks</span>
-                        <div class="ep-desc">Melihat semua tugas yang dibebankan kepada mahasiswa</div>
+                    <li onclick="document.getElementById('req-url').value='/api/v1/divisions'">
+                        <span class="method-get">GET</span> <span class="ep-url">/api/v1/divisions</span>
+                        <div class="ep-desc">Melihat daftar divisi kepengurusan HMSI periode 2026/2027</div>
                     </li>
-                    <li onclick="document.getElementById('req-url').value='/projects'">
-                        <span class="method-get">GET</span> <span class="ep-url">/projects</span>
-                        <div class="ep-desc">Melihat semua project (Responsi & Tugas Besar)</div>
+                    <li onclick="document.getElementById('req-url').value='/api/v1/work-programs'">
+                        <span class="method-get">GET</span> <span class="ep-url">/api/v1/work-programs</span>
+                        <div class="ep-desc">Melihat daftar program kerja unggulan HMSI UTY</div>
                     </li>
-                    <li onclick="document.getElementById('req-url').value='/projects/responsi'">
-                        <span class="method-get">GET</span> <span class="ep-url">/projects/responsi</span>
-                        <div class="ep-desc">Melihat detail informasi dan topik mengenai Practical Exam</div>
+                    <li onclick="document.getElementById('req-url').value='/api/v1/work-programs/sisfornite'">
+                        <span class="method-get">GET</span> <span class="ep-url">/api/v1/work-programs/sisfornite</span>
+                        <div class="ep-desc">Melihat rincian detail program kerja Makrab Sisfornite</div>
                     </li>
-                    <li onclick="document.getElementById('req-url').value='/projects/final-project'">
-                        <span class="method-get">GET</span> <span class="ep-url">/projects/final-project</span>
-                        <div class="ep-desc">Melihat detail informasi dan topik mengenai Final Project</div>
+                    <li onclick="document.getElementById('req-url').value='/api/v1/work-programs/fusion-tech'">
+                        <span class="method-get">GET</span> <span class="ep-url">/api/v1/work-programs/fusion-tech</span>
+                        <div class="ep-desc">Melihat rincian detail kompetisi teknologi Fusion Tech 2026</div>
                     </li>
                 </ul>
                 <p class="text-muted text-sm" style="margin-top: 10px;">* Klik pada daftar endpoint di atas untuk menyalin URL otomatis ke Request Builder.</p>
@@ -140,7 +140,7 @@
 
         <!-- Kolom Kanan: Response & Logs -->
         <div class="right-panel">
-            
+
             <!-- RESPONSE -->
             <div class="card response-card">
                 <div class="card-header">RESPONSE</div>
