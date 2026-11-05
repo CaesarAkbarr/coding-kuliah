@@ -46,12 +46,24 @@ public class latihanGame {
 
         warrior hero1 = new warrior();
 
+
         hero1.nama = "Hylos";
         hero1.attackPoint = 5;
         hero1.hp = 200;
+        hero1.defense = 100;
 
         hero1.infoKarakter();
         hero1.statusWarrior();
+
+        mage hero2 = new mage();
+
+        hero2.nama = "Kagura";
+        hero2.attackPoint = 30;
+        hero2.hp = 80;
+        hero2.mana = 50;
+
+        hero2.infoKarakter();
+        hero2.statusMage();
 
 
     }
