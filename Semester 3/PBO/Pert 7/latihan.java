@@ -8,7 +8,7 @@ class pegawai {
         System.out.println();
         System.out.println("=== System Gajian Java ===");
         System.out.println("Nama Pegawai: " + nama);
-        System.out.printf("Gaji Pegawai: Rp %,d%n", gajiPokok);
+        System.out.printf("Gaji Pegawai: Rp. %,d%n", gajiPokok);
 
     }
 }
@@ -21,8 +21,8 @@ class manajer extends pegawai {
         int tunjangan = (gajiPokok * 20) / 100;
         int totalManajer = tunjangan + gajiPokok;
         System.out.println("Jabatan : Manajer");
-        System.out.printf("Tunjangan: Rp %,d%n", tunjangan);
-        System.out.printf("Total Gaji: Rp %,d%n", totalManajer);
+        System.out.printf("Tunjangan 20%: Rp. %,d%n", tunjangan);
+        System.out.printf("Total Gaji: Rp. %,d%n", totalManajer);
 
     }
 
