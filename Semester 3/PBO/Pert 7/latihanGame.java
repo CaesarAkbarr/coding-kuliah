@@ -44,7 +44,15 @@ public class latihanGame {
 
     public static void main(String[] args) {
 
-        
+        warrior hero1 = new warrior();
+
+        hero1.nama = "Hylos";
+        hero1.attackPoint = 5;
+        hero1.hp = 200;
+
+        hero1.infoKarakter();
+        hero1.statusWarrior();
+
 
     }
 
