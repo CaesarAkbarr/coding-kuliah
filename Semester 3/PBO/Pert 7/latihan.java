@@ -25,7 +25,6 @@ class manajer extends pegawai {
         System.out.printf("Total Gaji: Rp. %,d%n", totalManajer);
 
     }
-
 }
 
 public class latihan {
