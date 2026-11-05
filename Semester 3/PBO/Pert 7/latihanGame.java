@@ -5,9 +5,9 @@ class karakterGame {
 
     void infoKarakter() {
 
-        system.out.println("Nama hero: " + nama);
-        system.out.println("HP: " + hp);
-        system.out.println("Attack Point: " + attackPoint);
+        System.out.println("Nama hero: " + nama);
+        System.out.println("HP: " + hp);
+        System.out.println("Attack Point: " + attackPoint);
 
     }
 }
@@ -19,8 +19,8 @@ class warrior extends karakterGame {
     void statusWarrior() {
 
         int totalHp = hp + defense;
-        system.out.println("Defense: " + defense);
-        system.out.println("Total HP: " + totalHp);
+        System.out.println("Defense: " + defense);
+        System.out.println("Total HP: " + totalHp);
 
     }
 
@@ -33,8 +33,8 @@ class mage extends karakterGame {
     void statusMage() {
 
         int totalAttack = attackPoint + mana;
-        system.out.println("Mana: " + mana);
-        system.out.println("Total Attack: " + totalAttack);
+        System.out.println("Mana: " + mana);
+        System.out.println("Total Attack: " + totalAttack);
 
     }
 
@@ -44,7 +44,7 @@ public class latihanGame {
 
     public static void main(String[] args) {
 
-
+        
 
     }
 
