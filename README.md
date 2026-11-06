@@ -11,7 +11,7 @@ Repositori ini disusun berdasarkan jenjang semester perkuliahan:
 <!-- AUTO_SEMESTER_3_START -->
 - **Semester 3**:
   - `PAVBW` (Pemrograman Aplikasi Visual Berbasis Web): Pert 1, Pert 2, Pert 3, Pert 4, Pert 5, Pert 6
-  - `PBO` (Pemrograman Berorientasi Objek): Pert 1, Pert 2, Pert 3, Pert 4 Quiz, Pert 5, Pert 6
+  - `PBO` (Pemrograman Berorientasi Objek): matri-asdos-PBO, Pert 1, Pert 2, Pert 3, Pert 4 Quiz, Pert 5, Pert 6, Pert 7
   - `PWP` (Pemrograman Web Praktikum): Pert3, Pert4, Pert5, Pert6
   - `RPL` (Rekayasa Perangkat Lunak): Tugas-Git
   - `SO` (Sistem Operasi): Pert 5, Pert 6
