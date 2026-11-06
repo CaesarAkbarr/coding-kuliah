@@ -16,7 +16,11 @@ endblock %} {% block content %}
         </div>
         {% endif %}
 
-        <form method="POST" action="{{ url_for('register') }}">
+        <form
+          id="form-register"
+          method="POST"
+          action="{{ url_for('register') }}"
+        >
           <div class="mb-3">
             <label for="nim" class="form-label fw-semibold"
               >Nomor Induk Mahasiswa (NIM)</label
@@ -88,4 +92,14 @@ endblock %} {% block content %}
     </div>
   </div>
 </div>
-{% endblock %}
+{% if error %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    showPopupModal(
+      "Peringatan Pendaftaran",
+      "{{ error_title }}",
+      "{{ error }}",
+    );
+  });
+</script>
+{% endif %} {% endblock %}

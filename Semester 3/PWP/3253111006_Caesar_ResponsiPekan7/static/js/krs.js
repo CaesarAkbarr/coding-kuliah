@@ -112,3 +112,66 @@ $(document).ready(function () {
     });
   });
 });
+
+// Fungsi Global Menampilkan Pop-Up Modal Error
+window.showPopupModal = function (title, heading, message) {
+  $("#modalTitle").text(title);
+  $("#modalHeading").text(heading);
+  $("#modalBody").text(message);
+  const modalEl = document.getElementById("feedbackModal");
+  if (modalEl) {
+    const feedbackModal = new bootstrap.Modal(modalEl);
+    feedbackModal.show();
+  }
+};
+
+$(document).ready(function () {
+  // 1. Validasi Client-Side Form Login (Cegah tipe data salah sebelum dikirim)
+  $("#form-login").on("submit", function (e) {
+    const nim = $("#nim").val().trim();
+    if (!/^\d+$/.test(nim)) {
+      e.preventDefault();
+      showPopupModal(
+        "Tipe Data Salah",
+        "Format NIM Tidak Valid",
+        "NIM harus berupa angka (numerik), tidak boleh mengandung huruf atau simbol!",
+      );
+    }
+  });
+
+  // 2. Validasi Client-Side Form Register
+  $("#form-register").on("submit", function (e) {
+    const nim = $("#nim").val().trim();
+    const pass = $("#password").val();
+
+    if (!/^\d+$/.test(nim)) {
+      e.preventDefault();
+      showPopupModal(
+        "Tipe Data Salah",
+        "Format NIM Tidak Valid",
+        "NIM harus berupa angka (numerik), tidak boleh mengandung huruf atau simbol!",
+      );
+      return;
+    }
+
+    if (nim.length < 8 || nim.length > 15) {
+      e.preventDefault();
+      showPopupModal(
+        "Panjang NIM Tidak Sesuai",
+        "Panjang Karakter Tidak Valid",
+        "NIM harus terdiri dari 8 hingga 15 digit angka!",
+      );
+      return;
+    }
+
+    if (pass.length < 6) {
+      e.preventDefault();
+      showPopupModal(
+        "Kata Sandi Lemah",
+        "Password Terlalu Pendek",
+        "Kata sandi minimal harus 6 karakter untuk menjaga keamanan akun!",
+      );
+      return;
+    }
+  });
+});

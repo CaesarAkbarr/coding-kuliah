@@ -29,8 +29,16 @@ def login():
     success = request.args.get("success")
 
     if request.method == "POST":
-        nim = request.form.get("nim")
-        password = request.form.get("password")
+        nim = request.form.get("nim", "").strip()
+        password = request.form.get("password", "")
+
+        # Validasi tipe data NIM di sisi server
+        if not nim.isdigit():
+            return render_template(
+                "login.html",
+                error_title="Tipe Data Salah",
+                error="Format NIM harus berupa angka numerik, tidak boleh berisi karakter huruf atau simbol!",
+            )
 
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -39,37 +47,76 @@ def login():
         cursor.close()
         conn.close()
 
-        if user and user["password"] == password:
-            session["user_id"] = user["id"]
-            session["nim"] = user["nim"]
-            session["nama"] = user["nama"]
-            return redirect(url_for("index"))
-        else:
+        # Validasi keberadaan akun di database
+        if not user:
             return render_template(
-                "login.html", error="NIM atau password salah!", success=success
+                "login.html",
+                error_title="Akun Tidak Terdaftar",
+                error=f"NIM {nim} tidak ditemukan dalam database sistem. Silakan lakukan pendaftaran akun terlebih dahulu!",
             )
+
+        # Validasi kecocokan password
+        if user["password"] != password:
+            return render_template(
+                "login.html",
+                error_title="Kata Sandi Salah",
+                error="Kata sandi yang Anda masukkan tidak cocok dengan data akun!",
+            )
+
+        # Jika lolos seluruh validasi
+        session["user_id"] = user["id"]
+        session["nim"] = user["nim"]
+        session["nama"] = user["nama"]
+        return redirect(url_for("index"))
 
     return render_template("login.html", success=success)
 
 
 # Rute Autentikasi: Register Mahasiswa Baru
 @app.route("/register", methods=["GET", "POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     if "user_id" in session:
         return redirect(url_for("index"))
 
     if request.method == "POST":
-        nim = request.form.get("nim")
-        nama = request.form.get("nama")
-        password = request.form.get("password")
+        nim = request.form.get("nim", "").strip()
+        nama = request.form.get("nama", "").strip()
+        password = request.form.get("password", "")
 
         if not nim or not nama or not password:
-            return render_template("register.html", error="Semua kolom wajib diisi!")
+            return render_template(
+                "register.html",
+                error_title="Kolom Belum Lengkap",
+                error="Seluruh kolom pendaftaran wajib diisi!",
+            )
+
+        # Validasi tipe data NIM
+        if not nim.isdigit():
+            return render_template(
+                "register.html",
+                error_title="Tipe Data Salah",
+                error="NIM wajib berupa angka numerik!",
+            )
+
+        if len(nim) < 8 or len(nim) > 15:
+            return render_template(
+                "register.html",
+                error_title="Panjang Karakter Salah",
+                error="NIM mahasiswa harus terdiri dari 8 hingga 15 digit angka!",
+            )
+
+        if len(password) < 6:
+            return render_template(
+                "register.html",
+                error_title="Password Lemah",
+                error="Kata sandi minimal harus terdiri dari 6 karakter!",
+            )
 
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Cek apakah NIM sudah pernah didaftarkan
+        # Cek duplikasi di database
         cursor.execute("SELECT id FROM mahasiswa WHERE nim = %s", (nim,))
         existing_user = cursor.fetchone()
 
@@ -77,7 +124,9 @@ def register():
             cursor.close()
             conn.close()
             return render_template(
-                "register.html", error="NIM ini sudah terdaftar! Silakan login."
+                "register.html",
+                error_title="Data Sudah Terdaftar",
+                error=f"NIM {nim} sudah terdaftar di database! Silakan langsung login atau gunakan NIM Anda sendiri.",
             )
 
         try:
@@ -91,13 +140,17 @@ def register():
             return redirect(
                 url_for(
                     "login",
-                    success="Registrasi berhasil! Silakan login dengan NIM Anda.",
+                    success="Registrasi berhasil! Silakan login dengan akun baru Anda.",
                 )
             )
         except mysql.connector.Error as err:
             cursor.close()
             conn.close()
-            return render_template("register.html", error=f"Gagal mendaftar: {err}")
+            return render_template(
+                "register.html",
+                error_title="Kesalahan Database",
+                error=f"Terjadi kendala saat menyimpan data: {err}",
+            )
 
     return render_template("register.html")
 
