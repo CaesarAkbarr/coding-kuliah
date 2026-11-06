@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "kunci_rahasia_krs_pwp_2026")
 
 
-# 1. Fungsi Koneksi ke MySQL
+# Fungsi Koneksi ke MySQL
 def get_db_connection():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST", "localhost"),
@@ -20,11 +20,13 @@ def get_db_connection():
     )
 
 
-# 2. Rute Autentikasi: Login
+# Rute Autentikasi: Login
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if "user_id" in session:
         return redirect(url_for("index"))
+
+    success = request.args.get("success")
 
     if request.method == "POST":
         nim = request.form.get("nim")
@@ -43,19 +45,71 @@ def login():
             session["nama"] = user["nama"]
             return redirect(url_for("index"))
         else:
-            return render_template("login.html", error="NIM atau password salah!")
+            return render_template(
+                "login.html", error="NIM atau password salah!", success=success
+            )
 
-    return render_template("login.html")
+    return render_template("login.html", success=success)
 
 
-# 3. Rute Autentikasi: Logout
+# Rute Autentikasi: Register Mahasiswa Baru
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if "user_id" in session:
+        return redirect(url_for("index"))
+
+    if request.method == "POST":
+        nim = request.form.get("nim")
+        nama = request.form.get("nama")
+        password = request.form.get("password")
+
+        if not nim or not nama or not password:
+            return render_template("register.html", error="Semua kolom wajib diisi!")
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Cek apakah NIM sudah pernah didaftarkan
+        cursor.execute("SELECT id FROM mahasiswa WHERE nim = %s", (nim,))
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            cursor.close()
+            conn.close()
+            return render_template(
+                "register.html", error="NIM ini sudah terdaftar! Silakan login."
+            )
+
+        try:
+            cursor.execute(
+                "INSERT INTO mahasiswa (nim, nama, password) VALUES (%s, %s, %s)",
+                (nim, nama, password),
+            )
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return redirect(
+                url_for(
+                    "login",
+                    success="Registrasi berhasil! Silakan login dengan NIM Anda.",
+                )
+            )
+        except mysql.connector.Error as err:
+            cursor.close()
+            conn.close()
+            return render_template("register.html", error=f"Gagal mendaftar: {err}")
+
+    return render_template("register.html")
+
+
+# Rute Autentikasi: Logout
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("login"))
 
 
-# 4. Rute Utama: Halaman Pengambilan KRS (Diproteksi Session)
+# Rute Utama: Halaman Pengambilan KRS (Diproteksi Session)
 @app.route("/")
 def index():
     if "user_id" not in session:
@@ -100,7 +154,7 @@ def index():
     )
 
 
-# 5. Endpoint AJAX: Ambil Mata Kuliah
+# Endpoint AJAX: Ambil Mata Kuliah
 @app.route("/api/krs/ambil", methods=["POST"])
 def ambil_mk():
     if "user_id" not in session:
@@ -189,7 +243,7 @@ def ambil_mk():
         conn.close()
 
 
-# 6. Endpoint AJAX: Batalkan Mata Kuliah
+# Endpoint AJAX: Batalkan Mata Kuliah
 @app.route("/api/krs/batal", methods=["POST"])
 def batal_mk():
     if "user_id" not in session:
@@ -234,7 +288,7 @@ def batal_mk():
     )
 
 
-# 7. Runner Aplikasi
+# Runner Aplikasi
 if __name__ == "__main__":
     app.run(
         debug=os.getenv("FLASK_DEBUG", "True").lower() == "true",

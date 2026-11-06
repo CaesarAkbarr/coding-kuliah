@@ -1,0 +1,91 @@
+{% extends 'base.html' %} {% block title %}Daftar Akun Mahasiswa - Portal KRS{%
+endblock %} {% block content %}
+<div class="row justify-content-center mt-4">
+  <div class="col-md-5">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-success text-white text-center py-3">
+        <h5 class="mb-0 fw-bold">
+          <i class="bi bi-person-plus-fill me-2"></i>Pendaftaran Mahasiswa Baru
+        </h5>
+      </div>
+      <div class="card-body p-4">
+        {% if error %}
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <div>{{ error }}</div>
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('register') }}">
+          <div class="mb-3">
+            <label for="nim" class="form-label fw-semibold"
+              >Nomor Induk Mahasiswa (NIM)</label
+            >
+            <div class="input-group">
+              <span class="input-group-text"
+                ><i class="bi bi-person-badge"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control"
+                id="nim"
+                name="nim"
+                placeholder="Contoh: 3253111006"
+                required
+                autofocus
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="nama" class="form-label fw-semibold"
+              >Nama Lengkap</label
+            >
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input
+                type="text"
+                class="form-control"
+                id="nama"
+                name="nama"
+                placeholder="Masukkan nama lengkap"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="password" class="form-label fw-semibold"
+              >Kata Sandi</label
+            >
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-key"></i></span>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Buat password akun"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">
+            <i class="bi bi-check-circle me-1"></i> Daftarkan Akun
+          </button>
+        </form>
+
+        <div class="mt-4 text-center">
+          <span class="text-muted small">Sudah memiliki akun?</span>
+          <a
+            href="{{ url_for('login') }}"
+            class="text-decoration-none fw-semibold small ms-1"
+            >Masuk di sini</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

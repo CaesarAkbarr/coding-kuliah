@@ -9,10 +9,10 @@ endblock %} {% block content %}
         </h5>
       </div>
       <div class="card-body p-4">
-        {% if error %}
-        <div class="alert alert-danger d-flex align-items-center" role="alert">
-          <i class="bi bi-exclamation-triangle-fill me-2"></i>
-          <div>{{ error }}</div>
+        {% if success %}
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <div>{{ success }}</div>
         </div>
         {% endif %}
 
@@ -62,6 +62,14 @@ endblock %} {% block content %}
         <div class="mt-3 text-center text-muted small">
           Gunakan NIM <strong>3253111006</strong> dan password
           <strong>password123</strong> untuk demo pengujian.
+        </div>
+        <div class="mt-4 text-center">
+          <span class="text-muted small">Belum memiliki akun?</span>
+          <a
+            href="{{ url_for('register') }}"
+            class="text-decoration-none fw-semibold small ms-1"
+            >Daftar Mahasiswa Baru</a
+          >
         </div>
       </div>
     </div>
