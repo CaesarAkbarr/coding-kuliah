@@ -1,0 +1,136 @@
+{% extends 'base.html' %} {% block title %}Dashboard Pengambilan Mata Kuliah{%
+endblock %} {% block content %}
+<!-- Alert Notifikasi Interaktif via jQuery -->
+<div id="alert-container"></div>
+
+<!-- Kartu Informasi Mahasiswa & Beban SKS -->
+<div class="row mb-4">
+  <div class="col-md-8">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body">
+        <h5 class="card-title fw-bold text-primary mb-1">
+          <i class="bi bi-person-check-fill me-2"></i>Profil Mahasiswa
+        </h5>
+        <p class="text-muted mb-3 small">
+          Program Studi Sistem Informasi - Semester 3
+        </p>
+        <div class="row g-2">
+          <div class="col-sm-6">
+            <span class="text-secondary small">Nama Lengkap:</span>
+            <div class="fw-semibold">{{ nama }}</div>
+          </div>
+          <div class="col-sm-6">
+            <span class="text-secondary small">NIM:</span>
+            <div class="fw-semibold">{{ nim }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mt-3 mt-md-0">
+    <div class="card shadow-sm border-0 bg-primary text-white h-100">
+      <div
+        class="card-body text-center d-flex flex-column justify-content-center"
+      >
+        <span class="text-uppercase small fw-bold opacity-75"
+          >Beban SKS Diambil</span
+        >
+        <div class="display-5 fw-bold my-1">
+          <span id="badge-total-sks">{{ total_sks }}</span>
+          <span class="fs-4 fw-normal">/ 24</span>
+        </div>
+        <small class="opacity-75">Batas maksimal pengambilan: 24 SKS</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabel Daftar Mata Kuliah -->
+<div class="card shadow-sm border-0">
+  <div
+    class="card-header bg-white py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2"
+  >
+    <h5 class="mb-0 fw-bold">
+      <i class="bi bi-journals me-2 text-primary"></i>Katalog Mata Kuliah
+      Tersedia
+    </h5>
+    <div class="input-group" style="max-width: 320px">
+      <span class="input-group-text bg-light"
+        ><i class="bi bi-search"></i
+      ></span>
+      <input
+        type="text"
+        id="search-mk"
+        class="form-control"
+        placeholder="Cari kode atau nama matkul..."
+      />
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0" id="table-matakuliah">
+        <thead class="table-light">
+          <tr>
+            <th class="text-center" style="width: 60px">No</th>
+            <th style="width: 110px">Kode MK</th>
+            <th>Nama Mata Kuliah</th>
+            <th class="text-center" style="width: 80px">SKS</th>
+            <th class="text-center" style="width: 100px">Semester</th>
+            <th>Dosen Pengampu</th>
+            <th class="text-center" style="width: 80px">Kuota</th>
+            <th class="text-center" style="width: 160px">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for mk in daftar_mk %}
+          <tr id="row-mk-{{ mk.id }}">
+            <td class="text-center">{{ loop.index }}</td>
+            <td>
+              <span class="badge bg-secondary font-monospace"
+                >{{ mk.kode_mk }}</span
+              >
+            </td>
+            <td class="fw-semibold mk-nama">{{ mk.nama_mk }}</td>
+            <td class="text-center">
+              <span class="badge bg-info text-dark">{{ mk.sks }} SKS</span>
+            </td>
+            <td class="text-center">Semester {{ mk.semester }}</td>
+            <td>
+              <small class="text-muted"
+                ><i class="bi bi-person me-1"></i>{{ mk.dosen }}</small
+              >
+            </td>
+            <td class="text-center">
+              <span class="badge bg-light text-dark border"
+                >{{ mk.kuota }}</span
+              >
+            </td>
+            <td class="text-center">
+              {% if mk.id in mk_diambil_ids %}
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm btn-action btn-batal w-100"
+                data-id="{{ mk.id }}"
+                data-nama="{{ mk.nama_mk }}"
+              >
+                <i class="bi bi-trash3 me-1"></i> Batalkan
+              </button>
+              {% else %}
+              <button
+                type="button"
+                class="btn btn-primary btn-sm btn-action btn-ambil w-100"
+                data-id="{{ mk.id }}"
+                data-nama="{{ mk.nama_mk }}"
+              >
+                <i class="bi bi-plus-circle me-1"></i> Ambil MK
+              </button>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

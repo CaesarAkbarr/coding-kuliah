@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% block title %}Login Mahasiswa - Portal KRS{%
+endblock %} {% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-primary text-white text-center py-3">
+        <h5 class="mb-0 fw-bold">
+          <i class="bi bi-lock-fill me-2"></i>Autentikasi Mahasiswa
+        </h5>
+      </div>
+      <div class="card-body p-4">
+        {% if error %}
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <div>{{ error }}</div>
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+          <div class="mb-3">
+            <label for="nim" class="form-label fw-semibold"
+              >Nomor Induk Mahasiswa (NIM)</label
+            >
+            <div class="input-group">
+              <span class="input-group-text"
+                ><i class="bi bi-person-badge"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control"
+                id="nim"
+                name="nim"
+                placeholder="Contoh: 3253111006"
+                required
+                autofocus
+              />
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="password" class="form-label fw-semibold"
+              >Kata Sandi</label
+            >
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-key"></i></span>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Masukkan password"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Masuk ke Portal
+          </button>
+        </form>
+
+        <div class="mt-3 text-center text-muted small">
+          Gunakan NIM <strong>3253111006</strong> dan password
+          <strong>password123</strong> untuk demo pengujian.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
