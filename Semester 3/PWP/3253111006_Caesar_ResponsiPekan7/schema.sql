@@ -18,11 +18,11 @@ CREATE TABLE IF NOT EXISTS matakuliah (
     kuota INT DEFAULT 30
 );
 
-CREATE TABLE IF NOT EXISTS krs (
+CREATE TABLE IF NOT EXISTS matakuliah_diambil (
     id INT AUTO_INCREMENT PRIMARY KEY,
     mahasiswa_id INT NOT NULL,
     matakuliah_id INT NOT NULL,
-    tanggal_ambil TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tanggal_ambil DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (mahasiswa_id) REFERENCES mahasiswa(id) ON DELETE CASCADE,
     FOREIGN KEY (matakuliah_id) REFERENCES matakuliah(id) ON DELETE CASCADE,
     UNIQUE KEY unique_pengambilan (mahasiswa_id, matakuliah_id)
