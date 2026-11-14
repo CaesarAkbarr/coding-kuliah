@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Pendonor - Pusat Informasi Donor Darah</title>
+</head>
+<body>
+
+    <header>
+        <h1>Pusat Informasi Kegiatan Donor Darah</h1>
+        <p>Formulir Konfirmasi Kehadiran dan Pendaftaran Calon Pendonor Darah</p>
+
+        <nav>
+            <a href="index.html"><button type="button">Beranda</button></a> |
+            <a href="info.html"><button type="button">Info &amp; Jadwal</button></a>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+        <h2>Formulir Pendaftaran Calon Pendonor</h2>
+        <p>Silakan isi data diri Anda dengan benar sebelum datang ke lokasi kegiatan:</p>
+
+        <form action="index.html" method="get">
+
+            <!-- Bagian 1: Identitas Pribadi -->
+            <fieldset>
+                <legend><strong>Identitas Calon Pendonor</strong></legend>
+
+                <label for="nama">Nama Lengkap:</label><br>
+                <input type="text" id="nama" name="nama" placeholder="Contoh: Budi Santoso" required><br><br>
+
+                <label for="nik">Nomor Induk Kependudukan (NIK):</label><br>
+                <input type="text" id="nik" name="nik" maxlength="16" placeholder="16 digit NIK KTP" required><br><br>
+
+                <label for="usia">Usia (Tahun):</label><br>
+                <input type="number" id="usia" name="usia" min="17" max="65" placeholder="17-60" required><br><br>
+
+                <label for="berat">Berat Badan (Kg):</label><br>
+                <input type="number" id="berat" name="berat" min="45" placeholder="Minimal 45" required><br><br>
+
+                Jenis Kelamin:<br>
+                <input type="radio" id="jk_l" name="jenis_kelamin" value="Laki-laki" required>
+                <label for="jk_l">Laki-laki</label><br>
+                <input type="radio" id="jk_p" name="jenis_kelamin" value="Perempuan">
+                <label for="jk_p">Perempuan</label><br><br>
+
+                <label for="telepon">Nomor WhatsApp Aktif:</label><br>
+                <input type="tel" id="telepon" name="telepon" placeholder="08xxxxxxxxxx" required>
+            </fieldset>
+
+            <br>
+
+            <!-- Bagian 2: Informasi Donor & Lokasi -->
+            <fieldset>
+                <legend><strong>Pilihan Jadwal &amp; Data Medis Sederhana</strong></legend>
+
+                <label for="gol_darah">Golongan Darah:</label><br>
+                <select id="gol_darah" name="gol_darah" required>
+                    <option value="" selected>-- Pilih Golongan Darah --</option>
+                    <option value="A">Golongan A</option>
+                    <option value="B">Golongan B</option>
+                    <option value="AB">Golongan AB</option>
+                    <option value="O">Golongan O</option>
+                    <option value="Belum Tahu">Belum Mengetahui</option>
+                </select><br><br>
+
+                <label for="lokasi_jadwal">Pilih Agenda &amp; Lokasi:</label><br>
+                <select id="lokasi_jadwal" name="lokasi_jadwal" required>
+                    <option value="" selected>-- Pilih Lokasi Donor --</option>
+                    <option value="Kampus 1 UTY">21 Nov 2026 - Aula Kampus 1 UTY, Sleman</option>
+                    <option value="Condongcatur">29 Nov 2026 - Balai Desa Condongcatur</option>
+                    <option value="Sinduadi">12 Des 2026 - Gedung Pertemuan Sinduadi</option>
+                </select><br><br>
+
+                Riwayat Donor Sebelumnya:<br>
+                <input type="radio" id="donor_baru" name="riwayat" value="Pertama Kali" required>
+                <label for="donor_baru">Pertama kali (Belum pernah donor)</label><br>
+                <input type="radio" id="donor_rutin" name="riwayat" value="Pernah Donor">
+                <label for="donor_rutin">Sudah pernah (Terakhir lebih dari 60 hari lalu)</label><br><br>
+
+                <label for="catatan">Riwayat Penyakit / Alergi Obat (Jika ada):</label><br>
+                <textarea id="catatan" name="catatan" rows="3" cols="40" placeholder="Tulis catatan kesehatan Anda jika ada..."></textarea>
+            </fieldset>
+
+            <br>
+
+            <!-- Bagian 3: Pernyataan Kesiapan -->
+            <fieldset>
+                <legend><strong>Konfirmasi &amp; Persetujuan</strong></legend>
+
+                <input type="checkbox" id="syarat_tidur" name="syarat_tidur" value="Ya" required>
+                <label for="syarat_tidur">Saya sudah tidur minimal 5 jam semalam sebelum hari kegiatan.</label><br>
+
+                <input type="checkbox" id="syarat_makan" name="syarat_makan" value="Ya" required>
+                <label for="syarat_makan">Saya bersedia sarapan/makan terlebih dahulu sebelum mendonor.</label><br>
+
+                <input type="checkbox" id="syarat_sehat" name="syarat_sehat" value="Ya" required>
+                <label for="syarat_sehat">Saya menyatakan dalam kondisi sehat dan tidak sedang minum obat antibiotik.</label>
+            </fieldset>
+
+            <br>
+
+            <input type="submit" value="Kirim Pendaftaran">
+            <input type="reset" value="Reset Formulir">
+
+        </form>
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>&copy; 2026 Komunitas Relawan Donor Darah &bull; Tugas UTS PAVBW</p>
+        <p>Universitas Teknologi Yogyakarta (UTY)</p>
+    </footer>
+
+</body>
+</html>
