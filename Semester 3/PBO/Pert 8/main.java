@@ -1,43 +1,10 @@
 import java.io.*;
 
-abstract class manusia {
-    private double tinggiBadan;
-
-    public manusia(double TB){
-        tinggiBadan = TB;
-    }
-
-    public double getTB(){
-        return tinggiBadan;
-    }
-    public abstract double htgBBI();
-}
-
-class cowo extends manusia {
-    public cowo(double TB){
-        super(TB);
-    }
-
-    public double htgBBI(){
-        return (super.getTB() - 100) * 0.9;
-    }
-}
-
-class cewe extends manusia {
-    public cewe(double TB){
-        super(TB);
-    }
-
-    public double htgBBI(){
-        return (super.getTB() - 100) * 0.8;
-    }
-}
-
 public class main {
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader (new InputStreamReader (System.in));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        manusia[] m = new manusia [2];
+        manusia[] m = new manusia[2];
 
         int x = 0;
 
@@ -59,5 +26,39 @@ public class main {
             }
             x++;
         } while (x < 2);
+    }
+}
+
+abstract class manusia {
+    private double tinggiBadan;
+
+    public manusia(double TB) {
+        tinggiBadan = TB;
+    }
+
+    public double getTB() {
+        return tinggiBadan;
+    }
+
+    public abstract double htgBBI();
+}
+
+class cowo extends manusia {
+    public cowo(double TB) {
+        super(TB);
+    }
+
+    public double htgBBI() {
+        return (super.getTB() - 100) * 0.9;
+    }
+}
+
+class cewe extends manusia {
+    public cewe(double TB) {
+        super(TB);
+    }
+
+    public double htgBBI() {
+        return (super.getTB() - 100) * 0.8;
     }
 }

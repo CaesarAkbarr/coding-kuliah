@@ -71,7 +71,7 @@ class tumbuhan extends mahlukHidup {
 
     public void cetakCiri() {
         System.out.println("=== Ciri-ciri Tumbuhan: " + getNama() + " ===");
-        System.out.println("1. Bernafas menggunakan autotrof.");
+        System.out.println("1. Bernafas menggunakan autotrof yang melakukan fotosintesis.");
         System.out.println("2. Bergerak secara pasif.");
         System.out.println("3. Berkembang biak dengan cara: " + berkembangBiak + ".");
     }
