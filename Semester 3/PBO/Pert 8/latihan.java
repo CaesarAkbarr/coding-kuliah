@@ -3,9 +3,9 @@ import java.io.*;
 public class latihan {
     public static void main(String[] args) {
         mahlukHidup[] daftar = {
-            new manusia("Budi"),
-            new hewan("Ikan", "insang", "berenang"),
-            new tumbuhan("Mangga", "vegetatif")
+                new manusia("Budi"),
+                new hewan("Ikan", "insang", "berenang"),
+                new tumbuhan("Mangga", "vegetatif")
         };
 
         for (mahlukHidup m : daftar) {
@@ -18,11 +18,11 @@ public class latihan {
 abstract class mahlukHidup {
     private String nama;
 
-    public mahlukHidup(String nama){
+    public mahlukHidup(String nama) {
         this.nama = nama;
     }
 
-    public String getNama(){
+    public String getNama() {
         return nama;
     }
 
@@ -30,10 +30,11 @@ abstract class mahlukHidup {
 }
 
 class manusia extends mahlukHidup {
-    public manusia(String nama){
+    public manusia(String nama) {
         super(nama);
     }
-    public void cetakCiri(){
+
+    public void cetakCiri() {
         System.out.println("=== Ciri-ciri Manusia: " + getNama() + " ===");
         System.out.println("1. Bernafas menggunakan paru-paru.");
         System.out.println("2. Bergerak aktif dengan dua kaki (bipedal).");
@@ -46,12 +47,13 @@ class hewan extends mahlukHidup {
     private String alatPernafasan;
     private String caraBergerak;
 
-    public hewan(String nama, String alatPernafasan, String caraBergerak){
+    public hewan(String nama, String alatPernafasan, String caraBergerak) {
         super(nama);
         this.alatPernafasan = alatPernafasan;
         this.caraBergerak = caraBergerak;
     }
-    public void cetakCiri(){
+
+    public void cetakCiri() {
         System.out.println("=== Ciri-ciri Hewan: " + getNama() + " ===");
         System.out.println("1. Bernafas menggunakan: " + alatPernafasan + ".");
         System.out.println("2. Bergerak aktif dengan cara: " + caraBergerak + ".");
@@ -62,11 +64,12 @@ class hewan extends mahlukHidup {
 class tumbuhan extends mahlukHidup {
     private String berkembangBiak;
 
-    public tumbuhan(String nama, String berkembangBiak){
+    public tumbuhan(String nama, String berkembangBiak) {
         super(nama);
         this.berkembangBiak = berkembangBiak;
     }
-    public void cetakCiri(){
+
+    public void cetakCiri() {
         System.out.println("=== Ciri-ciri Tumbuhan: " + getNama() + " ===");
         System.out.println("1. Bernafas menggunakan autotrof.");
         System.out.println("2. Bergerak secara pasif.");
