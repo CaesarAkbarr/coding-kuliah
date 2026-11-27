@@ -32,13 +32,9 @@
 | Mata Kuliah | Kode | Daftar Pertemuan & Proyek |
 | :--- | :---: | :--- |
 | Pemrograman Aplikasi Visual Berbasis Web | `PAVBW` | `Pert 1`, `Pert 2`, `Pert 3`, `Pert 4`, `Pert 5`, `Pert 6`, `Pert 7`, `UTS` |
-| Pemrograman Berorientasi Objek | `PBO` | `matri-asdos-PBO`, `Pert 1`, `Pert 2`, `Pert 3`, `Pert 4 Quiz`, `Pert 5`, `Pert 6`, `Pert 7`, `Pert 8`, `UTS` |
-<<<<<<< HEAD
-| Pemrograman Web Praktikum | `PWP` | `Pert 3`, `Pert 5`, `Pert 6`, `Pert 7 Responsi`, `Pert 8`, `Pert 4` |
-=======
-| Pemrograman Web Praktikum | `PWP` | `Pert 3`, `Pert 5`, `Pert 6`, `Pert 7 Responsi`, `Pert 8`, `Pert 4` |
+| Pemrograman Berorientasi Objek | `PBO` | `Materi Asdos PBO`, `Pert 1`, `Pert 2`, `Pert 3`, `Pert 4 Quiz`, `Pert 5`, `Pert 6`, `Pert 7`, `Pert 8`, `UTS` |
+| Pemrograman Web Praktikum | `PWP` | `Pert 3`, `Pert 4`, `Pert 5`, `Pert 6`, `Pert 7 Responsi`, `Pert 8` |
 | Rekayasa Perangkat Lunak | `RPL` | `Tugas Git` |
->>>>>>> 5e7f8a30182e68ecafbab904abba81a5c0ba3934
 | Sistem Operasi | `SO` | `Pert 5`, `Pert 6` |
 <!-- AUTO_SEMESTER_3_END -->
 

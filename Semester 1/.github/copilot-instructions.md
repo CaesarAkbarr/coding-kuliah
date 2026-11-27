@@ -4,10 +4,10 @@
 This workspace contains small, self-contained Java programs for educational purposes. Each file implements a distinct system or exercise, with no shared dependencies or complex architecture. There are no build scripts, external libraries, or advanced frameworks in use.
 
 ### Key Directories & Files
-- `Tugas-Coding-Kuliah/`
+- `Tugas Coding Kuliah/`
   - `responsi.java`: Contains four independent systems (JNE package classification, employee bonus calculator, pallet weighing, cashier system). Each system is implemented as a static method in the `responsi` class and invoked from `main()`.
   - `belajarLoop.java`, `test.java`: Standalone Java exercises, likely focused on basic programming concepts.
-- `calculator/Calculator.java`: Another standalone Java file, likely implementing calculator logic.
+- `Calculator/Calculator.java`: Another standalone Java file, likely implementing calculator logic.
 
 ## Developer Workflows
 - **Build & Run**: Compile and run individual `.java` files using standard Java commands. Example:
