@@ -67,7 +67,7 @@ java NamaFile
 ```
 
 ### 2. Python / Flask (Semester 3 PWP)
-Masuk ke direktori pertemuan terkait (misalnya `Semester 3/PWP/Pert4`):
+Masuk ke direktori pertemuan terkait (misalnya `Semester 3/PWP/Pert 4`):
 
 ```bash
 python -m venv .venv
