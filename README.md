@@ -33,8 +33,7 @@
 | :--- | :---: | :--- |
 | Pemrograman Aplikasi Visual Berbasis Web | `PAVBW` | `Pert 1`, `Pert 2`, `Pert 3`, `Pert 4`, `Pert 5`, `Pert 6`, `Pert 7`, `UTS` |
 | Pemrograman Berorientasi Objek | `PBO` | `matri-asdos-PBO`, `Pert 1`, `Pert 2`, `Pert 3`, `Pert 4 Quiz`, `Pert 5`, `Pert 6`, `Pert 7`, `Pert 8`, `UTS` |
-| Pemrograman Web Praktikum | `PWP` | `3253111006_Caesar_ResponsiPekan7`, `Pert 8`, `Pert3`, `Pert4`, `Pert5`, `Pert6` |
-| Rekayasa Perangkat Lunak | `RPL` | `Tugas-Git` |
+| Pemrograman Web Praktikum | `PWP` | `Pert 3`, `Pert 5`, `Pert 6`, `Pert 7 Responsi`, `Pert 8`, `Pert4` |
 | Sistem Operasi | `SO` | `Pert 5`, `Pert 6` |
 <!-- AUTO_SEMESTER_3_END -->
 
